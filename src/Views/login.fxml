@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="Controllers.LoginController">
+    <children>
+        <TextField fx:id="emailIdField" editable="true" layoutX="209.0" layoutY="123.0" prefWidth="200.0" />
+        <Label layoutX="111.0" layoutY="126.0" text="username" />
+        <Label layoutX="113.0" layoutY="180.0" text="password" />
+        <PasswordField fx:id="passwordIdField" layoutX="209.0" layoutY="177.0" prefWidth="200.0" />
+        <Button fx:id="submit" blendMode="DIFFERENCE" cache="false" layoutX="264.0" layoutY="229.0" mnemonicParsing="false" onAction="#submit" text="Log in " textFill="#ff9533" wrapText="false" />
+    </children>
+</AnchorPane>
