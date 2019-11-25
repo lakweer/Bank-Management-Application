@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Label layoutX="265.0" layoutY="40.0" text="Savings Account">
+      <font>
+        <Font name="System Bold" size="35.0" />
+      </font>
+    </Label>
+    <Label layoutX="314.0" layoutY="89.0" text="Withdraw / Deposit">
+      <font>
+        <Font size="20.0" />
+      </font>
+    </Label>
+    <Button layoutX="84.0" layoutY="613.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="73.0" text="Cancel" />
+    <Button layoutX="643.0" layoutY="621.0" mnemonicParsing="false" prefHeight="35.0" text="Submit" />
+    <Label layoutX="84.0" layoutY="194.0" text="Account Number" />
+    <TextField layoutX="84.0" layoutY="236.0" prefHeight="35.0" prefWidth="407.0" />
+    <Label layoutX="84.0" layoutY="296.0" text="Ammount" />
+    <TextField layoutX="84.0" layoutY="340.0" prefHeight="35.0" prefWidth="407.0" />
+    <MenuButton layoutX="84.0" layoutY="135.0" mnemonicParsing="false" text="Type">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Action 1" />
+        <MenuItem mnemonicParsing="false" text="Action 2" />
+      </items>
+    </MenuButton>
+  </children>
+</AnchorPane>

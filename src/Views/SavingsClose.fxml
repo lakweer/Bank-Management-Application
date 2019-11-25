@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Label layoutX="286.0" layoutY="32.0" text="APPLICATION">
+      <font>
+        <Font name="System Bold" size="35.0" />
+      </font>
+    </Label>
+    <Label layoutX="301.0" layoutY="74.0" text="Savings Account Close">
+      <font>
+        <Font size="20.0" />
+      </font>
+    </Label>
+    <Label layoutX="79.0" layoutY="131.0" text="Account Number" />
+    <Button layoutX="79.0" layoutY="610.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="73.0" text="Cancel" />
+    <Button layoutX="638.0" layoutY="618.0" mnemonicParsing="false" prefHeight="35.0" text="Submit" />
+    <TextField layoutX="79.0" layoutY="163.0" prefHeight="35.0" prefWidth="407.0" />
+  </children>
+</AnchorPane>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <Label layoutX="281.0" layoutY="14.0" prefHeight="82.0" prefWidth="238.0" text="APPLICATION">
+      <font>
+        <Font name="System Bold" size="35.0" />
+      </font>
+    </Label>
+    <Label layoutX="281.0" layoutY="55.0" minHeight="2.0" prefHeight="59.0" prefWidth="238.0" text="Personal Account Opening">
+      <font>
+        <Font size="20.0" />
+      </font>
+    </Label>
+    <Button layoutX="57.0" layoutY="658.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="73.0" text="Cancel" />
+    <Button layoutX="616.0" layoutY="658.0" mnemonicParsing="false" prefHeight="35.0" text="Submit" />
+    <Label layoutX="61.0" layoutY="114.0" text="Account Type" />
+    <MenuButton layoutX="57.0" layoutY="146.0" mnemonicParsing="false" popupSide="BOTTOM" text="Account Type">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Action 1" />
+        <MenuItem mnemonicParsing="false" text="Action 2" />
+      </items>
+    </MenuButton>
+    <Label layoutX="60.0" layoutY="200.0" text="Name in Full" />
+    <TextField layoutX="57.0" layoutY="234.0" prefHeight="35.0" prefWidth="632.0" />
+    <Label layoutX="57.0" layoutY="288.0" text="House Name" />
+    <TextField layoutX="56.0" layoutY="318.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="281.0" layoutY="288.0" text="Street One" />
+    <TextField layoutX="281.0" layoutY="318.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="497.0" layoutY="288.0" text="Street Two" />
+    <TextField layoutX="497.0" layoutY="318.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="60.0" layoutY="365.0" text="Town" />
+    <TextField layoutX="57.0" layoutY="395.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="281.0" layoutY="365.0" text="District" />
+    <TextField layoutX="281.0" layoutY="395.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="497.0" layoutY="365.0" text="Postal Code" />
+    <TextField layoutX="497.0" layoutY="395.0" prefHeight="35.0" prefWidth="192.0" />
+    <Label layoutX="57.0" layoutY="456.0" text="Gender" />
+    <MenuButton layoutX="57.0" layoutY="485.0" mnemonicParsing="false" prefHeight="35.0" text="Gender">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Action 1" />
+        <MenuItem mnemonicParsing="false" text="Action 2" />
+      </items>
+    </MenuButton>
+    <Label layoutX="281.0" layoutY="456.0" text="NIC No" />
+    <TextField layoutX="281.0" layoutY="485.0" prefHeight="35.0" prefWidth="277.0" />
+    <Label layoutX="57.0" layoutY="552.0" text="Date Of Birth" />
+  </children>
+</AnchorPane>

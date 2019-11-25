@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import Models.EmploeeModel;
+
 
 public class LoginController {
 
@@ -22,11 +24,9 @@ public class LoginController {
     @FXML
     public void submit(ActionEvent event)  throws Exception{
 
-        username = emailIdField.getText();
-        String password = passwordIdField.getText();
-
-        System.out.println(username);
-
+        EmploeeModel model = new EmploeeModel();
+        String params[] = {emailIdField.getText(), passwordIdField.getText()};
+        model.login(params);
     }
 
 

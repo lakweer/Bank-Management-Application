@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="892.0" prefWidth="1196.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+  <children>
+    <AnchorPane layoutX="0.0" layoutY="0.0" prefHeight="88.0" prefWidth="1196.0">
+      <children>
+        <MenuButton layoutX="1000.0" layoutY="29.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="170.0" text="UserName" textAlignment="LEFT">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Edit Profile" />
+            <MenuItem mnemonicParsing="false" text="Logout" />
+          </items>
+        </MenuButton>
+        <Label layoutX="24.0" layoutY="33.0" text="Bank Of Sri Lanka">
+          <font>
+            <Font name="Cambria" size="35.0" />
+          </font>
+        </Label>
+      </children>
+    </AnchorPane>
+    <AnchorPane layoutX="0.0" layoutY="88.0" prefHeight="804.0" prefWidth="207.0">
+      <children>
+        <MenuButton layoutX="14.0" layoutY="40.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Savings Account">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="122.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Current Account">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="82.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Fixed Deposit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="162.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Bank Loans">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="202.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Debit Cards">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+      </children>
+    </AnchorPane>
+    <Pane layoutX="269.0" layoutY="128.0" prefHeight="750.0" prefWidth="800.0" />
+  </children>
+</AnchorPane>
