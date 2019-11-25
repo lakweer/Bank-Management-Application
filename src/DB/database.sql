@@ -1,5 +1,7 @@
 create database bank;
 
+use bank;
+
 create table employee (
     employee_id varchar(40),
     first_name varchar(50) not null,
