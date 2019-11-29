@@ -36,3 +36,9 @@ create table employee_users(
     primary key(employee_id, username),
     foreign key(employee_id) references employee(employee_id)
     );
+
+
+CREATE TABLE Branch(
+    BranchID varchar(20),
+    BranchName varchar(20)
+);
