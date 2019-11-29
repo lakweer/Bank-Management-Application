@@ -19,13 +19,4 @@ public class Database {
         }
         return connection;
     }
-
-    public static void closeConnection(){
-        try {
-            connection.close();
-            connection = null;
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 }

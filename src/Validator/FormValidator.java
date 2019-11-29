@@ -36,7 +36,7 @@ public class FormValidator {
 
     public static boolean nicNumberValidate(String nic){
         if(nic != null){
-            return ((nic.charAt(9) == 'V') && (nic.length() == 10) && (nic.substring(0,8).matches("\\d+")));
+            return ((nic.length() == 10) && (nic.charAt(9) == 'V')&& (nic.substring(0,8).matches("\\d+")));
         }else{
             return false;
         }

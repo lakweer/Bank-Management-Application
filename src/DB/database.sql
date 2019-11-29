@@ -1,44 +1,46 @@
-create database bank;
+CREATE database bank;
 
 use bank;
 
-create table employee (
-    employee_id varchar(40),
-    first_name varchar(50) not null,
-    last_name varchar(50) not null,
-    nic char(10) not null,
-    birth_date date not null,
-    primary key(employee_id)
+CREATE TABLE branch(
+    BranchID varchar(20) PRIMARY KEY,
+    BranchName varchar(20) NOT NULL,
+    Address BLOB NOT NULL
     );
 
-create table branch (
-    branch_id int(20),
-    branch_name varchar(50) not null,
-    manager_id varchar(40),
-    postal_address blob not null,
-    primary key(branch_id)
+CREATE TABLE employee(
+    EmployeeID varchar(40) PRIMARY KEY,
+    FirstName varchar(20) NOT NULL,
+    LastName varchar(20) NOT NULL,
+    Nic char(10) NOT NULL UNIQUE,
+    Email varchar(250) NOT NULL UNIQUE,
+    BirthDate Date NOT NULL
     );
 
-create table employee_branch(
-    branch_id int(20) ,
-    employee_id varchar(40) ,
-    joined_date Date,
-    leave_date Date,
-    primary key(branch_id, employee_id, joined_date),
-    foreign key(branch_id) references branch(branch_id),
-    foreign key(employee_id) references employee(employee_id)
-    );
-
-create table employee_users(
-    employee_id varchar(40),
-    username varchar(50),
-    password varchar(300) not null,
-    primary key(employee_id, username),
-    foreign key(employee_id) references employee(employee_id)
-    );
-
-
-CREATE TABLE Branch(
+CREATE TABLE employeeBranch(
     BranchID varchar(20),
-    BranchName varchar(20)
-);
+    EmployeeID varchar(40),
+    JoinedDate Date NOT NULL,
+    Leaved Date,
+    PRIMARY KEY(BranchID, EmployeeID, JoinedDate),
+    FOREIGN KEY(BranchID) REFERENCES branch(BranchID),
+    FOREIGN KEY(EmployeeID) REFERENCES employee(EmployeeID)
+    );
+
+CREATE TABLE users(
+    EmployeeID varchar(40) PRIMARY KEY,
+    UserName varchar(40) NOT NULL UNIQUE,
+    Password varchar(512) NOT NULL,
+    Status ENUM('1','0') NOT NULL
+    );
+
+INSERT INTO `branch`(`BranchID`, `BranchName`, `Address`) VALUES ('BOSL_001_COL_NUG','NUGEGODA','No.56, Bank Of Sri Lanka, High Level Road, Nugegoda');
+
+INSERT INTO `employee`(`EmployeeID`, `FirstName`, `LastName`, `Nic`, `Email`, `BirthDate`) VALUES
+(uuid(),'Alan','Walker','123456789V','alanwalker@gmail.com','1992-01-10');
+
+INSERT INTO `users`(`EmployeeID`, `UserName`, `Password`, `Status`) VALUES
+('5acbfcf0-12b1-11ea-8718-d8c4971f41ea','admin','admin','1');
+
+INSERT INTO `employeebranch`(`BranchID`, `EmployeeID`, `JoinedDate`, `Leaved`) VALUES
+('BOSL_001_COL_NUG','5acbfcf0-12b1-11ea-8718-d8c4971f41ea','2019-11-29',NULL);

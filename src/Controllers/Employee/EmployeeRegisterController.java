@@ -1,7 +1,8 @@
-package Controllers;
+package Controllers.Employee;
 
 
-import Models.EmploeeModel;
+import Controllers.LoginForm;
+import Models.EmployeeModel;
 import Objects.Employee;
 import Validator.FormValidator;
 import javafx.application.Application;
@@ -9,18 +10,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import Hashing.PasswordHasing;
+import Helpers.Helpers;
 
 
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 public class EmployeeRegisterController extends Application {
@@ -34,7 +34,7 @@ public class EmployeeRegisterController extends Application {
         // Add UI controls to the registration form grid pane
         addUIControls(pane, primaryStage);
         // Create a scene with registration form grid pane as the root node
-        Scene scene = new Scene(pane, 800, 600);
+        Scene scene = new Scene(pane, 800, 800);
         // Set the scene in primary stage
         primaryStage.setScene(scene);
 
@@ -111,6 +111,19 @@ public class EmployeeRegisterController extends Application {
         pane.getChildren().add(password);
         password.relocate(234, 411);
 
+        //ADD birthday selector
+        DatePicker dob = new DatePicker(LocalDate.now());
+        dob.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                LocalDate today = LocalDate.now();
+                setDisable(empty || date.compareTo(today) > 0);
+            }
+        });
+        dob.setPrefSize(150,40);
+        pane.getChildren().add(dob);
+        dob.relocate(234,500);
+
         // Add Submit Button
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
@@ -118,73 +131,64 @@ public class EmployeeRegisterController extends Application {
         submitButton.setPrefHeight(42);
         submitButton.setTextFill(Paint.valueOf("#ff7a00"));
         pane.getChildren().add(submitButton);
-        submitButton.relocate(318,494);
+        submitButton.relocate(318,720);
 
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(firstName.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your First Name");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your First Name");
                     return;
                 }
                 
                 if(lastName.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Last Name");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Last Name");
                     return;
                 }
                 
                 if(!nic.getText().isEmpty()) {
                    if(!FormValidator.nicNumberValidate(nic.getText())){
-                       showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Correct NIC Number");
+                       Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Correct NIC Number");
                        return;
                    }
                 }else{
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your NIC Number");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your NIC Number");
                     return;
                 }
                 
                 if(username.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a Username");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a Username");
                     return;
                 }
                 
                 if(!password.getText().isEmpty()) {
                     if(!FormValidator.passwordValidate(password.getText())){
-                        showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a Strong password");
+                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a Strong password");
                         return;
                     }
                 }else{
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a password");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a password");
                     return;
                 }
 
-                Employee employee = new Employee(firstName.getText(), lastName.getText(), nic.getText(), username.getText(), password.getText());
-                EmploeeModel model = new EmploeeModel();
-                Boolean result = false;
-                try {
-                    result = model.addNewEmployee(employee);
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }if(result){
-                    LoginForm form = new LoginForm();
-                    form.start(primaryStage);
-                }
+//                Employee employee = new Employee(username.getText());
+//                EmployeeModel model = new EmployeeModel();
+//                Boolean result = false;
+//                try {
+//                    result = model.addNewEmployee(employee);
+//                }catch (SQLException e){
+//                    e.printStackTrace();
+//                }if(result){
+//                    LoginForm form = new LoginForm();
+//                    form.start(primaryStage);
+//                }else{
+//                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Username exist");
+//                }
             }
 
 
 
         });
    }
-//  ;,8-yYxn
-    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
-    }
-
-
 }

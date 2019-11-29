@@ -56,6 +56,18 @@
             <MenuItem mnemonicParsing="false" text="Action 2" />
           </items>
         </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="244.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Add a New Customer">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
+        <MenuButton layoutX="14.0" layoutY="582.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Branch Employee">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Action 1" />
+            <MenuItem mnemonicParsing="false" text="Action 2" />
+          </items>
+        </MenuButton>
       </children>
     </AnchorPane>
     <Pane layoutX="269.0" layoutY="128.0" prefHeight="750.0" prefWidth="800.0" />

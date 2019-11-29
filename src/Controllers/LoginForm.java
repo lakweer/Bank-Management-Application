@@ -1,6 +1,6 @@
 package Controllers;
 
-import Models.EmploeeModel;
+import Models.EmployeeModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,9 +10,9 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import Controllers.Employee.EmployeeHome;
 import java.sql.SQLException;
+import Helpers.Helpers;
 
 public class LoginForm extends Application {
 
@@ -56,15 +56,7 @@ public class LoginForm extends Application {
         pane.getChildren().add(forGotPassword);
         forGotPassword.relocate(345,308);
 
-        //Sign In Link
-        Hyperlink signIn = new Hyperlink("Sign In");
-        signIn.setFont(Font.font("System",15));
-        signIn.setUnderline(true);
-        pane.getChildren().add(signIn);
-        signIn.relocate(416,349);
-
         //Login Button
-
         Button loginButton = new Button("Login");
         loginButton.setPrefHeight(34);
         loginButton.setPrefWidth(75);
@@ -76,15 +68,17 @@ public class LoginForm extends Application {
             @Override
             public void handle(ActionEvent event) {
                 if(username.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Username");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Username");
                     return;
                 }
 
                 if(password.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your password");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your password");
                     return;
                 }
-                EmploeeModel model =new  EmploeeModel();
+
+                //Login Action
+                EmployeeModel model =new EmployeeModel();
                 String[] params = {username.getText(),password.getText()};
                 boolean result = false;
                 try {
@@ -93,14 +87,14 @@ public class LoginForm extends Application {
                     e.printStackTrace();
                 }
                 if(result){
-                    EmployeeHome home = new EmployeeHome(username.getText(),model.getEmployeeID());
+                    EmployeeHome home = new EmployeeHome(username.getText(), model.getEmployeeID(), model.getBranchID());
                     try {
                         home.start(primaryStage);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                 }else{
-                    showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Invalid Username Password");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Invalid Username Password");
                     return;
                 }
             }
@@ -108,27 +102,6 @@ public class LoginForm extends Application {
 
 
         });
-
-        signIn.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
-                EmployeeRegisterController signupForm = new EmployeeRegisterController();
-                try {
-                    signupForm.start(primaryStage);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 
     @Override

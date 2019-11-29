@@ -32,7 +32,7 @@ CREATE TABLE Branch (
     BranchName VARCHAR(50) NOT NULL,
     ManagerId VARCHAR(40),
     PostalAddress TEXT NOT NULL,
-    FOREIGN KEY (ManagerId) REFERENCES branchmanager(ManagerId)
+    FOREIGN KEY (ManagerId) REFERENCES BranchManager(ManagerId)
     );
 
 CREATE TABLE BranchManagersHistory (
