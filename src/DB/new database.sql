@@ -1,74 +1,73 @@
 CREATE DATABASE banksystem;
 USE banksystem;
 
-CREATE TABLE Employee (
+CREATE TABLE branch (
+    BranchId VARCHAR(40) PRIMARY KEY,
+    BranchName VARCHAR(50) NOT NULL,
+    PostalAddress TEXT NOT NULL
+    );
+
+CREATE TABLE employee (
     EmployeeId VARCHAR(40) ,
     FirstName varchar(50) NOT NULL,
     LastName varchar(50) NOT NULL,
     BranchID VARCHAR(40),
     Nic CHAR(10) NOT NULL,
+    Email VARCHAR(250) NOT NULL,
     BirthDate DATE NOT NULL,
-    PRIMARY KEY(EmployeeId)
-    /*FOREIGN KEY (BranchID) REFERENCES Branch (BranchID)*/
+    PRIMARY KEY(EmployeeId),
+    FOREIGN KEY (BranchID) REFERENCES branch (BranchID)
     );
 
-CREATE TABLE EmployeeLogin (
+CREATE TABLE employee_login (
     EmployeeID VARCHAR(40) NOT NULL,
     Username VARCHAR(50) PRIMARY KEY,
-    Password VARCHAR(50) NOT NULL,
-    FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeId)
+    Password VARCHAR(500) NOT NULL,
+    Status ENUM('1','0') NOT NULL,
+    Type ENUM('Normal','BranchManager'),
+    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE BranchManager (
+CREATE TABLE branch_manager (
      ManagerId VARCHAR(40) PRIMARY KEY,
-     EmployeeId VARCHAR(40) NOT NULL,
-     BranchID VARCHAR(40),
-     FOREIGN KEY (EmployeeId) REFERENCES Employee(EmployeeId)
- 	/*FOREIGN KEY (BranchId) REFERENCES Branch(BranchId)*/
+     EmployeeId VARCHAR(40) ,
+     BranchID VARCHAR(40) ,
+     FOREIGN KEY (EmployeeId) REFERENCES employee(EmployeeId),
+     FOREIGN KEY (BranchId) REFERENCES branch(BranchId)
      );
 
-CREATE TABLE Branch (
-    BranchId VARCHAR(40) PRIMARY KEY,
-    BranchName VARCHAR(50) NOT NULL,
-    ManagerId VARCHAR(40),
-    PostalAddress TEXT NOT NULL,
-    FOREIGN KEY (ManagerId) REFERENCES BranchManager(ManagerId)
-    );
-
-CREATE TABLE BranchManagersHistory (
+CREATE TABLE branch_managers_history (
     ManagerId VARCHAR(40),
     BranchId VARCHAR(40),
-    JoinedDate DATE,
+    JoinedDate DATE ,
     LeaveDate DATE,
     PRIMARY KEY (ManagerId, BranchId, JoinedDate),
-    FOREIGN KEY (ManagerId) REFERENCES BranchManager(ManagerId),
-    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
+    FOREIGN KEY (ManagerId) REFERENCES branch_manager(ManagerId),
+    FOREIGN KEY (BranchID) REFERENCES branch(BranchID)
     );
 
-CREATE TABLE NormalEmployee (
+CREATE TABLE normal_employee (
     EmployeeId VARCHAR(40) PRIMARY KEY,
-    BranchId VARCHAR(40),
-    FOREIGN KEY (EmployeeId) REFERENCES Employee(EmployeeId),
-    FOREIGN KEY (BranchId) REFERENCES Branch(BranchId)
+    FOREIGN KEY (EmployeeId) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE NormalEmployeesHistory (
+CREATE TABLE normal_employees_history (
     EmployeeId VARCHAR(40),
     BranchId VARCHAR(40),
     JoinedDate DATE,
     LeaveDate DATE,
     PRIMARY KEY (EmployeeId, BranchId, JoinedDate),
-    FOREIGN KEY (EmployeeId) REFERENCES normalemployee(EmployeeId),
-    FOREIGN KEY (BranchID) REFERENCES Branch(BranchID)
+    FOREIGN KEY (EmployeeId) REFERENCES normal_employee(EmployeeId),
+    FOREIGN KEY (BranchID) REFERENCES branch(BranchID)
     );
 
-CREATE TABLE Customer (
+CREATE TABLE customer (
     CustomerId VARCHAR(40) PRIMARY KEY,
     CustomerType ENUM('Individual','Organization') NOT NULL,
-    Email VARCHAR(50)
+    Email VARCHAR(250)
     );
 
-CREATE TABLE Individual (
+CREATE TABLE individual (
     CustomerId VARCHAR(40) PRIMARY KEY,
     Nic CHAR(10) UNIQUE NOT NULL,
     FirstName varchar(50) NOT NULL,
@@ -81,10 +80,10 @@ CREATE TABLE Individual (
     PostalCode VARCHAR(50) NOT NULL,
     Gender ENUM('Male','Female') NOT NULL,
     Birthday DATE NOT NULL,
-    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId)
+    FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE Organization (
+CREATE TABLE organization (
     CustomerId VARCHAR(40) PRIMARY KEY,
     OrganizationName VARCHAR(50) NOT NULL,
     AuthorizedPerson VARCHAR(50) NOT NULL,
@@ -94,75 +93,75 @@ CREATE TABLE Organization (
     StreetTwo VARCHAR(50),
     Town VARCHAR(50) NOT NULL,
     PostalCode VARCHAR(50) NOT NULL,
-    TelephoneNumber INT(10) NOT NULL,
-    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId)
+    TelephoneNumber CHAR(10) NOT NULL,
+    FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE CustomerOnlineAccount (
+CREATE TABLE customer_online_account (
     AccountId VARCHAR(40) PRIMARY KEY,
     CustomerId VARCHAR(40) UNIQUE NOT NULL,
     Email VARCHAR(50) NOT NULL,
-    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId)
+    FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE CustomerLogin (
+CREATE TABLE customer_login (
     AccountId VARCHAR(40) NOT NULL,
     Username VARCHAR(50) PRIMARY KEY,
     Password VARCHAR(40) NOT NULL,
-    FOREIGN KEY (AccountId) REFERENCES customeronlineaccount(AccountId)
+    FOREIGN KEY (AccountId) REFERENCES customer_online_account(AccountId)
     );
 
-CREATE TABLE SavingsAccountsType (
+CREATE TABLE savings_accounts_type (
     AccountTypeId VARCHAR(40) PRIMARY KEY,
     AccountTypeName VARCHAR(50) NOT NULL,
-    InterestRate DECIMAL(10,2) NOT NULL,
+    InterestRate DECIMAL(5,2) NOT NULL,
     MinimumAge INT NOT NULL,
     MaximumAge INT NOT NULL,
     MinimumBalance DECIMAL(10,2)
     );
 
-CREATE TABLE SavingsAccount (
+CREATE TABLE savings_account (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     BranchId VARCHAR(40) NOT NULL,
     AccountTypeId VARCHAR(40) NOT NULL,
     CustomerId VARCHAR(40) NOT NULL,
-    FOREIGN KEY (BranchId) REFERENCES Branch(BranchId),
-    FOREIGN KEY (AccountTypeId) REFERENCES SavingsAccountsType(AccountTypeId),
+    FOREIGN KEY (BranchId) REFERENCES branch(BranchId),
+    FOREIGN KEY (AccountTypeId) REFERENCES savings_accounts_type(AccountTypeId),
     FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE DebitCard (
+CREATE TABLE debit_card (
     CardNumber VARCHAR(40) PRIMARY KEY,
     CardCode VARCHAR(40) UNIQUE NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     IssuedDate DATE NOT NULL,
     ExpiryDate DATE NOT NULL,
-    FOREIGN KEY (AccountNumber) REFERENCES savingsaccount(AccountNumber)
+    FOREIGN KEY (AccountNumber) REFERENCES savings_account(AccountNumber)
     );
 
-CREATE TABLE SavingsWithdraw (
+CREATE TABLE savings_withdraw (
     WithdrawId VARCHAR(40) PRIMARY KEY,
     EmployeeId VARCHAR(40) NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     WithdrawDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
     Teller VARCHAR(50) NOT NULL,
-    FOREIGN KEY(EmployeeId) REFERENCES Employee(EmployeeId),
-    FOREIGN KEY(AccountNumber) REFERENCES SavingsAccount(AccountNumber)
+    FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
+    FOREIGN KEY(AccountNumber) REFERENCES savings_account(AccountNumber)
     );
 
-CREATE TABLE SavingsDeposit (
+CREATE TABLE savings_deposit (
     DepositId VARCHAR(40) PRIMARY KEY,
     EmployeeId VARCHAR(40) NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     DepositDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
     Teller VARCHAR(50) NOT NULL,
-    FOREIGN KEY(EmployeeId) REFERENCES Employee(EmployeeId),
-    FOREIGN KEY(AccountNumber) REFERENCES SavingsAccount(AccountNumber)
+    FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
+    FOREIGN KEY(AccountNumber) REFERENCES savings_account(AccountNumber)
     );
 
-CREATE TABLE FixedDepositAccount (
+CREATE TABLE fixed_deposit_account (
     FDAccountNumber VARCHAR(40) PRIMARY KEY,
     SavingsAccountNumber VARCHAR(40) NOT NULL,
     CustomerId VARCHAR(40) NOT NULL,
@@ -170,86 +169,86 @@ CREATE TABLE FixedDepositAccount (
     DepositAmount DECIMAL(10,2) NOT NULL,
     DepositDate DATE NOT NULL,
     MaturityDate DATE NOT NULL,
-    FOREIGN KEY(SavingsAccountNumber) REFERENCES SavingsAccount(AccountNumber),
-    FOREIGN KEY(CustomerId) REFERENCES Customer(CustomerId)
+    FOREIGN KEY(SavingsAccountNumber) REFERENCES savings_account(AccountNumber),
+    FOREIGN KEY(CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE CurrentAccount (
+CREATE TABLE current_account (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     BranchId VARCHAR(40) NOT NULL,
     CustomerId VARCHAR(40) NOT NULL,
-    FOREIGN KEY (BranchId) REFERENCES Branch(BranchId),
-    FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId)
+    FOREIGN KEY (BranchId) REFERENCES branch(BranchId),
+    FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE CurrentAccountOpen (
+CREATE TABLE current_account_open (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     OpenEmployeeId VARCHAR(40) NOT NULL,
     OpenDate DATE NOT NULL,
-    FOREIGN KEY (AccountNumber) REFERENCES CurrentAccount(AccountNumber),
-    FOREIGN KEY (OpenEmployeeId) REFERENCES Employee(EmployeeId)
+    FOREIGN KEY (AccountNumber) REFERENCES current_account(AccountNumber),
+    FOREIGN KEY (OpenEmployeeId) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE CurrentAccountClose (
+CREATE TABLE current_account_close (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     CloseEmployeeId VARCHAR(40) NOT NULL,
     CloseDate DATE NOT NULL,
-    FOREIGN KEY (AccountNumber) REFERENCES CurrentAccount(AccountNumber),
-    FOREIGN KEY (CloseEmployeeId) REFERENCES Employee(EmployeeId)
+    FOREIGN KEY (AccountNumber) REFERENCES current_account(AccountNumber),
+    FOREIGN KEY (CloseEmployeeId) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE SavingsOpen (
+CREATE TABLE savings_open (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     OpenEmployeeId VARCHAR(40) NOT NULL,
     OpenDate DATE NOT NULL,
-    FOREIGN KEY (AccountNumber) REFERENCES SavingsAccount(AccountNumber),
-    FOREIGN KEY (OpenEmployeeId) REFERENCES Employee(EmployeeId)
+    FOREIGN KEY (AccountNumber) REFERENCES savings_account(AccountNumber),
+    FOREIGN KEY (OpenEmployeeId) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE SavingsClose (
+CREATE TABLE savings_close (
     AccountNumber VARCHAR(40) PRIMARY KEY,
     CloseEmployeeId VARCHAR(40) NOT NULL,
     CloseDate DATE NOT NULL,
-    FOREIGN KEY (AccountNumber) REFERENCES SavingsAccount(AccountNumber),
-    FOREIGN KEY (CloseEmployeeId) REFERENCES Employee(EmployeeId)
+    FOREIGN KEY (AccountNumber) REFERENCES savings_account(AccountNumber),
+    FOREIGN KEY (CloseEmployeeId) REFERENCES employee(EmployeeId)
     );
 
-CREATE TABLE CurrentAccountDeposit (
+CREATE TABLE current_account_deposit (
     DepositId VARCHAR(40) PRIMARY KEY,
     EmployeeId VARCHAR(40) NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     DepositDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
     ChequeNumber VARCHAR(40) NOT NULL,
-    FOREIGN KEY(EmployeeId) REFERENCES Employee(EmployeeId),
-    FOREIGN KEY(AccountNumber) REFERENCES CurrentAccount(AccountNumber)
+    FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
+    FOREIGN KEY(AccountNumber) REFERENCES current_account(AccountNumber)
     );
 
-CREATE TABLE CurrentAccountWithdraw (
+CREATE TABLE current_account_withdraw (
     WithdrawId VARCHAR(40) PRIMARY KEY,
     EmployeeId VARCHAR(40) NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     WithdrawDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
     ChequeNumber VARCHAR(40) NOT NULL,
-    FOREIGN KEY(EmployeeId) REFERENCES Employee(EmployeeId),
-    FOREIGN KEY(AccountNumber) REFERENCES CurrentAccount(AccountNumber)
+    FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
+    FOREIGN KEY(AccountNumber) REFERENCES current_account(AccountNumber)
     );
 
-CREATE TABLE Transfer (
+CREATE TABLE transfer (
     TransferId VARCHAR(40) PRIMARY KEY,
     TransferredFromAccountNumber VARCHAR(40) NOT NULL,
     TransferredToAccountNumber VARCHAR(40) NOT NULL,
    	TransferAmount DECIMAL(10,2) NOT NULL,
     Date DATE NOT NULL,
-    FOREIGN KEY(TransferredFromAccountNumber) REFERENCES SavingsAccount(AccountNumber),
-    FOREIGN KEY(TransferredToAccountNumber) REFERENCES SavingsAccount(AccountNumber)
+    FOREIGN KEY(TransferredFromAccountNumber) REFERENCES savings_account(AccountNumber),
+    FOREIGN KEY(TransferredToAccountNumber) REFERENCES savings_account(AccountNumber)
     );
 
-CREATE TABLE ATMWithdraw (
+CREATE TABLE atm_withdraw (
     WithdrawId VARCHAR(40) PRIMARY KEY,
     CardNumber VARCHAR(40) NOT NULL,
     WithdrawDate DATETIME NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY(CardNumber) REFERENCES DebitCard(CardNumber)
+    FOREIGN KEY(CardNumber) REFERENCES debit_card(CardNumber)
     );
