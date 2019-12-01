@@ -11,21 +11,21 @@ CREATE TABLE employee (
     EmployeeId VARCHAR(40) ,
     FirstName varchar(50) NOT NULL,
     LastName varchar(50) NOT NULL,
-    BranchID VARCHAR(40),
+    BranchId VARCHAR(40),
     Nic CHAR(10) NOT NULL,
     Email VARCHAR(250) NOT NULL,
     BirthDate DATE NOT NULL,
     PRIMARY KEY(EmployeeId),
-    FOREIGN KEY (BranchID) REFERENCES branch (BranchID)
+    FOREIGN KEY (BranchId) REFERENCES branch (BranchId)
     );
 
 CREATE TABLE employee_login (
-    EmployeeID VARCHAR(40) NOT NULL,
-    Username VARCHAR(50) PRIMARY KEY,
+    EmployeeId VARCHAR(40) NOT NULL,
+    UserName VARCHAR(50) PRIMARY KEY,
     Password VARCHAR(500) NOT NULL,
     Status ENUM('1','0') NOT NULL,
     Type ENUM('Normal','BranchManager'),
-    FOREIGN KEY (EmployeeID) REFERENCES employee(EmployeeId)
+    FOREIGN KEY (EmployeeId) REFERENCES employee(EmployeeId)
     );
 
 CREATE TABLE branch_manager (
@@ -62,8 +62,9 @@ CREATE TABLE normal_employees_history (
     );
 
 CREATE TABLE customer (
-    CustomerId VARCHAR(40) PRIMARY KEY,
+    CustomerId VARCHAR(40),
     CustomerType ENUM('Individual','Organization') NOT NULL,
+    PRIMARY KEY(CustomerId, CustomerType, Email)
     Email VARCHAR(250)
     );
 
@@ -94,6 +95,7 @@ CREATE TABLE organization (
     Town VARCHAR(50) NOT NULL,
     PostalCode VARCHAR(50) NOT NULL,
     TelephoneNumber CHAR(10) NOT NULL,
+    AuthorizedPersonNic VARCHAR(12) NOT NULL,
     FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 

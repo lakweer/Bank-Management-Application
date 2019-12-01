@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="892.0" prefWidth="1196.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
@@ -56,7 +53,7 @@
             <MenuItem mnemonicParsing="false" text="Action 2" />
           </items>
         </MenuButton>
-        <MenuButton layoutX="14.0" layoutY="244.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Add a New Customer">
+        <MenuButton layoutX="14.0" layoutY="242.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="170.0" text="Add a New Customer">
           <items>
             <MenuItem mnemonicParsing="false" text="Action 1" />
             <MenuItem mnemonicParsing="false" text="Action 2" />

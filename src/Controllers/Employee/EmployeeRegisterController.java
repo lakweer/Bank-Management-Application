@@ -1,9 +1,7 @@
 package Controllers.Employee;
 
 
-import Controllers.LoginForm;
-import Models.EmployeeModel;
-import Objects.Employee;
+
 import Validator.FormValidator;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -15,11 +13,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import Helpers.Helpers;
-
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 

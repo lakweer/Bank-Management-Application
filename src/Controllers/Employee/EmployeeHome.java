@@ -173,6 +173,16 @@ public class EmployeeHome extends Application {
         sideAnchorPane.getChildren().add(dcMenu);
         dcMenu.relocate(14,202);
 
+        MenuItem addIndividualCustomer = new MenuItem("Create Individual");
+        MenuItem addOrganizationCustomer = new MenuItem("Create Organization");
+
+        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer);
+        customerManagement.setFont(Font.font("System",15));
+        customerManagement.setPrefSize(170,42);
+        customerManagement.setPopupSide(Side.RIGHT);
+        sideAnchorPane.getChildren().add(customerManagement);
+        customerManagement.relocate(14,242);
+
         MenuItem addNewEmployee = new MenuItem("New Employee");
 
         MenuButton employeeSettingsMenu = new MenuButton("Branch Employee", null, addNewEmployee);
@@ -182,11 +192,19 @@ public class EmployeeHome extends Application {
         sideAnchorPane.getChildren().add(employeeSettingsMenu);
         employeeSettingsMenu.relocate(14,582);
 
-        personalSavingsOpenItem.setOnAction(new EventHandler<ActionEvent>() {
+        addIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 disablePane();
-                personalSavingsOpenPane(pane);
+                individualCustomerCreatePane(pane);
+            }
+        });
+
+        addOrganizationCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                organizationCustomerCreatePane(pane);
             }
         });
 
@@ -199,178 +217,14 @@ public class EmployeeHome extends Application {
         });
     }
 
-    private void personalSavingsOpenPane(Pane pane){
+    private void individualCustomerCreatePane(Pane pane){
+        IndividualCustomerRegister c =new  IndividualCustomerRegister(this);
+        c.IndividualCustomerRegisterUI(pane);
+    }
 
-        Pane pane1 = new Pane();
-        pane1.setPrefSize(800,750);
-        pane.getChildren().add(pane1);
-        pane1.relocate(269,128);
-
-        //Main Title
-        Label mainTitle = new Label("APPLICATION");
-        mainTitle.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.getChildren().add(mainTitle);
-        mainTitle.relocate(281,14);
-
-        //Sub Title
-        Label subTitle = new Label("Personal Account Opening");
-        subTitle.setFont(Font.font("System",20));
-        pane1.getChildren().add(subTitle);
-        subTitle.relocate(281,55);
-
-
-        //Account Type
-        Label acType = new Label("Account Type");
-        acType.setFont(Font.font("System",15));
-        pane1.getChildren().add(acType);
-        acType.relocate(61,114);
-
-        MenuItem acTypeOne = new MenuItem("Children's Account");
-        MenuItem acTypeTwo = new MenuItem("18+ Account");
-
-        MenuButton acTypeMenu = new MenuButton("Account Type", null, acTypeOne, acTypeTwo);
-        acTypeMenu.setCache(true);
-        acTypeMenu.setFont(Font.font("System",15));
-        acTypeMenu.setPrefSize(144,27);
-        acTypeMenu.setPopupSide(Side.BOTTOM);
-        pane1.getChildren().add(acTypeMenu);
-        acTypeMenu.relocate(61,162);
-
-        //Full Name Label
-        Label fullNameLabel = new Label("Full Name");
-        fullNameLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(fullNameLabel);
-        fullNameLabel.relocate(61,204);
-
-        //Full name Input Field
-        TextField fullNameText = new TextField();
-        fullNameText.setPrefSize(632,35);
-        pane1.getChildren().add(fullNameText);
-        fullNameText.relocate(61, 234);
-
-        //House Name Label
-        Label houseNameLabel = new Label("House Name");
-        houseNameLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(houseNameLabel);
-        houseNameLabel.relocate(61,288);
-
-        //House Name Input Field
-        TextField houseNameText = new TextField();
-        houseNameText.setPrefSize(192,35);
-        pane1.getChildren().add(houseNameText);
-        houseNameText.relocate(61, 318);
-
-        //Street One Label
-        Label streetOneLabel = new Label("Street One");
-        streetOneLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(streetOneLabel);
-        streetOneLabel.relocate(281,288);
-
-        //Street One Input Field
-        TextField streetOneText = new TextField();
-        streetOneText.setPrefSize(192,35);
-        pane1.getChildren().add(streetOneText);
-        streetOneText.relocate(281, 318);
-
-
-        //Street Two Label
-        Label streetTwoLabel = new Label("Street Two");
-        streetTwoLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(streetTwoLabel);
-        streetTwoLabel.relocate(497,288);
-
-        //Street Two Input Field
-        TextField streetTwoText = new TextField();
-        streetTwoText.setPrefSize(192,35);
-        pane1.getChildren().add(streetTwoText);
-        streetTwoText.relocate(497, 318);
-
-
-        //town Label
-        Label townLabel = new Label("Town");
-        townLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(townLabel);
-        townLabel.relocate(61,365);
-
-        //Town Input Field
-        TextField townNameText = new TextField();
-        townNameText.setPrefSize(192,35);
-        pane1.getChildren().add(townNameText);
-        townNameText.relocate(61, 395);
-
-        //District Label
-        Label districtLabel = new Label("District");
-        districtLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(districtLabel);
-        districtLabel.relocate(281,365);
-
-        //District Input Field
-        TextField districtNameText = new TextField();
-        districtNameText.setPrefSize(192,35);
-        pane1.getChildren().add(districtNameText);
-        districtNameText.relocate(281, 395);
-
-        //Postal Code Label
-        Label postalCodeLabel = new Label("Postal Code");
-        postalCodeLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(postalCodeLabel);
-        postalCodeLabel.relocate(497,365);
-
-        //Postal Code Input Field
-        TextField postalCodeText = new TextField();
-        postalCodeText.setPrefSize(192,35);
-        pane1.getChildren().add(postalCodeText);
-        postalCodeText.relocate(497, 395);
-
-
-        //Gender Label
-        Label genderLabel = new Label("Gender");
-        genderLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(genderLabel);
-        genderLabel.relocate(61,456);
-
-        //Gender Menu
-        MenuItem maleType = new MenuItem("Male");
-        MenuItem femaleType = new MenuItem("Female");
-
-        MenuButton genderTypeMenu = new MenuButton("Gender", null, maleType, femaleType);
-        genderTypeMenu.setFont(Font.font("System",15));
-        genderTypeMenu.setPrefSize(102,35);
-        acTypeMenu.setPopupSide(Side.BOTTOM);
-        pane1.getChildren().add(genderTypeMenu);
-        genderTypeMenu.relocate(61,485);
-
-        //Postal Code Label
-        Label nicNoLabel = new Label("NIC No");
-        nicNoLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(nicNoLabel);
-        nicNoLabel.relocate(281,456);
-
-        //NIC Number Input Field
-        TextField nicNoText = new TextField();
-        nicNoText.setPrefSize(192,35);
-        pane1.getChildren().add(nicNoText);
-        nicNoText.relocate(281, 485);
-
-        //Buttons
-        cancelButton(pane, pane1);
-        //Submit Button
-        Button submitButton = new Button("Submit");
-        submitButton.setDefaultButton(true);
-        submitButton.setPrefWidth(73);
-        submitButton.setPrefHeight(35);
-        pane1.getChildren().add(submitButton);
-        submitButton.relocate(616,658);
-
-        submitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                enablePane();
-                pane.getChildren().remove(pane1);
-            }
-        });
-
-
+    private void organizationCustomerCreatePane(Pane pane){
+        OrganizationCustomerregister c = new OrganizationCustomerregister(this);
+        c.organizationCustomerRegisterPane(pane);
     }
 
     private void changeAccountSettings(Pane pane, Stage primaryStage){
@@ -585,168 +439,11 @@ public class EmployeeHome extends Application {
         }
 
     private void addNewEmployeePane(Pane pane){
-        Pane pane1 = new Pane();
-        pane1.setPrefSize(800,750);
-        pane.getChildren().add(pane1);
-        pane1.relocate(269,128);
+        AddNewEmplyeePane addNewEmployee = new AddNewEmplyeePane(this);
+        addNewEmployee.registerNewEmployeePane(pane);
+       }
 
-        //Title
-        Label headerLabel = new Label("Employee Registration Form");
-        headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.getChildren().add(headerLabel);
-        headerLabel.relocate(167,20);
-
-        //Branch Label
-        Label branchLabel = new Label("Branch :");
-        pane1.getChildren().add(branchLabel);
-        branchLabel.relocate(47,79);
-
-        Label branchIDLabel = new Label(BranchID);
-        pane1.getChildren().add(branchIDLabel);
-        branchIDLabel.relocate(112,79);
-
-        //Today Date Label
-        Label dateLabel = new Label("Date :");
-        pane1.getChildren().add(dateLabel);
-        dateLabel.relocate(549,79);
-
-        Label todayDateLabel = new Label(LocalDate.now().toString());
-        pane1.getChildren().add(todayDateLabel);
-        todayDateLabel.relocate(596,79);
-
-        // First Name Label
-        Label firstNameLabel = new Label("First Name");
-        pane1.getChildren().add(firstNameLabel);
-        firstNameLabel.relocate(47,148);
-
-        // First Name Text Field
-        TextField firstNameText = new TextField();
-        firstNameText.setPrefSize(399,32);
-        pane1.getChildren().add(firstNameText);
-        firstNameText.relocate(201,142);
-
-        // Last Name Label
-        Label lastNameLabel = new Label("Last Name");
-        pane1.getChildren().add(lastNameLabel);
-        lastNameLabel.relocate(47,210);
-
-        // Add Name Text Field
-        TextField lastNameText = new TextField();
-        lastNameText.setPrefSize(399,32);
-        pane1.getChildren().add(lastNameText);
-        lastNameText.relocate(201,204);
-
-        // Add NIC Label
-        Label nicLabel = new Label("NIC Number");
-        pane1.getChildren().add(nicLabel);
-        nicLabel.relocate(47,279);
-
-        // Add NIC Text Field
-        TextField nicText = new TextField();
-        nicText.setPrefSize(399,32);
-        pane1.getChildren().add(nicText);
-        nicText.relocate(201,273);
-
-        // Email Label
-        Label emailLabel = new Label("Email");
-        pane1.getChildren().add(emailLabel);
-        emailLabel.relocate(47, 337);
-
-        // Email Text Field
-        TextField emailText = new TextField();
-        emailText.setPrefSize(399,32);
-        pane1.getChildren().add(emailText);
-        emailText.relocate(201, 331);
-
-        // Date Of Birth Label
-        Label dobLabel = new Label("Date Of Birth");
-        pane1.getChildren().add(dobLabel);
-        dobLabel.relocate(47, 407);
-
-        //ADD birthday selector
-        DatePicker dob = new DatePicker(LocalDate.now());
-        dob.setDayCellFactory(picker -> new DateCell() {
-            public void updateItem(LocalDate date, boolean empty) {
-                super.updateItem(date, empty);
-                LocalDate today = LocalDate.now();
-                setDisable(empty || date.compareTo(today) > 0);
-            }
-        });
-        dob.setPrefSize(150,40);
-        pane1.getChildren().add(dob);
-        dob.relocate(201,403);
-
-        //Buttons
-        cancelButton(pane, pane1);
-
-        //Submit Button
-        Button submitButton = new Button("Submit");
-        submitButton.setDefaultButton(true);
-        submitButton.setPrefSize(73,35);
-        pane1.getChildren().add(submitButton);
-        submitButton.relocate(616,658);
-
-
-        submitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(firstNameText.getText().isEmpty()) {
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the First Name");
-                    return;
-                }
-
-                if(lastNameText.getText().isEmpty()) {
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Last Name");
-                    return;
-                }
-
-                if(!nicText.getText().isEmpty()) {
-                    if(!FormValidator.nicNumberValidate(nicText.getText())){
-                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Correct NIC Number");
-                        return;
-                    }
-                }else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the NIC Number");
-                    return;
-                }
-
-                if(!emailText.getText().isEmpty()) {
-                    if(!FormValidator.emailValidate(emailText.getText())){
-                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Valid Email");
-                        return;
-                    }
-                }else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter a Email");
-                    return;
-                }
-
-                if(dob.getValue().toString().isEmpty()) {
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Birth Date");
-                    return;
-                }
-
-                Employee employee = new Employee(nicText.getText());
-                employee.setFirstName(firstNameText.getText());
-                employee.setLastName(lastNameText.getText());
-                employee.setNic(nicText.getText());
-                employee.setEmail(emailText.getText());
-                employee.setDateOfBirth(LocalDate.parse(dob.getValue().toString()));
-                model.setEmployeeID(employeeID);
-                Boolean result = false;
-                try {
-                    result = model.addNewEmployee(employee);
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }if(result){
-                    pane.getChildren().remove(pane1);
-                    enablePane();
-                }else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Error When Creating the Form");
-                }
-
-    }   });}
-
-    private void cancelButton(Pane pane,Pane pane1 ){
+    protected void cancelButton(Pane pane,Pane pane1 ){
         //Cancel Button
         Button cancelButton = new Button("Cancel");
         cancelButton.setDefaultButton(true);
@@ -763,17 +460,55 @@ public class EmployeeHome extends Application {
         });
     }
 
-    private void disablePane(){
+    protected void disablePane(){
         for (Pane p: panes) {
             p.setDisable(true);
         }
     }
 
-    private void enablePane(){
+    protected void enablePane(){
         for (Pane p: panes) {
             p.setDisable(false);
         }
     }
 
+    public String getUserName() {
+        return userName;
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public String getBranchID() {
+        return BranchID;
+    }
+
+    public void setBranchID(String branchID) {
+        BranchID = branchID;
+    }
+
+    public AnchorPane[] getPanes() {
+        return panes;
+    }
+
+    public void setPanes(AnchorPane[] panes) {
+        this.panes = panes;
+    }
+
+    public EmployeeModel getModel() {
+        return model;
+    }
+
+    public void setModel(EmployeeModel model) {
+        this.model = model;
+    }
 }

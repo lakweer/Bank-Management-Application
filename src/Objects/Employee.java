@@ -12,15 +12,25 @@ public class Employee {
     private String userName;
     private String password;
     private String email;
+    private String branchId;
     private LocalDate dateOfBirth;
 
 
-    public Employee(String userName){
+    public Employee(String userName, String branchId){
         this.userName = userName;
+        this.branchId = branchId;
     }
 
     public String getEmployeeId() {
         return employeeId;
+    }
+
+    public String getBranchId() {
+        return branchId;
+    }
+
+    public void setBranchId(String branchId) {
+        this.branchId = branchId;
     }
 
     public void setEmployeeId(String employeeId) {

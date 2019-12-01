@@ -18,13 +18,13 @@ public class EmployeeModel {
         public boolean login(String[] params) throws SQLException {
             connection = Database.getConnection();
             try{
-                String sql = "SELECT EmployeeID FROM users WHERE UserName = ? AND Password = ? AND Status = 1";
+                String sql = "SELECT EmployeeID FROM employee_login WHERE UserName = ? AND Password = ? AND Status = 1";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, params[0]);
                 stmt.setString(2, params[1]);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()){
-                    employeeId = rs.getString("EmployeeID");
+                    employeeId = rs.getString("EmployeeId");
                 }
             }catch (SQLException e){
                 e.printStackTrace();
@@ -46,7 +46,7 @@ public class EmployeeModel {
         public String getBranchID(){
             connection = Database.getConnection();
             try{
-                String sql = "SELECT BranchID FROM employeebranch WHERE EmployeeID= ? AND Leaved is null";
+                String sql = "SELECT BranchId FROM employee WHERE EmployeeId= ? ";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1,getEmployeeID());
                 ResultSet rs = stmt.executeQuery();
@@ -71,24 +71,25 @@ public class EmployeeModel {
         connection = Database.getConnection();
         String empID = null;
         try {
-            String sql = "INSERT INTO employee VALUES (UUID(), ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO employee VALUES (UUID(), ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, employee.getFirstName());
             stmt.setString(2, employee.getLastName());
-            stmt.setString(3, employee.getNic());
-            stmt.setString(4,employee.getEmail());
-            stmt.setString(5,employee.getDateOfBirth().toString());
+            stmt.setString(3, employee.getBranchId());
+            stmt.setString(4, employee.getNic());
+            stmt.setString(5,employee.getEmail());
+            stmt.setString(6,employee.getDateOfBirth().toString());
             int result = stmt.executeUpdate(); //returns a integer
             if(result>0) {
-                String sql_1 = "SELECT EmployeeID FROM employee WHERE Nic = ? ";
+                String sql_1 = "SELECT EmployeeId FROM employee WHERE Nic = ? ";
                 PreparedStatement statement_1 = connection.prepareStatement(sql_1);
                 statement_1.setString(1, employee.getNic());
                 ResultSet rs = statement_1.executeQuery();
                 while (rs.next()) {
-                    empID = rs.getString("EmployeeID");
+                    empID = rs.getString("EmployeeId");
                 }
                 if(empID!= null){
-                    return addEmployeeToLogInTable(empID, employee.getNic()) && employeeSetToBranch(empID);
+                    return addEmployeeToLogInTable(empID, employee.getNic())&& addNormalEmployee(empID) && employeeSetToBranch(empID) ;
                 }
             }
         }catch (SQLException e){
@@ -101,15 +102,34 @@ public class EmployeeModel {
         return false;
     }
 
+        private boolean addNormalEmployee(String empID){
+            connection = Database.getConnection();
+            try{
+                String sql = "INSERT INTO normal_employee VALUES (?)";
+                PreparedStatement stmt = connection.prepareStatement(sql);
+                stmt.setString(1, empID);
+                int result = stmt.executeUpdate();
+                if(result>0){
+                    return true;
+                }else{
+                    return false;
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return false;
+        }
+
         private boolean addEmployeeToLogInTable(String empID, String nic){
             connection = Database.getConnection();
             try{
-                String sql = "INSERT INTO users VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO employee_login VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, empID);
                 stmt.setString(2,nic);
                 stmt.setString(3,"SLBC");
                 stmt.setString(4,"1");
+                stmt.setString(5,"Normal");
                 int result = stmt.executeUpdate();
                 if(result>0){
                     return true;
@@ -125,7 +145,7 @@ public class EmployeeModel {
         public boolean isUniqueUsername(String username){
             connection = Database.getConnection();
             try {
-                String sql = "SELECT UserName FROM users WHERE UserName = ?";
+                String sql = "SELECT UserName FROM employee_login WHERE UserName = ?";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, username);
                 ResultSet rs = stmt.executeQuery();
@@ -142,7 +162,7 @@ public class EmployeeModel {
         public boolean updateEmployeeUsername(String username){
             connection = Database.getConnection();
             try{
-                String sql = "UPDATE users  SET UserName = ? WHERE EmployeeID =? ";
+                String sql = "UPDATE employee_login  SET UserName = ? WHERE EmployeeId =? ";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, username);
                 stmt.setString(2,employeeId);
@@ -161,10 +181,10 @@ public class EmployeeModel {
         public boolean employeeSetToBranch(String empID){
             connection = Database.getConnection();
             try{
-                String sql = "INSERT INTO employeebranch (`BranchID`, `EmployeeID`, `JoinedDate`) VALUES (?, ?, ?)";
+                String sql = "INSERT INTO normal_employees_history (`EmployeeId`, `BranchId`, `JoinedDate`) VALUES (?, ?, ?)";
                 PreparedStatement stmt = connection.prepareStatement(sql);
-                stmt.setString(1, getBranchID());
-                stmt.setString(2,empID);
+                stmt.setString(1, empID);
+                stmt.setString(2,getBranchID());
                 stmt.setString(3, LocalDate.now().toString());
                 int result = stmt.executeUpdate();
                 if(result>0){
@@ -181,7 +201,7 @@ public class EmployeeModel {
         public String getEmployeePassword(){
             connection = Database.getConnection();
             try{
-                String sql = "SELECT Password FROM users WHERE EmployeeID = ?";
+                String sql = "SELECT Password FROM employee_login WHERE EmployeeId = ?";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, employeeId);
                 ResultSet rs = stmt.executeQuery();
@@ -199,7 +219,7 @@ public class EmployeeModel {
         public boolean updateEmployeePassword(String password){
             connection = Database.getConnection();
             try{
-                String sql = "UPDATE users  SET Password = ? WHERE EmployeeID =? ";
+                String sql = "UPDATE employee_login  SET Password = ? WHERE EmployeeId =? ";
                 PreparedStatement stmt = connection.prepareStatement(sql);
                 stmt.setString(1, password);
                 stmt.setString(2,employeeId);

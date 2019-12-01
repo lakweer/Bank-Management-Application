@@ -27,9 +27,9 @@ public class FormValidator {
     }
 
     // Assuming that # of digits in a phone number should be exactly 10
-    public boolean phoneValidate(String phoneNumberString){
+    public static  boolean phoneValidate(String phoneNumberString){
         if (phoneNumberString != null){
-            return ((phoneNumberString.charAt(0) == '0') && (phoneNumberString.length() == 10));
+            return ((phoneNumberString.length() == 10) && (phoneNumberString.charAt(0) == '0') && (phoneNumberString.length() == 10));
         }
         return false;
     }
@@ -37,6 +37,14 @@ public class FormValidator {
     public static boolean nicNumberValidate(String nic){
         if(nic != null){
             return ((nic.length() == 10) && (nic.charAt(9) == 'V')&& (nic.substring(0,8).matches("\\d+")));
+        }else{
+            return false;
+        }
+    }
+
+    public static boolean postalCodeValidate(String code){
+        if(code !=null){
+            return ((code.length() == 5) && (code.matches("\\d+")));
         }else{
             return false;
         }
