@@ -100,18 +100,14 @@ CREATE TABLE organization (
     );
 
 CREATE TABLE customer_online_account (
-    AccountId VARCHAR(40) PRIMARY KEY,
-    CustomerId VARCHAR(40) UNIQUE NOT NULL,
+    CustomerId VARCHAR(40) PRIMARY KEY,
     Email VARCHAR(50) NOT NULL,
+    Username VARCHAR(50) NOT NULL UNIQUE,
+    Password VARCHAR(256) NOT NULL,
+    Status ENUM('0','1') NOT NULL,
     FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
 
-CREATE TABLE customer_login (
-    AccountId VARCHAR(40) NOT NULL,
-    Username VARCHAR(50) PRIMARY KEY,
-    Password VARCHAR(40) NOT NULL,
-    FOREIGN KEY (AccountId) REFERENCES customer_online_account(AccountId)
-    );
 
 CREATE TABLE savings_accounts_type (
     AccountTypeId VARCHAR(40) PRIMARY KEY,
@@ -131,6 +127,9 @@ CREATE TABLE savings_account (
     FOREIGN KEY (AccountTypeId) REFERENCES savings_accounts_type(AccountTypeId),
     FOREIGN KEY (CustomerId) REFERENCES customer(CustomerId)
     );
+
+ALTER TABLE `savings_account` ADD `Balance` DECIMAL(12,2) NOT NULL AFTER `CustomerId`;
+ALTER TABLE `savings_account` ADD `Status` ENUM('0','1') NOT NULL AFTER `Balance`;
 
 CREATE TABLE debit_card (
     CardNumber VARCHAR(40) PRIMARY KEY,
@@ -254,3 +253,14 @@ CREATE TABLE atm_withdraw (
     Amount DECIMAL(10,2) NOT NULL,
     FOREIGN KEY(CardNumber) REFERENCES debit_card(CardNumber)
     );
+
+CREATE TABLE second_holder(
+    SecondHolderId varchar(40) PRIMARY KEY,
+    CustomerId VARCHAR(40),
+    FullName VARCHAR(256) NOT NULL,
+    Gender ENUM('Male', 'Female') NOT NULL,
+    Nic CHAR(10),
+    Dob DATE NOT NULL,
+    FOREIGN KEY(CustomerId) REFERENCES individual(CustomerId)
+    );
+

@@ -17,3 +17,7 @@ INSERT INTO `normal_employee`(`EmployeeId`) VALUES
 --normal_employees_history
 INSERT INTO `normal_employees_history`(`EmployeeId`, `BranchId`, `JoinedDate`, `LeaveDate`) VALUES
 ('5a4c34ed-13fa-11ea-8718-d8c4971f41ea','BOSL_001_COL_NUG','2019-11-29',NULL);
+
+--Savings Account Types
+INSERT INTO `savings_accounts_type`(`AccountTypeId`, `AccountTypeName`, `InterestRate`, `MinimumAge`, `MaximumAge`, `MinimumBalance`) VALUES
+('SA_TYPE_001','Children',0.12,0,18,0.00), ('SA_TYPE_002','Teen',0.11,13,19,500.00), ('SA_TYPE_003','18+',0.10,18,59,1000.00), ('SA_TYPE_004','Senior Citizen',0.13,60,100,1000.0);

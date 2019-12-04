@@ -1,5 +1,6 @@
 package Controllers.Employee;
 
+import Controllers.Employee.SavingsAccount.SavingsAccountOpen;
 import Controllers.LoginForm;
 import Helpers.Helpers;
 import Validator.FormValidator;
@@ -11,14 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import Objects.Employee;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import java.io.FileInputStream;
-import java.sql.SQLException;
-import java.time.LocalDate;
 import Models.EmployeeModel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -89,7 +87,6 @@ public class EmployeeHome extends Application {
         topAnchorPane.getChildren().add(userMenu);
         userMenu.relocate(1000,30);
 
-
         editProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -97,7 +94,6 @@ public class EmployeeHome extends Application {
                 changeAccountSettings(pane, primaryStage);
             }
         });
-
 
         logout.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -117,11 +113,11 @@ public class EmployeeHome extends Application {
         panes[1] = sideAnchorPane;
 
         //Savings Account Button
-        MenuItem personalSavingsOpenItem = new MenuItem("Open Savings Account");
+        MenuItem savingsOpenItem = new MenuItem("Open Savings Account");
         MenuItem closeSA = new MenuItem("Close Savings Account");
         MenuItem transactionSA = new MenuItem("Transaction");
 
-        MenuButton savingsMenu = new MenuButton("Savings Account", null,personalSavingsOpenItem, closeSA, transactionSA);
+        MenuButton savingsMenu = new MenuButton("Savings Account", null,savingsOpenItem, closeSA, transactionSA);
         savingsMenu.setFont(Font.font("System",15));
         savingsMenu.setPrefSize(170,42);
         savingsMenu.setPopupSide(Side.RIGHT);
@@ -215,11 +211,24 @@ public class EmployeeHome extends Application {
                 addNewEmployeePane(pane);
             }
         });
+
+        savingsOpenItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                openSavingsPane(pane);
+            }
+        });
     }
 
     private void individualCustomerCreatePane(Pane pane){
         IndividualCustomerRegister c =new  IndividualCustomerRegister(this);
         c.IndividualCustomerRegisterUI(pane);
+    }
+
+    private void openSavingsPane(Pane pane){
+        SavingsAccountOpen p = new SavingsAccountOpen(this);
+        p.openSavingsPane(pane);
     }
 
     private void organizationCustomerCreatePane(Pane pane){
@@ -443,7 +452,7 @@ public class EmployeeHome extends Application {
         addNewEmployee.registerNewEmployeePane(pane);
        }
 
-    protected void cancelButton(Pane pane,Pane pane1 ){
+    public void cancelButton(Pane pane,Pane pane1 ){
         //Cancel Button
         Button cancelButton = new Button("Cancel");
         cancelButton.setDefaultButton(true);

@@ -3,6 +3,8 @@ package Controllers.Employee;
 import Helpers.Helpers;
 import Models.CustomerModel;
 import Validator.FormValidator;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Side;
@@ -46,9 +48,14 @@ public class IndividualCustomerRegister {
         firstNameText.setPrefSize(256,32);
         pane1.getChildren().add(firstNameText);
         firstNameText.relocate(37, 129);
+        firstNameText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*")) {
+                firstNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
+            }
+        });
 
         //Last Name Label
-        Label lastNameLabel = new Label("First Name");
+        Label lastNameLabel = new Label("Last Name");
         lastNameLabel.setFont(Font.font("System",15));
         pane1.getChildren().add(lastNameLabel);
         lastNameLabel.relocate(374,109);
@@ -58,6 +65,11 @@ public class IndividualCustomerRegister {
         lastNameText.setPrefSize(256,32);
         pane1.getChildren().add(lastNameText);
         lastNameText.relocate(374, 129);
+        lastNameText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*")) {
+                lastNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
+            }
+        });
 
         //Nic Label
         Label nicNoLabel = new Label("NIC No");
@@ -70,6 +82,14 @@ public class IndividualCustomerRegister {
         nicNoText.setPrefSize(379,32);
         pane1.getChildren().add(nicNoText);
         nicNoText.relocate(37, 196);
+        nicNoText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,9}([\\.]\\d{0,2})*[V]?")) {
+                    nicNoText.setText(oldValue);
+                }
+            }
+        });
 
         //Email Label
         Label emailLabel = new Label("Email");
@@ -156,6 +176,14 @@ public class IndividualCustomerRegister {
         postalCodeText.setPrefSize(150,32);
         pane1.getChildren().add(postalCodeText);
         postalCodeText.relocate(37, 486);
+        postalCodeText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,5}?")) {
+                    postalCodeText.setText(oldValue);
+                }
+            }
+        });
 
 
         //Gender Label

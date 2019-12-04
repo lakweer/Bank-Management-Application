@@ -3,6 +3,8 @@ package Controllers.Employee;
 import Helpers.Helpers;
 import Objects.Employee;
 import Validator.FormValidator;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -59,6 +61,11 @@ public class AddNewEmplyeePane {
         firstNameText.setPrefSize(399,32);
         pane1.getChildren().add(firstNameText);
         firstNameText.relocate(201,142);
+        firstNameText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*")) {
+                firstNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
+            }
+        });
 
         // Last Name Label
         Label lastNameLabel = new Label("Last Name");
@@ -70,6 +77,11 @@ public class AddNewEmplyeePane {
         lastNameText.setPrefSize(399,32);
         pane1.getChildren().add(lastNameText);
         lastNameText.relocate(201,204);
+        lastNameText.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\sa-zA-Z*")) {
+                lastNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
+            }
+        });
 
         // Add NIC Label
         Label nicLabel = new Label("NIC Number");
@@ -81,6 +93,14 @@ public class AddNewEmplyeePane {
         nicText.setPrefSize(399,32);
         pane1.getChildren().add(nicText);
         nicText.relocate(201,273);
+        nicText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,9}([\\.]\\d{0,2})*[V]?")) {
+                    nicText.setText(oldValue);
+                }
+            }
+        });
 
         // Email Label
         Label emailLabel = new Label("Email");

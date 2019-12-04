@@ -4,6 +4,8 @@ import Helpers.Helpers;
 import Models.CustomerModel;
 import Objects.OrganizationCustomer;
 import Validator.FormValidator;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -78,6 +80,14 @@ public class OrganizationCustomerregister {
         authorizedPersonNICText.setPrefSize(256,32);
         pane1.getChildren().add(authorizedPersonNICText);
         authorizedPersonNICText.relocate(374, 196);
+        authorizedPersonNICText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,9}([\\.]\\d{0,2})*[V]?")) {
+                    authorizedPersonNICText.setText(oldValue);
+                }
+            }
+        });
 
         //Email Label
         Label emailLabel = new Label("Email");
@@ -153,6 +163,15 @@ public class OrganizationCustomerregister {
         postalCodeText.setPrefSize(150,32);
         pane1.getChildren().add(postalCodeText);
         postalCodeText.relocate(243, 401);
+        postalCodeText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,5}?")) {
+                    postalCodeText.setText(oldValue);
+                }
+            }
+        });
+
 
         //Telephone Number Label
         Label phoneNumberLabel = new Label("Telephone Number");
@@ -165,6 +184,14 @@ public class OrganizationCustomerregister {
         phoneNumberText.setPrefSize(216,32);
         pane1.getChildren().add(phoneNumberText);
         phoneNumberText.relocate(37, 486);
+        phoneNumberText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,10}?")) {
+                    phoneNumberText.setText(oldValue);
+                }
+            }
+        });
 
 
         parent.cancelButton(pane, pane1);
