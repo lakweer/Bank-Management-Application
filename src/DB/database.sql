@@ -34,6 +34,8 @@ CREATE TABLE users(
     Status ENUM('1','0') NOT NULL
     );
 
+create table test;
+
 INSERT INTO `branch`(`BranchID`, `BranchName`, `Address`) VALUES ('BOSL_001_COL_NUG','NUGEGODA','No.56, Bank Of Sri Lanka, High Level Road, Nugegoda');
 
 INSERT INTO `employee`(`EmployeeID`, `FirstName`, `LastName`, `Nic`, `Email`, `BirthDate`) VALUES
