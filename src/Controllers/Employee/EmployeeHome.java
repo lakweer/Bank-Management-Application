@@ -7,14 +7,17 @@ import Validator.FormValidator;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import java.io.FileInputStream;
 import Models.EmployeeModel;
@@ -27,7 +30,7 @@ public class EmployeeHome extends Application {
     private String userName;
     private String employeeID;
     private String BranchID;
-    private AnchorPane panes[] =new AnchorPane[2];
+    private Pane panes[] =new Pane[2];
     private EmployeeModel model = new EmployeeModel();
 
     public EmployeeHome(String userName, String employeeID, String BranchID){
@@ -48,10 +51,15 @@ public class EmployeeHome extends Application {
         addUIControls(pane, primaryStage);
         leftSidePane(pane, primaryStage);
         // Create a scene with registration form grid pane as the root node
-        Scene scene = new Scene(pane, 1196, 892);
+        Scene scene = new Scene(pane);
         // Set the scene in primary stage
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setScene(scene);
-
+        primaryStage.setX(bounds.getMinX());
+        primaryStage.setY(bounds.getMinY());
+        primaryStage.setWidth(bounds.getWidth());
+        primaryStage.setHeight(bounds.getHeight());
+        primaryStage.setMaxWidth(bounds.getWidth() * 2);
         primaryStage.show();
     }
 
@@ -106,11 +114,15 @@ public class EmployeeHome extends Application {
 
     private void leftSidePane(Pane pane,Stage primaryStage){
         //Side Anchor Pane
-        AnchorPane sideAnchorPane = new AnchorPane();
-        sideAnchorPane.setPrefSize(207,804);
+//        AnchorPane sideAnchorPane = new AnchorPane();
+//        sideAnchorPane.setPrefSize(207,804);
+//        pane.getChildren().add(sideAnchorPane);
+//        sideAnchorPane.relocate(0,88);
+        VBox sideAnchorPane = new VBox();
         pane.getChildren().add(sideAnchorPane);
-        sideAnchorPane.relocate(0,88);
+        sideAnchorPane.relocate(0,200);
         panes[1] = sideAnchorPane;
+
 
         //Savings Account Button
         MenuItem savingsOpenItem = new MenuItem("Open Savings Account");
@@ -122,7 +134,7 @@ public class EmployeeHome extends Application {
         savingsMenu.setPrefSize(170,42);
         savingsMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(savingsMenu);
-        savingsMenu.relocate(14,40);
+
 
         //FD Account
         MenuItem openFD = new MenuItem("Open Fixed Deposit");
@@ -133,7 +145,7 @@ public class EmployeeHome extends Application {
         fdMenu.setPrefSize(170,42);
         fdMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(fdMenu);
-        fdMenu.relocate(14,82);
+
 
         //Current Account
         MenuItem openCA = new MenuItem("Open Current Account");
@@ -145,7 +157,7 @@ public class EmployeeHome extends Application {
         caMenu.setPrefSize(170,42);
         caMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(caMenu);
-        caMenu.relocate(14,122);
+
 
         //Bank Loans
         MenuItem requestBL = new MenuItem("Request Bank Loan");
@@ -156,7 +168,7 @@ public class EmployeeHome extends Application {
         blMenu.setPrefSize(170,42);
         blMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(blMenu);
-        blMenu.relocate(14,162);
+
 
         //Debit Card
         MenuItem issueDC = new MenuItem("Issue new card");
@@ -167,7 +179,7 @@ public class EmployeeHome extends Application {
         dcMenu.setPrefSize(170,42);
         dcMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(dcMenu);
-        dcMenu.relocate(14,202);
+
 
         MenuItem addIndividualCustomer = new MenuItem("Create Individual");
         MenuItem addOrganizationCustomer = new MenuItem("Create Organization");
@@ -177,7 +189,7 @@ public class EmployeeHome extends Application {
         customerManagement.setPrefSize(170,42);
         customerManagement.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(customerManagement);
-        customerManagement.relocate(14,242);
+
 
         MenuItem addNewEmployee = new MenuItem("New Employee");
 
@@ -186,7 +198,8 @@ public class EmployeeHome extends Application {
         employeeSettingsMenu.setPrefSize(170,42);
         employeeSettingsMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(employeeSettingsMenu);
-        employeeSettingsMenu.relocate(14,582);
+
+
 
         addIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -219,6 +232,7 @@ public class EmployeeHome extends Application {
                 openSavingsPane(pane);
             }
         });
+
     }
 
     private void individualCustomerCreatePane(Pane pane){
@@ -505,11 +519,11 @@ public class EmployeeHome extends Application {
         BranchID = branchID;
     }
 
-    public AnchorPane[] getPanes() {
+    public Pane[] getPanes() {
         return panes;
     }
 
-    public void setPanes(AnchorPane[] panes) {
+    public void setPanes(Pane[] panes) {
         this.panes = panes;
     }
 

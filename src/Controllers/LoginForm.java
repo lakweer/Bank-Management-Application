@@ -71,7 +71,6 @@ public class LoginForm extends Application {
                     Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your Username");
                     return;
                 }
-
                 if(password.getText().isEmpty()) {
                     Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter your password");
                     return;

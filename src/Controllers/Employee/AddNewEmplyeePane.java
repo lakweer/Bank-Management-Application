@@ -24,6 +24,11 @@ public class AddNewEmplyeePane {
     protected Pane registerNewEmployeePane(Pane pane){
         Pane pane1 = new Pane();
         pane1.setPrefSize(800,750);
+        pane1.setStyle(
+                "-fx-border-width: 2;" +
+                "-fx-border-insets: 5;" +
+                "-fx-border-radius: 5;" +
+                "-fx-border-color: black;");
         pane.getChildren().add(pane1);
         pane1.relocate(269,128);
 

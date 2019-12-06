@@ -15,7 +15,6 @@ public class Employee {
     private String branchId;
     private LocalDate dateOfBirth;
 
-
     public Employee(String userName, String branchId){
         this.userName = userName;
         this.branchId = branchId;
