@@ -11,9 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -46,7 +44,7 @@ public class EmployeeHome extends Application {
         primaryStage.setTitle("Employee Home");
 
         // Create the registration form grid pane
-        Pane pane = new Pane();
+        BorderPane pane = new BorderPane();
         // Add UI controls to the registration form grid pane
         addUIControls(pane, primaryStage);
         leftSidePane(pane, primaryStage);
@@ -63,13 +61,12 @@ public class EmployeeHome extends Application {
         primaryStage.show();
     }
 
-    private void addUIControls(Pane pane, Stage primaryStage) throws Exception {
+    private void addUIControls(BorderPane pane, Stage primaryStage) throws Exception {
 
         //Top pane
-        AnchorPane topAnchorPane = new AnchorPane();
+        HBox topAnchorPane = new HBox();
         topAnchorPane.setPrefSize(1196,88);
-        pane.getChildren().add(topAnchorPane);
-        topAnchorPane.relocate(0,0);
+        pane.setTop(topAnchorPane);
         panes[0] = topAnchorPane;
 
         //Home Title
@@ -112,15 +109,14 @@ public class EmployeeHome extends Application {
         });
     }
 
-    private void leftSidePane(Pane pane,Stage primaryStage){
+    private void leftSidePane(BorderPane pane,Stage primaryStage){
         //Side Anchor Pane
 //        AnchorPane sideAnchorPane = new AnchorPane();
 //        sideAnchorPane.setPrefSize(207,804);
 //        pane.getChildren().add(sideAnchorPane);
 //        sideAnchorPane.relocate(0,88);
         VBox sideAnchorPane = new VBox();
-        pane.getChildren().add(sideAnchorPane);
-        sideAnchorPane.relocate(0,200);
+        pane.setLeft(sideAnchorPane);
         panes[1] = sideAnchorPane;
 
 
@@ -235,7 +231,7 @@ public class EmployeeHome extends Application {
 
     }
 
-    private void individualCustomerCreatePane(Pane pane){
+    private void individualCustomerCreatePane(BorderPane pane){
         IndividualCustomerRegister c =new  IndividualCustomerRegister(this);
         c.IndividualCustomerRegisterUI(pane);
     }
