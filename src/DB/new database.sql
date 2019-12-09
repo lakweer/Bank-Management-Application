@@ -137,9 +137,20 @@ CREATE TABLE savings_transaction (
     AccountNumber VARCHAR(40) NOT NULL,
     TransactionDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
-    TransactionType ENUM('Deposit','Withdraw') NOT NULL,
-    Teller ENUM('ATM','OnlineTransfer','EMP','SYSTEM') NOT NULL,
+    TransactionType ENUM('ATM','OnlineTransfer','EMP','SYSTEM') NOT NULL,
     FOREIGN KEY(AccountNumber) REFERENCES savings_account(AccountNumber)
+    );
+
+CREATE TABLE savings_withdraw (
+    WithdrawId VARCHAR(40) PRIMARY KEY,
+    TransactionId VARCHAR(40) NOT NULL,
+    FOREIGN KEY(TransactionId) REFERENCES savings_transaction(TransactionId)
+    );
+
+CREATE TABLE savings_deposit (
+    DepositId VARCHAR(40) PRIMARY KEY,
+    TransactionId VARCHAR(40) NOT NULL,
+    FOREIGN KEY(TransactionId) REFERENCES savings_transaction(TransactionId)
     );
 
 CREATE TABLE employee_savings_transaction(
@@ -239,8 +250,8 @@ CREATE TABLE transfer (
     TransferDate DATE NOT NULL,
     WithdrawId VARCHAR(40) NOT NULL,
     DepositId VARCHAR(40) NOT NULL,
-    FOREIGN KEY(WithdrawId) REFERENCES savings_transaction(TransactionId),
-    FOREIGN KEY(DepositId) REFERENCES savings_transaction(TransactionId),
+    FOREIGN KEY(WithdrawId) REFERENCES savings_withdraw(WithdrawId),
+    FOREIGN KEY(DepositId) REFERENCES savings_deposit(DepositId),
     FOREIGN KEY(TransferredFromAccountNumber) REFERENCES savings_account(AccountNumber),
     FOREIGN KEY(TransferredToAccountNumber) REFERENCES savings_account(AccountNumber)
     );
