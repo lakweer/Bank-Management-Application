@@ -7,12 +7,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import Objects.IndividualCustomer;
@@ -29,37 +28,22 @@ public class IndividualCustomerRegister {
 
     protected GridPane IndividualCustomerRegisterUI(BorderPane pane){
         GridPane pane1 = new GridPane();
-//        pane1.setPrefSize(800,750);
         pane.setCenter(pane1);
         pane1.setHgap(8);
         pane1.setVgap(8);
-//        pane1.setPadding(new Insets(10, 30, 0, 30));
-
-        //set Border
-        pane1.setStyle("-fx-padding: 10;" +
-                "-fx-border-style: solid inside;" +
-                "-fx-border-width: 2;" +
-                "-fx-border-insets: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-border-color: blue;");
-
+        pane1.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         //Main Title
         Label mainTitle = new Label("Individual Customer Register");
         mainTitle.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.add(mainTitle,1,0,2,1);
-
-
+        pane1.add(mainTitle,1,0,4,1);
 
         //First Name Label
         Label firstNameLabel = new Label("First Name");
-        firstNameLabel.setFont(Font.font("System",15));
         pane1.add(firstNameLabel, 1,3);
-
 
         //Last name Input Field
         TextField firstNameText = new TextField();
-        firstNameText.setPrefSize(256,32);
         pane1.add(firstNameText,1,4);
 
         firstNameText.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -70,13 +54,10 @@ public class IndividualCustomerRegister {
 
         //Last Name Label
         Label lastNameLabel = new Label("Last Name");
-        lastNameLabel.setFont(Font.font("System",15));
         pane1.add(lastNameLabel,2,3);
-
 
         //Last name Input Field
         TextField lastNameText = new TextField();
-        lastNameText.setPrefSize(256,32);
         pane1.add(lastNameText,2,4);
 
         lastNameText.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -88,13 +69,12 @@ public class IndividualCustomerRegister {
         //Nic Label
         Label nicNoLabel = new Label("NIC No");
         nicNoLabel.setFont(Font.font("System",15));
-        pane1.add(nicNoLabel,1,5);
+        pane1.add(nicNoLabel,3,3);
 
 
         //NIC Number Input Field
         TextField nicNoText = new TextField();
-        nicNoText.setPrefSize(379,32);
-        pane1.add(nicNoText,1,6,2,1);
+        pane1.add(nicNoText,3,4);
 
         nicNoText.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -107,87 +87,58 @@ public class IndividualCustomerRegister {
 
         //Email Label
         Label emailLabel = new Label("Email");
-        emailLabel.setFont(Font.font("System",15));
-        pane1.add(emailLabel,1,7);
-
+        pane1.add(emailLabel,4,3);
 
         //Email Input Field
         TextField emailText = new TextField();
-        emailText.setPrefSize(379,32);
-        pane1.add(emailText,1,8,2,1);
-
+        pane1.add(emailText,4,4);
 
         //House Number Label
         Label houseNumberLabel = new Label("House Number");
-        houseNumberLabel.setFont(Font.font("System",15));
         pane1.add(houseNumberLabel,1,9);
-
 
         //House Number Input Field
         TextField houseNumberText = new TextField();
-        houseNumberText.setPrefSize(150,32);
         pane1.add(houseNumberText,1,10);
-
 
         //Street One Label
         Label streetOneLabel = new Label("Street One");
-        streetOneLabel.setFont(Font.font("System",15));
         pane1.add(streetOneLabel,2,9);
-
 
         //Street One Input Field
         TextField streetOneText = new TextField();
-        streetOneText.setPrefSize(173,32);
         pane1.add(streetOneText,2,10);
-
-
 
         //Street Two Label
         Label streetTwoLabel = new Label("Street Two");
-        streetTwoLabel.setFont(Font.font("System",15));
         pane1.add(streetTwoLabel,1,11);
-
 
         //Street Two Input Field
         TextField streetTwoText = new TextField();
-        streetTwoText.setPrefSize(173,32);
         pane1.add(streetTwoText,1,12);
-
-
 
         //town Label
         Label townLabel = new Label("Town");
-        townLabel.setFont(Font.font("System",15));
         pane1.add(townLabel,2,11);
-
 
         //Town Input Field
         TextField townNameText = new TextField();
-        townNameText.setPrefSize(173,32);
         pane1.add(townNameText,2,12);
-
 
         //District Label
         Label districtLabel = new Label("District");
-        districtLabel.setFont(Font.font("System",15));
         pane1.add(districtLabel,1,13);
-
 
         //District Input Field
         TextField districtNameText = new TextField();
-        districtNameText.setPrefSize(173,32);
         pane1.add(districtNameText,1,14);
-
 
         //Postal Code Label
         Label postalCodeLabel = new Label("Postal Code");
-        postalCodeLabel.setFont(Font.font("System",15));
         pane1.add(postalCodeLabel,2,13);
-
 
         //Postal Code Input Field
         TextField postalCodeText = new TextField();
-        postalCodeText.setPrefSize(150,32);
         pane1.add(postalCodeText,2,14);
 
         postalCodeText.textProperty().addListener(new ChangeListener<String>() {
@@ -202,20 +153,16 @@ public class IndividualCustomerRegister {
 
         //Gender Label
         Label genderLabel = new Label("Gender");
-        genderLabel.setFont(Font.font("System",15));
         pane1.add(genderLabel,1,15);
-
 
         //Gender Menu
         MenuItem maleType = new MenuItem("Male");
         MenuItem femaleType = new MenuItem("Female");
 
         MenuButton genderTypeMenu = new MenuButton("Gender", null, maleType, femaleType);
-        genderTypeMenu.setFont(Font.font("System",15));
         genderTypeMenu.setPrefSize(102,35);
         genderTypeMenu.setPopupSide(Side.BOTTOM);
         pane1.add(genderTypeMenu,1,16);
-
 
         // Date Of Birth Label
         Label dobLabel = new Label("Date Of Birth");

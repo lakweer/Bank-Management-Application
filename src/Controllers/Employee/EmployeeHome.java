@@ -241,7 +241,7 @@ public class EmployeeHome extends Application {
         p.openSavingsPane(pane);
     }
 
-    private void organizationCustomerCreatePane(Pane pane){
+    private void organizationCustomerCreatePane(BorderPane pane){
         OrganizationCustomerregister c = new OrganizationCustomerregister(this);
         c.organizationCustomerRegisterPane(pane);
     }
@@ -457,7 +457,7 @@ public class EmployeeHome extends Application {
 
         }
 
-    private void addNewEmployeePane(Pane pane){
+    private void addNewEmployeePane(BorderPane pane){
         AddNewEmplyeePane addNewEmployee = new AddNewEmplyeePane(this);
         addNewEmployee.registerNewEmployeePane(pane);
        }

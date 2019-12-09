@@ -9,7 +9,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -20,66 +22,50 @@ public class OrganizationCustomerregister {
         this.parent = parent;
     }
 
-    protected Pane organizationCustomerRegisterPane(Pane pane){
-        Pane pane1 = new Pane();
-        pane1.setPrefSize(800,750);
-        pane.getChildren().add(pane1);
-        pane1.relocate(269,128);
+    protected GridPane organizationCustomerRegisterPane(BorderPane pane){
+
+        GridPane pane1 = new GridPane();
+        pane.setCenter(pane1);
+        pane1.setHgap(8);
+        pane1.setVgap(8);
 
         //Main Title
         Label mainTitle = new Label("Organization Customer Register");
         mainTitle.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.getChildren().add(mainTitle);
-        mainTitle.relocate(37,14);
-
+        pane1.add(mainTitle,1,0,4,1);
 
         //Organization Name Label
         Label organizationNameLabel = new Label("Organization Name");
-        organizationNameLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(organizationNameLabel);
-        organizationNameLabel.relocate(37,109);
+        pane1.add(organizationNameLabel,1,3);
 
         //organization name Input Field
         TextField organizationNameText = new TextField();
-        organizationNameText.setPrefSize(256,32);
-        pane1.getChildren().add(organizationNameText);
-        organizationNameText.relocate(37, 129);
+        pane1.add(organizationNameText,1,4);
 
         //Register Number Label
         Label registerNumberLabel = new Label("Register Number");
-        registerNumberLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(registerNumberLabel);
-        registerNumberLabel.relocate(374,109);
+        pane1.add(registerNumberLabel,2,3);
 
         //Register Number Input Field
         TextField registerNumberText = new TextField();
-        registerNumberText.setPrefSize(256,32);
-        pane1.getChildren().add(registerNumberText);
-        registerNumberText.relocate(374, 129);
+        pane1.add(registerNumberText,2,4);
 
         //Authorized Person  Label
         Label authorizedPersonLabel = new Label("Authorized Person");
-        authorizedPersonLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(authorizedPersonLabel);
-        authorizedPersonLabel.relocate(37,176);
+        pane1.add(authorizedPersonLabel,1,5);
 
         //Authorized Person Input Field
         TextField authorizedPersonText = new TextField();
-        authorizedPersonText.setPrefSize(256,32);
-        pane1.getChildren().add(authorizedPersonText);
-        authorizedPersonText.relocate(37, 196);
+        pane1.add(authorizedPersonText,1,6);
 
         //Authorized Person  Label
         Label authorizedNICLabel = new Label("Authorized Person Nic");
-        authorizedNICLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(authorizedNICLabel);
-        authorizedNICLabel.relocate(374,176);
+        pane1.add(authorizedNICLabel,2,5);
+
 
         //Authorized Person NIC Input Field
         TextField authorizedPersonNICText = new TextField();
-        authorizedPersonNICText.setPrefSize(256,32);
-        pane1.getChildren().add(authorizedPersonNICText);
-        authorizedPersonNICText.relocate(374, 196);
+        pane1.add(authorizedPersonNICText,2,6);
         authorizedPersonNICText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -91,78 +77,51 @@ public class OrganizationCustomerregister {
 
         //Email Label
         Label emailLabel = new Label("Email");
-        emailLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(emailLabel);
-        emailLabel.relocate(37,241);
+        pane1.add(emailLabel,1,7);
 
         //Email Input Field
         TextField emailText = new TextField();
-        emailText.setPrefSize(379,32);
-        pane1.getChildren().add(emailText);
-        emailText.relocate(37, 265);
+        pane1.add(emailText,1,8,2,1);
 
         //Building Number Label
         Label buildingNumberLabel = new Label("Building Number");
-        buildingNumberLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(buildingNumberLabel);
-        buildingNumberLabel.relocate(37,313);
+        pane1.add(buildingNumberLabel,1,9);
 
         //Building Number Input Field
         TextField buildingNumberText = new TextField();
-        buildingNumberText.setPrefSize(150,32);
-        pane1.getChildren().add(buildingNumberText);
-        buildingNumberText.relocate(37, 333);
+        pane1.add(buildingNumberText,1,10);
 
         //Street One Label
         Label streetOneLabel = new Label("Street One");
-        streetOneLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(streetOneLabel);
-        streetOneLabel.relocate(243,313);
+        pane1.add(streetOneLabel,2,9);
 
         //Street One Input Field
         TextField streetOneText = new TextField();
-        streetOneText.setPrefSize(173,32);
-        pane1.getChildren().add(streetOneText);
-        streetOneText.relocate(243, 333);
-
+        pane1.add(streetOneText,2,10);
 
         //Street Two Label
         Label streetTwoLabel = new Label("Street Two");
-        streetTwoLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(streetTwoLabel);
-        streetTwoLabel.relocate(455,313);
+        pane1.add(streetTwoLabel,1,11);
 
         //Street Two Input Field
         TextField streetTwoText = new TextField();
-        streetTwoText.setPrefSize(173,32);
-        pane1.getChildren().add(streetTwoText);
-        streetTwoText.relocate(455, 333);
-
+        pane1.add(streetTwoText,1,12);
 
         //town Label
         Label townLabel = new Label("Town");
-        townLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(townLabel);
-        townLabel.relocate(37,381);
+        pane1.add(townLabel,2,11);
 
         //Town Input Field
         TextField townNameText = new TextField();
-        townNameText.setPrefSize(173,32);
-        pane1.getChildren().add(townNameText);
-        townNameText.relocate(37, 401);
-
+        pane1.add(townNameText,2,12);
 
         //Postal Code Label
         Label postalCodeLabel = new Label("Postal Code");
-        postalCodeLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(postalCodeLabel);
-        postalCodeLabel.relocate(243,381);
+        pane1.add(postalCodeLabel,1,13);
 
         //Postal Code Input Field
         TextField postalCodeText = new TextField();
-        postalCodeText.setPrefSize(150,32);
-        pane1.getChildren().add(postalCodeText);
-        postalCodeText.relocate(243, 401);
+        pane1.add(postalCodeText,1,14);
         postalCodeText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -172,18 +131,13 @@ public class OrganizationCustomerregister {
             }
         });
 
-
         //Telephone Number Label
         Label phoneNumberLabel = new Label("Telephone Number");
-        phoneNumberLabel.setFont(Font.font("System",15));
-        pane1.getChildren().add(phoneNumberLabel);
-        phoneNumberLabel.relocate(37,459);
+        pane1.add(phoneNumberLabel,2,13);
 
         //Phone Number Input Field
         TextField phoneNumberText = new TextField();
-        phoneNumberText.setPrefSize(216,32);
-        pane1.getChildren().add(phoneNumberText);
-        phoneNumberText.relocate(37, 486);
+        pane1.add(phoneNumberText,2,14);
         phoneNumberText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -193,15 +147,24 @@ public class OrganizationCustomerregister {
             }
         });
 
+        //Cancel Button
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setDefaultButton(true);
+        cancelButton.setPrefSize(73,35);
+        pane1.add(cancelButton,1,17);
 
-        parent.cancelButton(pane, pane1);
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                parent.enablePane();
+                pane.getChildren().remove(pane1);
+            }
+        });
 
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
-        submitButton.setPrefWidth(73);
-        submitButton.setPrefHeight(35);
-        pane1.getChildren().add(submitButton);
-        submitButton.relocate(616,658);
+        submitButton.setPrefSize(73,35);
+        pane1.add(submitButton,2,17);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -251,7 +214,6 @@ public class OrganizationCustomerregister {
 
             }
         });
-
         return pane1;
     }
 }
