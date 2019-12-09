@@ -8,7 +8,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -21,51 +24,33 @@ public class AddNewEmplyeePane {
     protected  AddNewEmplyeePane(EmployeeHome parent){
         this.parent =parent;
     }
-    protected Pane registerNewEmployeePane(Pane pane){
-        Pane pane1 = new Pane();
-        pane1.setPrefSize(800,750);
-        pane1.setStyle(
-                "-fx-border-width: 2;" +
-                "-fx-border-insets: 5;" +
-                "-fx-border-radius: 5;" +
-                "-fx-border-color: black;");
-        pane.getChildren().add(pane1);
-        pane1.relocate(269,128);
+    protected GridPane registerNewEmployeePane(BorderPane pane){
+        GridPane pane1 = new GridPane();
+        pane.setCenter(pane1);
+        pane1.setHgap(10);
+        pane1.setVgap(10);
+        pane1.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         //Title
         Label headerLabel = new Label("Employee Registration Form");
         headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.getChildren().add(headerLabel);
-        headerLabel.relocate(167,20);
+        pane1.add(headerLabel,1,1,3,1);
 
         //Branch Label
-        Label branchLabel = new Label("Branch :");
-        pane1.getChildren().add(branchLabel);
-        branchLabel.relocate(47,79);
-
-        Label branchIDLabel = new Label(parent.getBranchID());
-        pane1.getChildren().add(branchIDLabel);
-        branchIDLabel.relocate(112,79);
+        Label branchLabel = new Label("Branch : " + parent.getBranchID());
+        pane1.add(branchLabel,1,2,2,1);
 
         //Today Date Label
-        Label dateLabel = new Label("Date :");
-        pane1.getChildren().add(dateLabel);
-        dateLabel.relocate(549,79);
-
-        Label todayDateLabel = new Label(LocalDate.now().toString());
-        pane1.getChildren().add(todayDateLabel);
-        todayDateLabel.relocate(596,79);
+        Label dateLabel = new Label("Date : " + LocalDate.now().toString());
+        pane1.add(dateLabel,3,2);
 
         // First Name Label
         Label firstNameLabel = new Label("First Name");
-        pane1.getChildren().add(firstNameLabel);
-        firstNameLabel.relocate(47,148);
+        pane1.add(firstNameLabel,1,3);
 
         // First Name Text Field
         TextField firstNameText = new TextField();
-        firstNameText.setPrefSize(399,32);
-        pane1.getChildren().add(firstNameText);
-        firstNameText.relocate(201,142);
+        pane1.add(firstNameText,2,3);
         firstNameText.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\sa-zA-Z*")) {
                 firstNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
@@ -74,14 +59,11 @@ public class AddNewEmplyeePane {
 
         // Last Name Label
         Label lastNameLabel = new Label("Last Name");
-        pane1.getChildren().add(lastNameLabel);
-        lastNameLabel.relocate(47,210);
+        pane1.add(lastNameLabel,1,4);
 
         // Add Name Text Field
         TextField lastNameText = new TextField();
-        lastNameText.setPrefSize(399,32);
-        pane1.getChildren().add(lastNameText);
-        lastNameText.relocate(201,204);
+        pane1.add(lastNameText,2,4);
         lastNameText.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\sa-zA-Z*")) {
                 lastNameText.setText(newValue.replaceAll("[^\\sa-zA-Z]", ""));
@@ -90,14 +72,11 @@ public class AddNewEmplyeePane {
 
         // Add NIC Label
         Label nicLabel = new Label("NIC Number");
-        pane1.getChildren().add(nicLabel);
-        nicLabel.relocate(47,279);
+        pane1.add(nicLabel,1,5);
 
         // Add NIC Text Field
         TextField nicText = new TextField();
-        nicText.setPrefSize(399,32);
-        pane1.getChildren().add(nicText);
-        nicText.relocate(201,273);
+        pane1.add(nicText,2,5);
         nicText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -109,19 +88,15 @@ public class AddNewEmplyeePane {
 
         // Email Label
         Label emailLabel = new Label("Email");
-        pane1.getChildren().add(emailLabel);
-        emailLabel.relocate(47, 337);
+        pane1.add(emailLabel,1,6);
 
         // Email Text Field
         TextField emailText = new TextField();
-        emailText.setPrefSize(399,32);
-        pane1.getChildren().add(emailText);
-        emailText.relocate(201, 331);
+        pane1.add(emailText,2,6);
 
         // Date Of Birth Label
         Label dobLabel = new Label("Date Of Birth");
-        pane1.getChildren().add(dobLabel);
-        dobLabel.relocate(47, 407);
+        pane1.add(dobLabel,1,7);
 
         //ADD birthday selector
         DatePicker dob = new DatePicker(LocalDate.now());
@@ -132,21 +107,30 @@ public class AddNewEmplyeePane {
                 setDisable(empty || date.compareTo(today) > 0);
             }
         });
-        dob.setPrefSize(150,40);
         dob.getEditor().setDisable(true);
-        pane1.getChildren().add(dob);
-        dob.relocate(201,403);
+        pane1.add(dob,2,7);
 
         //Buttons
-        parent.cancelButton(pane, pane1);
+
+        //Cancel Button
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setDefaultButton(true);
+        cancelButton.setPrefSize(73,35);
+        pane1.add(cancelButton,2,10);
+
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                parent.enablePane();
+                pane.getChildren().remove(pane1);
+            }
+        });
 
         //Submit Button
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
         submitButton.setPrefSize(73,35);
-        pane1.getChildren().add(submitButton);
-        submitButton.relocate(616,658);
-
+        pane1.add(submitButton,3,10);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
