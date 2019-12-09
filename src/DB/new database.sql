@@ -1,5 +1,5 @@
-CREATE DATABASE bank_system;
-USE bank_system;
+CREATE DATABASE banksystem;
+USE banksystem;
 
 CREATE TABLE branch (
     BranchId VARCHAR(40) PRIMARY KEY,
