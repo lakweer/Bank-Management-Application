@@ -188,7 +188,7 @@ public class IndividualCustomerRegister {
         Button cancelButton = new Button("Cancel");
         cancelButton.setDefaultButton(true);
         cancelButton.setPrefSize(73,35);
-        pane1.add(cancelButton,1,19);
+        pane1.add(cancelButton,1,17);
 
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

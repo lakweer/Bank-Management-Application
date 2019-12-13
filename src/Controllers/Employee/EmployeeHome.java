@@ -1,6 +1,8 @@
 package Controllers.Employee;
 
+import Controllers.Employee.SavingsAccount.SavingsAccountClose;
 import Controllers.Employee.SavingsAccount.SavingsAccountOpen;
+import Controllers.Employee.SavingsAccount.SavingsTransactionPane;
 import Controllers.LoginForm;
 import Helpers.Helpers;
 import Validator.FormValidator;
@@ -68,12 +70,12 @@ public class EmployeeHome extends Application {
         topAnchorPane.setPrefSize(1196,88);
         pane.setTop(topAnchorPane);
         panes[0] = topAnchorPane;
+        Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
 
         //Home Title
         Label homeLabel = new Label("Bank Of Sri Lanka");
         homeLabel.setFont(Font.font("Cambria", FontWeight.BOLD, 35));
-        topAnchorPane.getChildren().add(homeLabel);
-        homeLabel.relocate(24,33);
 
         FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
         Image image = new Image(input);
@@ -89,8 +91,8 @@ public class EmployeeHome extends Application {
         MenuButton userMenu = new MenuButton(userName, imageView, editProfile, logout);
         userMenu.setFont(Font.font("System",15));
         userMenu.setPrefSize(170,30);
-        topAnchorPane.getChildren().add(userMenu);
-        userMenu.relocate(1000,30);
+
+        topAnchorPane.getChildren().addAll(homeLabel,region1,userMenu);
 
         editProfile.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -110,15 +112,9 @@ public class EmployeeHome extends Application {
     }
 
     private void leftSidePane(BorderPane pane,Stage primaryStage){
-        //Side Anchor Pane
-//        AnchorPane sideAnchorPane = new AnchorPane();
-//        sideAnchorPane.setPrefSize(207,804);
-//        pane.getChildren().add(sideAnchorPane);
-//        sideAnchorPane.relocate(0,88);
         VBox sideAnchorPane = new VBox();
         pane.setLeft(sideAnchorPane);
         panes[1] = sideAnchorPane;
-
 
         //Savings Account Button
         MenuItem savingsOpenItem = new MenuItem("Open Savings Account");
@@ -131,7 +127,6 @@ public class EmployeeHome extends Application {
         savingsMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(savingsMenu);
 
-
         //FD Account
         MenuItem openFD = new MenuItem("Open Fixed Deposit");
         MenuItem closeFD = new MenuItem("Close Fixed Deposit");
@@ -141,7 +136,6 @@ public class EmployeeHome extends Application {
         fdMenu.setPrefSize(170,42);
         fdMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(fdMenu);
-
 
         //Current Account
         MenuItem openCA = new MenuItem("Open Current Account");
@@ -195,8 +189,6 @@ public class EmployeeHome extends Application {
         employeeSettingsMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(employeeSettingsMenu);
 
-
-
         addIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -229,6 +221,23 @@ public class EmployeeHome extends Application {
             }
         });
 
+        closeSA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                closeSavingsPane(pane);
+            }
+        });
+
+        transactionSA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                savingsTransactionPane(pane);
+            }
+        });
+
+
     }
 
     private void individualCustomerCreatePane(BorderPane pane){
@@ -236,9 +245,19 @@ public class EmployeeHome extends Application {
         c.IndividualCustomerRegisterUI(pane);
     }
 
-    private void openSavingsPane(Pane pane){
+    private void openSavingsPane(BorderPane pane){
         SavingsAccountOpen p = new SavingsAccountOpen(this);
         p.openSavingsPane(pane);
+    }
+
+    private void closeSavingsPane(BorderPane pane){
+        SavingsAccountClose p = new SavingsAccountClose(this);
+        p.closeSavingsPane(pane);
+    }
+
+    private void savingsTransactionPane(BorderPane pane){
+        SavingsTransactionPane ta = new SavingsTransactionPane(this);
+        ta.savingsTransactionPane(pane);
     }
 
     private void organizationCustomerCreatePane(BorderPane pane){
@@ -462,30 +481,13 @@ public class EmployeeHome extends Application {
         addNewEmployee.registerNewEmployeePane(pane);
        }
 
-    public void cancelButton(Pane pane,Pane pane1 ){
-        //Cancel Button
-        Button cancelButton = new Button("Cancel");
-        cancelButton.setDefaultButton(true);
-        cancelButton.setPrefSize(73,35);
-        pane1.getChildren().add(cancelButton);
-        cancelButton.relocate(61,658);
-
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                enablePane();
-                pane.getChildren().remove(pane1);
-            }
-        });
-    }
-
-    protected void disablePane(){
+    public void disablePane(){
         for (Pane p: panes) {
             p.setDisable(true);
         }
     }
 
-    protected void enablePane(){
+    public void enablePane(){
         for (Pane p: panes) {
             p.setDisable(false);
         }

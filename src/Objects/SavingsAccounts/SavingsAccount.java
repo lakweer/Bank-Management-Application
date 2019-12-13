@@ -10,6 +10,19 @@ public class SavingsAccount {
     private Double balance;
     private String status;
 
+    public SavingsAccount(){
+
+    }
+
+    public SavingsAccount(String accountNumber,String branchId,String accountType, String customerId, Double amount, String status){
+        this.accountNumber = accountNumber;
+        this.branchId = branchId;
+        this.accountType = accountType;
+        this.customerId = customerId;
+        this.balance = amount;
+        this.status = status;
+    }
+
     public String getAccountNumber() {
         return accountNumber;
     }

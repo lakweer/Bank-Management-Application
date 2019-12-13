@@ -147,4 +147,18 @@ public class CustomerModel {
         return false;
     }
 
+    public ResultSet getCustomerDetails(String nicValues){
+        ResultSet rs = null;
+        connection = DB.Database.getConnection();
+        try {
+            String sql = "SELECT `CustomerId`, `Birthday` FROM `individual` WHERE `Nic`= ? ";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1,nicValues);
+            rs = stmt.executeQuery();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
 }
