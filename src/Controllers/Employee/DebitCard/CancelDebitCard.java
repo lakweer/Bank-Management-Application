@@ -1,12 +1,9 @@
-package Controllers.Employee.SavingsAccount;
+package Controllers.Employee.DebitCard;
 
 import Controllers.Employee.EmployeeHome;
-import Helpers.Helpers;
-import Models.SavingsAccountModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,29 +12,34 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
 import java.time.LocalDate;
 
-public class SavingsAccountClose {
-    private EmployeeHome parent;
-    private SavingsAccountModel savingsModel;
+public class CancelDebitCard {
 
-    public  SavingsAccountClose(EmployeeHome parent){
-        this.parent=parent;
-        this.savingsModel = new SavingsAccountModel();
+    private EmployeeHome parent;
+
+    /*
+    Card Number, Pin Number, Account Number, Issued Date Expiry Date
+     */
+
+    public CancelDebitCard(EmployeeHome parent){
+        this.parent = parent;
     }
-    public GridPane closeSavingsPane(BorderPane pane) {
-        GridPane pane1 =new GridPane();
+
+    public GridPane openDebitCardPane(BorderPane pane) {
+        GridPane pane1 = new GridPane();
         pane.setCenter(pane1);
         pane1.setHgap(10);
         pane1.setVgap(10);
         pane1.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         //Title
-        Label headerLabel = new Label("Savings Account Close");
+        Label headerLabel = new Label("Cancel Debit Card");
         headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
         pane1.add(headerLabel, 2, 1, 4, 1);
 
-        //Branch Label
+        //Employee Label
         Label branchLabel = new Label("Employee : " + parent.getUserName());
         pane1.add(branchLabel, 1, 2, 2, 1);
 
@@ -46,17 +48,20 @@ public class SavingsAccountClose {
         pane1.setHalignment(dateLabel, HPos.RIGHT);
         pane1.add(dateLabel, 4, 2);
 
-        Label accNumberLabel = new Label("Account Number : ");
-        pane1.add(accNumberLabel,1,4,2,1);
+        Label fdNumberLabel = new Label("Debit Card Number : ");
+        pane1.add(fdNumberLabel, 1, 4, 2, 1);
 
-        TextField accnumberText = new TextField();
-        pane1.add(accnumberText,1,5,4,1);
-        pane1.setHalignment(accnumberText, HPos.CENTER);
+        Label savingsNumberLabel = new Label("Savings Account Number : ");
+        pane1.add(savingsNumberLabel, 1, 5, 2, 1);
+
+        TextField savingsAccNumberText = new TextField();
+        pane1.add(savingsAccNumberText, 3, 5, 2, 1);
+        pane1.setHalignment(savingsAccNumberText, HPos.LEFT);
 
         Button cancelButton = new Button("Back");
         cancelButton.setDefaultButton(true);
-        cancelButton.setPrefSize(73,35);
-        pane1.add(cancelButton,1,19);
+        cancelButton.setPrefSize(73, 35);
+        pane1.add(cancelButton, 1, 8);
         pane1.setHalignment(cancelButton, HPos.CENTER);
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -68,34 +73,18 @@ public class SavingsAccountClose {
 
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
-        submitButton.setPrefSize(73,35);
-        pane1.add(submitButton,5,19);
+        submitButton.setPrefSize(73, 35);
+        pane1.add(submitButton, 3, 8);
         pane1.setHalignment(submitButton, HPos.CENTER);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                if(!(accnumberText.getText().trim().equals(""))){
-
-                    String result = savingsModel.close(accnumberText.getText(), LocalDate.now().toString(), parent.getEmployeeID() );
-                    if(result.equals("Success")){
-                        Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", "Account Closed");
-                        parent.enablePane();
-                        pane.getChildren().remove(pane1);
-                    }else{
-                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
-                        return;
-                    }
-                }
-                else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Fill all the fields!");
-                    return;
-                }
             }
+
+
         });
 
         return pane1;
     }
-
 }

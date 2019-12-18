@@ -1,5 +1,6 @@
 package Controllers;
 
+import Controllers.BranchManager.BranchMangerHome;
 import Models.EmployeeModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -86,12 +87,25 @@ public class LoginForm extends Application {
                     e.printStackTrace();
                 }
                 if(result){
-                    EmployeeHome home = new EmployeeHome(username.getText(), model.getEmployeeID(), model.getBranchID());
-                    try {
-                        home.start(primaryStage);
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    String empType = model.getEmployeeType();
+
+                    if(empType.equals("Normal")){
+                        EmployeeHome home = new EmployeeHome(username.getText(), model.getEmployeeID(), model.getBranchID());
+                        try {
+                            home.start(primaryStage);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     }
+                    else {
+                        BranchMangerHome home = new BranchMangerHome(username.getText(), model.getEmployeeID(), model.getBranchID());
+                        try {
+                            home.start(primaryStage);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+
                 }else{
                     Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Invalid Username Password");
                     return;

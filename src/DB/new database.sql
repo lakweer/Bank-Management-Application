@@ -66,6 +66,18 @@ CREATE TABLE customer (
     Email VARCHAR(250) UNIQUE
     );
 
+ALTER TABLE `customer` CHANGE `CustomerType` `CustomerType`
+ENUM('Individual','Organization','Child') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;
+
+CREATE TABLE children(
+    CustomerId VARCHAR(40) PRIMARY KEY,
+    FullName VARCHAR(255) NOT NULL,
+    BirthDate DATE,
+    GuardianId VARCHAR(40),
+    FOREIGN KEY(CustomerId) REFERENCES customer(CustomerId),
+    FOREIGN KEY(GuardianId) REFERENCES individual(CustomerId)
+    );
+
 CREATE TABLE individual (
     CustomerId VARCHAR(40) PRIMARY KEY,
     Nic CHAR(10) UNIQUE NOT NULL,

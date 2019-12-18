@@ -5,6 +5,14 @@ public class Customer {
     private String customerType;
     private String email;
 
+    public Customer(){
+
+    }
+
+    public Customer(String customerType) {
+        this.customerType = customerType;
+    }
+
     public String getCustomerId() {
         return customerId;
     }
@@ -28,4 +36,5 @@ public class Customer {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }

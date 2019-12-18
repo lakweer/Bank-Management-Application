@@ -1,4 +1,5 @@
-package Controllers.Employee;
+package Controllers.BranchManager;
+
 
 import Helpers.Helpers;
 import Objects.Employee;
@@ -13,17 +14,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class AddNewEmplyeePane {
-    private EmployeeHome parent;
+    private BranchMangerHome parent;
 
-    protected  AddNewEmplyeePane(EmployeeHome parent){
+    public   AddNewEmplyeePane(BranchMangerHome parent){
         this.parent =parent;
     }
-    protected GridPane registerNewEmployeePane(BorderPane pane){
+    public GridPane registerNewEmployeePane(BorderPane pane){
         GridPane pane1 = new GridPane();
         pane.setCenter(pane1);
         pane1.setHgap(10);
@@ -169,19 +168,12 @@ public class AddNewEmplyeePane {
                     return;
                 }
 
-                Employee employee = new Employee(nicText.getText(), parent.getBranchID());
-                employee.setFirstName(firstNameText.getText());
-                employee.setLastName(lastNameText.getText());
-                employee.setNic(nicText.getText());
-                employee.setEmail(emailText.getText());
-                employee.setDateOfBirth(LocalDate.parse(dob.getValue().toString()));
-                parent.getModel().setEmployeeID(parent.getEmployeeID());
-                Boolean result = false;
-                try {
-                    result = parent.getModel().addNewEmployee(employee);
-                }catch (SQLException e){
-                    e.printStackTrace();
-                }if(result){
+                Employee newEmployee = new Employee(firstNameText.getText(), lastNameText.getText(), nicText.getText(),
+                        nicText.getText(), "BOSL", emailText.getText(), parent.getBranchID(), dob.getValue());
+                String result = "";
+                    result = parent.getModel().addNewEmployee(newEmployee, "Normal");
+
+                if(result.equals("Success")){
                     pane.getChildren().remove(pane1);
                     parent.enablePane();
                 }else{

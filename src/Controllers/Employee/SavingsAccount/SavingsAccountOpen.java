@@ -2,6 +2,7 @@ package Controllers.Employee.SavingsAccount;
 
 import Controllers.Employee.EmployeeHome;
 import Helpers.Helpers;
+import Objects.Child;
 import Objects.SavingsAccounts.SavingsAccount;
 import Validator.FormValidator;
 import javafx.event.ActionEvent;
@@ -261,7 +262,62 @@ public class SavingsAccountOpen {
                 String result[];
                 if(accountType.equals("")){
 
-                }else if(accountType.equals("18+")){
+                }else if(accountType.equals("Children")){
+                    if(FormValidator.nicNumberValidate(guardianText.getText())){
+                        if(checkAmount("Children", depositAmountText.getText())){
+                            if(checkAge("Children", dob.getValue().toString())){
+                                Child child = new Child("Child", fullNameText.getText(), dob.getValue(), guardianText.getText());
+                                String result1 = savingsModel.childSavingsOpen(accnumberText.getText(), child, parent.getEmployeeID(), accountType, depositAmountText.getText(), parent.getBranchID());
+                                if(result1.equals("Success")){
+                                    pane.getChildren().remove(pane1);
+                                    parent.enablePane();
+                                }else{
+                                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result1);
+                                }
+                            }else{
+                                Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Wrong age range");
+                                return;
+                            }
+                        }else{
+                            Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Not enough deposit amount");
+                            return;
+                        }
+
+                    }else {
+                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Wrong Guardian NIC");
+                        return;
+                    }
+                }
+                else if(accountType.equals("Teen")){
+                    if(FormValidator.nicNumberValidate(guardianText.getText())){
+                        if(checkAmount("Teen", depositAmountText.getText())){
+                            if(checkAge("Teen", dob.getValue().toString())){
+                                Child child = new Child("Teen", fullNameText.getText(), dob.getValue(), guardianText.getText());
+                                String result1 = savingsModel.childSavingsOpen(accnumberText.getText(), child, parent.getEmployeeID(), accountType, depositAmountText.getText(), parent.getBranchID());
+                                if(result1.equals("Success")){
+                                    pane.getChildren().remove(pane1);
+                                    parent.enablePane();
+                                }else{
+                                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result1);
+                                }
+                            }else{
+                                Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Wrong age range");
+                                return;
+                            }
+                        }else{
+                            Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Not enough deposit amount");
+                            return;
+                        }
+
+                    }else {
+                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Wrong Guardian NIC");
+                        return;
+                    }
+                }
+
+
+
+                else if(accountType.equals("18+")){
                     if(FormValidator.nicNumberValidate(accountHolderText.getText())){
                         if(checkAmount("18+", depositAmountText.getText())){
                             result = getIndividualDetails();
@@ -466,7 +522,6 @@ public class SavingsAccountOpen {
             if(rs.next()){
                 result[0] = rs.getString(1);
                 result[1] = rs.getString(2);
-
             }
         }catch (SQLException e){
             e.printStackTrace();

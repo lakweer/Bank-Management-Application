@@ -1,5 +1,6 @@
 package Models;
 
+import Objects.Child;
 import Objects.SavingsAccounts.SavingsAccount;
 import Objects.SavingsAccounts.SavingsTransaction;
 
@@ -151,5 +152,33 @@ public class SavingsAccountModel {
     }
 
 
+    /*
+    Calls the `openChildSavingsAccount` Stored Procedure
+    Input Fields : savings Account Type, account Number, deposit Amount, employeeId,
+                    guardian Nic, child full name, child dob, branch Id
+     */
+    public String childSavingsOpen(String accountNumber, Child child, String empId, String accountType, String amount, String branchId){
+        connection = DB.Database.getConnection();
+        String result = "";
+        try {
+            String sql = "CALL `openChildSavingsAccount`(?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, accountType);
+            stmt.setString(2, accountNumber);
+            stmt.setString(3, amount);
+            stmt.setString(4, empId);
+            stmt.setString(5, child.getGuardianId());
+            stmt.setString(6, child.getFullName());
+            stmt.setString(7, child.getDob().toString());
+            stmt.setString(8, branchId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                result = rs.getString(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }

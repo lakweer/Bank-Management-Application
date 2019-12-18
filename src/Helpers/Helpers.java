@@ -13,4 +13,7 @@ public class Helpers {
         alert.initOwner(owner);
         alert.show();
     }
+
+    public static void creditCardNumberGenerator(){
+    }
 }

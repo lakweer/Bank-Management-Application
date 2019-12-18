@@ -1,5 +1,9 @@
 package Controllers.Employee;
 
+import Controllers.BranchManager.AddNewEmplyeePane;
+import Controllers.Employee.DebitCard.OpenDebitCard;
+import Controllers.Employee.FixedDeposit.FixedDepositOpen;
+import Controllers.Employee.Loans.RequestLoan;
 import Controllers.Employee.SavingsAccount.SavingsAccountClose;
 import Controllers.Employee.SavingsAccount.SavingsAccountOpen;
 import Controllers.Employee.SavingsAccount.SavingsTransactionPane;
@@ -180,15 +184,6 @@ public class EmployeeHome extends Application {
         customerManagement.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(customerManagement);
 
-
-        MenuItem addNewEmployee = new MenuItem("New Employee");
-
-        MenuButton employeeSettingsMenu = new MenuButton("Branch Employee", null, addNewEmployee);
-        employeeSettingsMenu.setFont(Font.font("System",15));
-        employeeSettingsMenu.setPrefSize(170,42);
-        employeeSettingsMenu.setPopupSide(Side.RIGHT);
-        sideAnchorPane.getChildren().add(employeeSettingsMenu);
-
         addIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -202,14 +197,6 @@ public class EmployeeHome extends Application {
             public void handle(ActionEvent event) {
                 disablePane();
                 organizationCustomerCreatePane(pane);
-            }
-        });
-
-        addNewEmployee.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                addNewEmployeePane(pane);
             }
         });
 
@@ -237,9 +224,44 @@ public class EmployeeHome extends Application {
             }
         });
 
+        openFD.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                fdOpenPane(pane);
+            }
+        });
 
+        requestBL.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                requestLoanPane(pane);
+            }
+        });
+        issueDC.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                openDebitCardPane(pane);
+            }
+        });
     }
 
+    private void openDebitCardPane(BorderPane pane){
+        OpenDebitCard card = new OpenDebitCard(this);
+        card.openDebitCardPane(pane);
+    }
+
+    private void fdOpenPane(BorderPane pane){
+        FixedDepositOpen open = new FixedDepositOpen(this);
+        open.fdOpenPane(pane);
+    }
+
+    private  void requestLoanPane(BorderPane pane){
+        RequestLoan loan = new RequestLoan(this);
+        loan.requestLoanPane(pane);
+    }
     private void individualCustomerCreatePane(BorderPane pane){
         IndividualCustomerRegister c =new  IndividualCustomerRegister(this);
         c.IndividualCustomerRegisterUI(pane);
@@ -476,10 +498,6 @@ public class EmployeeHome extends Application {
 
         }
 
-    private void addNewEmployeePane(BorderPane pane){
-        AddNewEmplyeePane addNewEmployee = new AddNewEmplyeePane(this);
-        addNewEmployee.registerNewEmployeePane(pane);
-       }
 
     public void disablePane(){
         for (Pane p: panes) {
