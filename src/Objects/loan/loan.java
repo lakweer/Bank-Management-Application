@@ -13,6 +13,7 @@ public class loan {
     private String EmploymentSector;
     private String EmploymentType;
     private String Profession;
+    private String LoanTypeId;
 
     public loan() {
 
@@ -71,6 +72,10 @@ public class loan {
 
     public Double getNetSalary() {
         return NetSalary;
+    }
+
+    public String getLoanTypeId() {
+        return LoanTypeId;
     }
 
     public String getEmploymentSector() {
@@ -145,5 +150,7 @@ public class loan {
         Profession = profession;
     }
 
-
+    public void setLoanTypeId(String loanTypeId) {
+        LoanTypeId = loanTypeId;
+    }
 }
