@@ -178,8 +178,10 @@ public class EmployeeHome extends Application {
 
         MenuItem addIndividualCustomer = new MenuItem("Create Individual");
         MenuItem addOrganizationCustomer = new MenuItem("Create Organization");
+        MenuItem SearchOrganizationCustomer = new MenuItem("Search Organization");
+        MenuItem SearchIndividualCustomer = new MenuItem("Search Individual");
 
-        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer);
+        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer,SearchOrganizationCustomer,SearchIndividualCustomer);
         customerManagement.setFont(Font.font("System",15));
         customerManagement.setPrefSize(170,42);
         customerManagement.setPopupSide(Side.RIGHT);
@@ -198,6 +200,22 @@ public class EmployeeHome extends Application {
             public void handle(ActionEvent event) {
                 disablePane();
                 organizationCustomerCreatePane(pane);
+            }
+        });
+
+        SearchOrganizationCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                SearchOrganizationCustomerPane(pane);
+            }
+        });
+
+        SearchIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                SearchIndividualCustomerPane(pane);
             }
         });
 
@@ -286,6 +304,16 @@ public class EmployeeHome extends Application {
     private void organizationCustomerCreatePane(BorderPane pane){
         OrganizationCustomerregister c = new OrganizationCustomerregister(this);
         c.organizationCustomerRegisterPane(pane);
+    }
+
+    private void SearchOrganizationCustomerPane(BorderPane pane){
+        OrganizationCustomerSearch c= new OrganizationCustomerSearch(this);
+        c.OrganizationCustomerSearchUI(pane);
+    }
+
+    private void SearchIndividualCustomerPane(BorderPane pane){
+        IndividualCustomerSearch c = new IndividualCustomerSearch(this);
+        c.IndividualCustomerSearchUI(pane);
     }
 
     private void changeAccountSettings(Pane pane, Stage primaryStage){
