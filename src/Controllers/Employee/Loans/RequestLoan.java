@@ -75,7 +75,7 @@ public class RequestLoan {
         pane1.add(loanTypeMenu, 1, 3,2,1);
 
         //customer id label
-        Label customerIDLabel = new Label("Customer ID : ");
+        Label customerIDLabel = new Label("NIC : ");
         pane1.add(customerIDLabel, 1, 4, 2, 1);
 
         TextField customerNICNumberText = new TextField();
