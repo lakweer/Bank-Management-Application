@@ -81,7 +81,8 @@ public class EmployeeHome extends Application {
         Label homeLabel = new Label("Bank Of Sri Lanka");
         homeLabel.setFont(Font.font("Cambria", FontWeight.BOLD, 35));
 
-        FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
+        String localDir = System.getProperty("user.dir");
+        FileInputStream input = new FileInputStream(localDir+"//src//Views//profile.jpg");
         Image image = new Image(input);
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(25.0);
