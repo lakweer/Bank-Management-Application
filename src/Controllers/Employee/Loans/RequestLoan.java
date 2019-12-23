@@ -26,6 +26,9 @@ public class RequestLoan {
      */
 
     private EmployeeHome parent;
+    private String loanType = "";
+    private String employmentSector = "";
+    private String employmentType = "";
 
     public RequestLoan(EmployeeHome parent){
         this.parent = parent;
@@ -39,9 +42,9 @@ public class RequestLoan {
         pane1.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         //Title
-        Label headerLabel = new Label("Request Loan");
+        Label headerLabel = new Label("  Individual Loan Request  ");
         headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.add(headerLabel, 2, 1, 4, 1);
+        pane1.add(headerLabel, 1, 1, 5, 1);
 
         //Employee Label
         Label branchLabel = new Label("Employee : " + parent.getUserName());
@@ -52,36 +55,31 @@ public class RequestLoan {
         pane1.setHalignment(dateLabel, HPos.RIGHT);
         pane1.add(dateLabel, 4, 2);
 
+//        //menu for customer type
+//        MenuItem individualType = new MenuItem("Individual");
+//        MenuItem organaizationType = new MenuItem("Organization");
+//
+//        MenuButton customerTypeMenu = new MenuButton("CUSTOMER TYPE", null, individualType, organaizationType);
+//        pane1.add(customerTypeMenu, 1, 3,2,1);
 
-        MenuItem sixMonthsType = new MenuItem("SIX MONTHS");
-        MenuItem oneYearType = new MenuItem("ONE YEAR ");
-        MenuItem threeYearsType = new MenuItem("THREE YEARS");
+        //menu for loan type
+        Label loanTypeLabel = new Label("Loan type : ");
+        pane1.add(loanTypeLabel, 1, 3, 2, 1);
 
-        MenuButton fdAccountTypeMenu = new MenuButton("ACCOUNT TYPE", null, sixMonthsType, oneYearType, threeYearsType);
-        pane1.add(fdAccountTypeMenu, 1, 3,2,1);
+        MenuItem educationalType = new MenuItem("Educational");
+        MenuItem housingType = new MenuItem("Housing");
+        MenuItem personalType = new MenuItem("Personal");
+        MenuItem vehicleType = new MenuItem("Vehicle");
 
-        Label expireDateLabel = new Label("Maturity Date :");
-        pane1.add(expireDateLabel, 3, 3, 2, 1);
+        MenuButton loanTypeMenu = new MenuButton("LOAN TYPE", null, educationalType, housingType, personalType, vehicleType);
+        pane1.add(loanTypeMenu, 1, 3,2,1);
 
-        Label fdNumberLabel = new Label("FD Account Number : ");
-        pane1.add(fdNumberLabel, 1, 4, 2, 1);
-
-        TextField fdAccNumberText = new TextField();
-        pane1.add(fdAccNumberText, 3, 4, 2, 1);
-        pane1.setHalignment(fdAccNumberText, HPos.LEFT);
-
-        Label savingsNumberLabel = new Label("Savings Account Number : ");
-        pane1.add(savingsNumberLabel, 1, 5, 2, 1);
-
-        TextField savingsAccNumberText = new TextField();
-        pane1.add(savingsAccNumberText, 3, 5, 2, 1);
-        pane1.setHalignment(savingsAccNumberText, HPos.LEFT);
-
-        Label customerNICLabel = new Label("Customer Nic Number : ");
-        pane1.add(customerNICLabel, 1, 6, 2, 1);
+        //customer id label
+        Label customerIDLabel = new Label("NIC : ");
+        pane1.add(customerIDLabel, 1, 4, 2, 1);
 
         TextField customerNICNumberText = new TextField();
-        pane1.add(customerNICNumberText, 3, 6, 2, 1);
+        pane1.add(customerNICNumberText, 3, 4, 2, 1);
         pane1.setHalignment(customerNICNumberText, HPos.LEFT);
 
         customerNICNumberText.textProperty().addListener(new ChangeListener<String>() {
@@ -93,30 +91,163 @@ public class RequestLoan {
             }
         });
 
-        // Deposit Amount Label
-        Label amountLabel = new Label("Deposit Amount(Rs) :");
-        pane1.add(amountLabel, 1, 7);
-        pane1.setHalignment(amountLabel, HPos.RIGHT);
+        //request amount label
+        Label requestAmountLabel = new Label("Request Amount (Rs) : ");
+        pane1.add(requestAmountLabel, 1, 5, 2, 1);
 
-        // Deposit Amount Text Field
-        TextField depositAmountText = new TextField();
-        pane1.add(depositAmountText, 3, 7);
-        depositAmountText.setAlignment(Pos.CENTER_RIGHT);
-        depositAmountText.textProperty().addListener(new ChangeListener<String>() {
+        TextField requestAmountText = new TextField();
+        pane1.add(requestAmountText, 3, 5, 2, 1);
+        pane1.setHalignment(requestAmountText, HPos.LEFT);
+
+        requestAmountText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
-                    depositAmountText.setText(oldValue);
+                    requestAmountText.setText(oldValue);
                 }
             }
         });
 
+        //employment sector label
+        Label employmentSectorLabel = new Label("Employment Sector : ");
+        pane1.add(employmentSectorLabel, 1, 6, 2, 1);
+
+        MenuItem publicType = new MenuItem("Public");
+        MenuItem privateType = new MenuItem("Private");
+        MenuItem selfType = new MenuItem("Self");
+
+        MenuButton employmentSectorTypeMenu = new MenuButton("Employment Sector", null, publicType, privateType, selfType);
+        pane1.add(employmentSectorTypeMenu, 3, 6,2,1);
+
+        //employment type label
+        Label employmentTypeLabel = new Label("Employment Type : ");
+        pane1.add(employmentTypeLabel, 1, 7, 2, 1);
+
+        MenuItem permanentType = new MenuItem("Permanent");
+        MenuItem temporaryType = new MenuItem("Temporary");
+
+        MenuButton employmentTypeTypeMenu = new MenuButton("Employment Type", null, permanentType, temporaryType);
+        pane1.add(employmentTypeTypeMenu, 3, 7,2,1);
+
+        //profession label
+        Label professionLabel = new Label("Profession : ");
+        pane1.add(professionLabel, 1, 8, 2, 1);
+
+        TextField professionText = new TextField();
+        pane1.add(professionText, 3, 8, 2, 1);
+        pane1.setHalignment(professionText, HPos.LEFT);
+
+        //Gross Salary label
+        Label grossSalaryLabel = new Label("Gross Salary (Rs) : ");
+        pane1.add(grossSalaryLabel, 1, 9, 2, 1);
+
+        TextField grossSalaryText = new TextField();
+        pane1.add(grossSalaryText, 3, 9, 2, 1);
+        pane1.setHalignment(grossSalaryText, HPos.LEFT);
+
+        grossSalaryText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
+                    grossSalaryText.setText(oldValue);
+                }
+            }
+        });
+
+        //Net Salary label
+        Label netSalaryLabel = new Label("Net Salary (Rs) : ");
+        pane1.add(netSalaryLabel, 1, 10, 2, 1);
+
+        TextField netSalaryText = new TextField();
+        pane1.add(netSalaryText, 3, 10, 2, 1);
+        pane1.setHalignment(netSalaryText, HPos.LEFT);
+
+        netSalaryText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
+                    netSalaryText.setText(oldValue);
+                }
+            }
+        });
+
+        educationalType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loanType = "Educational";
+                loanTypeMenu.setText(educationalType.getText());
+            }
+        });
+
+        personalType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loanType = "Personal";
+                loanTypeMenu.setText(personalType.getText());
+            }
+        });
+
+        housingType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loanType = "Housing";
+                loanTypeMenu.setText(housingType.getText());
+            }
+        });
+
+        vehicleType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                loanType = "Vehicle";
+                loanTypeMenu.setText(vehicleType.getText());
+            }
+        });
+
+        publicType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                employmentSector = "GOV";
+                employmentSectorTypeMenu.setText(publicType.getText());
+            }
+        });
+
+        privateType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                employmentSector = "PRIVATE";
+                employmentSectorTypeMenu.setText(privateType.getText());
+            }
+        });
+
+        selfType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                employmentSector = "SELF";
+                employmentSectorTypeMenu.setText(selfType.getText());
+            }
+        });
+
+        permanentType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                employmentType = "PER";
+                employmentTypeTypeMenu.setText(permanentType.getText());
+            }
+        });
+
+        temporaryType.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                employmentType = "TEMP";
+                employmentTypeTypeMenu.setText(temporaryType.getText());
+            }
+        });
 
 
         Button cancelButton = new Button("Back");
         cancelButton.setDefaultButton(true);
         cancelButton.setPrefSize(73, 35);
-        pane1.add(cancelButton, 1, 8);
+        pane1.add(cancelButton, 1, 12);
         pane1.setHalignment(cancelButton, HPos.CENTER);
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -129,7 +260,7 @@ public class RequestLoan {
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
         submitButton.setPrefSize(73, 35);
-        pane1.add(submitButton, 3, 8);
+        pane1.add(submitButton, 3, 12);
         pane1.setHalignment(submitButton, HPos.CENTER);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {

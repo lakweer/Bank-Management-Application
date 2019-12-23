@@ -1,8 +1,6 @@
 package Controllers.Employee;
 
-import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
-import Controllers.Employee.CurrentAccount.CurrentAccountClose;
-import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
+import Controllers.BranchManager.AddNewEmplyeePane;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
 import Controllers.Employee.Loans.RequestLoan;
@@ -25,7 +23,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import java.io.FileInputStream;
 import Models.EmployeeModel;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 public class EmployeeHome extends Application {
@@ -80,18 +81,19 @@ public class EmployeeHome extends Application {
         Label homeLabel = new Label("Bank Of Sri Lanka");
         homeLabel.setFont(Font.font("Cambria", FontWeight.BOLD, 35));
 
-        //FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
-        //Image image = new Image(input);
-        //ImageView imageView = new ImageView(image);
-        //imageView.setFitHeight(25.0);
-        //imageView.setFitWidth(25.0);
+        String localDir = System.getProperty("user.dir");
+        FileInputStream input = new FileInputStream(localDir+"//src//Views//profile.jpg");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(25.0);
+        imageView.setFitWidth(25.0);
 
         //Set Settings Menu Item
         MenuItem editProfile = new MenuItem("Settings");
         MenuItem logout = new MenuItem("Logout");
 
-//        User Menu
-        MenuButton userMenu = new MenuButton(userName, null, editProfile, logout);
+        //User Menu
+        MenuButton userMenu = new MenuButton(userName, imageView, editProfile, logout);
         userMenu.setFont(Font.font("System",15));
         userMenu.setPrefSize(170,30);
 
@@ -176,8 +178,10 @@ public class EmployeeHome extends Application {
 
         MenuItem addIndividualCustomer = new MenuItem("Create Individual");
         MenuItem addOrganizationCustomer = new MenuItem("Create Organization");
+        MenuItem SearchOrganizationCustomer = new MenuItem("Search Organization");
+        MenuItem SearchIndividualCustomer = new MenuItem("Search Individual");
 
-        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer);
+        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer,SearchOrganizationCustomer,SearchIndividualCustomer);
         customerManagement.setFont(Font.font("System",15));
         customerManagement.setPrefSize(170,42);
         customerManagement.setPopupSide(Side.RIGHT);
@@ -199,6 +203,22 @@ public class EmployeeHome extends Application {
             }
         });
 
+        SearchOrganizationCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                SearchOrganizationCustomerPane(pane);
+            }
+        });
+
+        SearchIndividualCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                SearchIndividualCustomerPane(pane);
+            }
+        });
+
         savingsOpenItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -215,35 +235,11 @@ public class EmployeeHome extends Application {
             }
         });
 
-        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
+        transactionSA.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 disablePane();
                 savingsTransactionPane(pane);
-            }
-        });
-
-        openCA.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                openCurrentPane(pane);
-            }
-        });
-
-        closeCA.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                closeCurrentPane(pane);
-            }
-        });
-
-        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                chequeDepositPane(pane);
             }
         });
 
@@ -305,24 +301,19 @@ public class EmployeeHome extends Application {
         ta.savingsTransactionPane(pane);
     }
 
-    private void openCurrentPane(BorderPane pane){
-        CurrentAccountOpen p = new CurrentAccountOpen(this);
-        p.openCurrentPane(pane);
-    }
-
-    private void closeCurrentPane(BorderPane pane){
-        CurrentAccountClose p = new CurrentAccountClose(this);
-        p.closeCurrentPane(pane);
-    }
-
-    private void chequeDepositPane(BorderPane pane){
-        CurrentTransactionPane ta = new CurrentTransactionPane(this);
-        ta.DepositChequePane(pane);
-    }
-
     private void organizationCustomerCreatePane(BorderPane pane){
         OrganizationCustomerregister c = new OrganizationCustomerregister(this);
         c.organizationCustomerRegisterPane(pane);
+    }
+
+    private void SearchOrganizationCustomerPane(BorderPane pane){
+        OrganizationCustomerSearch c= new OrganizationCustomerSearch(this);
+        c.OrganizationCustomerSearchUI(pane);
+    }
+
+    private void SearchIndividualCustomerPane(BorderPane pane){
+        IndividualCustomerSearch c = new IndividualCustomerSearch(this);
+        c.IndividualCustomerSearchUI(pane);
     }
 
     private void changeAccountSettings(Pane pane, Stage primaryStage){

@@ -67,19 +67,20 @@ public class BranchMangerHome {
         //Home Title
         Label homeLabel = new Label("Bank Of Sri Lanka");
         homeLabel.setFont(Font.font("Cambria", FontWeight.BOLD, 35));
-//
-//        FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
-//        Image image = new Image(input);
-//        ImageView imageView = new ImageView(image);
-//        imageView.setFitHeight(25.0);
-//        imageView.setFitWidth(25.0);
+
+        String localDir = System.getProperty("user.dir");
+        FileInputStream input = new FileInputStream(localDir+"//src//Views//profile.jpg");
+        Image image = new Image(input);
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(25.0);
+        imageView.setFitWidth(25.0);
 
         //Set Settings Menu Item
         MenuItem editProfile = new MenuItem("Settings");
         MenuItem logout = new MenuItem("Logout");
 
         //User Menu
-        MenuButton userMenu = new MenuButton(userName, null, editProfile, logout);
+        MenuButton userMenu = new MenuButton(userName, imageView, editProfile, logout);
         userMenu.setFont(Font.font("System",15));
         userMenu.setPrefSize(170,30);
 
