@@ -284,13 +284,7 @@ public class EmployeeHome extends Application {
             }
         });
 
-        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                transactionCurrentPane(pane);
-            }
-        });
+
     }
 
     private void openCurrentPane(BorderPane pane){
@@ -303,10 +297,6 @@ public class EmployeeHome extends Application {
         ca.closeCurrentPane(pane);
     }
 
-    private void transactionCurrentPane(BorderPane pane){
-        CurrentTransactionPane ca = new CurrentTransactionPane(this);
-        ca.TransactionCurrentPane(pane);
-    }
 
     private void openDebitCardPane(BorderPane pane){
         OpenDebitCard card = new OpenDebitCard(this);
