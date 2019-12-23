@@ -1,6 +1,9 @@
 package Controllers.Employee;
 
 import Controllers.BranchManager.AddNewEmplyeePane;
+import Controllers.Employee.CurrentAccount.CurrentAccountClose;
+import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
+import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
 import Controllers.Employee.Loans.RequestLoan;
@@ -145,7 +148,7 @@ public class EmployeeHome extends Application {
         //Current Account
         MenuItem openCA = new MenuItem("Open Current Account");
         MenuItem closeCA = new MenuItem("Close Current Account");
-        MenuItem transactionCA = new MenuItem("Check Deposit");
+        MenuItem transactionCA = new MenuItem("Current Transaction");
 
         MenuButton caMenu = new MenuButton("Current Account", null, openCA, closeCA, transactionCA);
         caMenu.setFont(Font.font("System",15));
@@ -265,6 +268,44 @@ public class EmployeeHome extends Application {
                 openDebitCardPane(pane);
             }
         });
+        openCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                openCurrentPane(pane);
+            }
+        });
+
+        closeCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                closeCurrentPane(pane);
+            }
+        });
+
+        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                transactionCurrentPane(pane);
+            }
+        });
+    }
+
+    private void openCurrentPane(BorderPane pane){
+        CurrentAccountOpen ca = new CurrentAccountOpen(this);
+        ca.openCurrentPane(pane);
+    }
+
+    private void closeCurrentPane(BorderPane pane){
+        CurrentAccountClose ca = new CurrentAccountClose(this);
+        ca.closeCurrentPane(pane);
+    }
+
+    private void transactionCurrentPane(BorderPane pane){
+        CurrentTransactionPane ca = new CurrentTransactionPane(this);
+        ca.TransactionCurrentPane(pane);
     }
 
     private void openDebitCardPane(BorderPane pane){
