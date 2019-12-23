@@ -2,7 +2,7 @@ package Controllers.Employee.CurrentAccount;
 
 import Controllers.Employee.EmployeeHome;
 import Helpers.Helpers;
-import Models.SavingsAccountModel;
+import Models.CurrentAccountModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -18,15 +18,13 @@ import javafx.scene.text.FontWeight;
 
 import java.time.LocalDate;
 
-
-
 public class CurrentAccountClose {
     private EmployeeHome parent;
-    private SavingsAccountModel savingsModel;
+    private CurrentAccountModel currentModel;
 
     public  CurrentAccountClose(EmployeeHome parent){
         this.parent=parent;
-        this.savingsModel = new SavingsAccountModel();
+        this.currentModel = new CurrentAccountModel();
     }
     public GridPane closeCurrentPane(BorderPane pane) {
         GridPane pane1 =new GridPane();
@@ -36,9 +34,9 @@ public class CurrentAccountClose {
         pane1.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
         //Title
-        Label headerLabel = new Label("Savings Account Close");
+        Label headerLabel = new Label("Current Account Close");
         headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.add(headerLabel, 2, 1, 4, 1);
+        pane1.add(headerLabel, 1, 1, 4, 1);
 
         //Branch Label
         Label branchLabel = new Label("Employee : " + parent.getUserName());
@@ -49,6 +47,7 @@ public class CurrentAccountClose {
         pane1.setHalignment(dateLabel, HPos.RIGHT);
         pane1.add(dateLabel, 4, 2);
 
+        //Account Number
         Label accNumberLabel = new Label("Account Number : ");
         pane1.add(accNumberLabel,1,4,2,1);
 
@@ -78,25 +77,24 @@ public class CurrentAccountClose {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-
-                if(!(accnumberText.getText().trim().equals(""))){
-
-                    String result = savingsModel.close(accnumberText.getText(), LocalDate.now().toString(), parent.getEmployeeID() );
-                    if(result.equals("Success")){
-                        Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", "Account Closed");
+                if(!accnumberText.getText().isEmpty()){
+                    String result = currentModel.closeCurrentAccount(accnumberText.getText(),LocalDate.now().toString(), parent);
+                    if(result.equals("Account successfully closed. Balance withdrawed.")){
+                        Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", result );
                         parent.enablePane();
                         pane.getChildren().remove(pane1);
-                    }else{
+                    }
+                    else{
                         Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
                         return;
                     }
-                }
-                else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Fill all the fields!");
+                }else{
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Fill All the Fields");
                     return;
                 }
             }
         });
+
 
         return pane1;
     }

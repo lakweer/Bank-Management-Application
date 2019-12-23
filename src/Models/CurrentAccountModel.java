@@ -1,13 +1,11 @@
 package Models;
 
 import Controllers.Employee.EmployeeHome;
+import DB.Database;
 import Objects.CurrentAccount.CurrentAccount;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class CurrentAccountModel {
 
@@ -30,6 +28,51 @@ public class CurrentAccountModel {
             stmt.setString(4, type);
             stmt.setString(5, parent.getEmployeeID());
             stmt.setString(6, account.getBranchId());
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                result = rs.getString(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String closeCurrentAccount(String account_number, String close_date, EmployeeHome parent){
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        try {
+            String sql = "CALL `currentAccountClose`(?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, account_number);
+            stmt.setString(2, close_date);
+            stmt.setString(3, parent.getEmployeeID());
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                result = rs.getString(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String currentAccountTransaction(String account_number, String transaction_date, EmployeeHome parent, String amount,
+                                            String cheque_number, String transaction_type){
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        try {
+            String sql = "CALL `currentAccountTransaction`(?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, parent.getEmployeeID());
+            stmt.setString(2, account_number);
+            stmt.setString(3, transaction_date);
+            stmt.setString(4, amount);
+            stmt.setString(5, cheque_number);
+            stmt.setString(6, transaction_type);
+
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){

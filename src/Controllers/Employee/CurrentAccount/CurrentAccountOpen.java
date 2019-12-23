@@ -4,9 +4,7 @@ package Controllers.Employee.CurrentAccount;
 import Controllers.Employee.EmployeeHome;
 import Helpers.Helpers;
 import Models.CurrentAccountModel;
-import Models.SavingsAccountModel;
 import Objects.CurrentAccount.CurrentAccount;
-import Objects.FixedDepositAccount.FixedDepositAccount;
 import Validator.FormValidator;
 import javafx.event.ActionEvent;
         import javafx.event.EventHandler;
@@ -48,7 +46,7 @@ public class CurrentAccountOpen {
         //Title
         Label headerLabel = new Label("Current Account Open");
         headerLabel.setFont(Font.font("System", FontWeight.BOLD, 35));
-        pane1.add(headerLabel,2,1,4,1);
+        pane1.add(headerLabel,1,1,4,1);
 
         //Branch Label
         Label branchLabel = new Label("Branch : " + parent.getBranchID());
