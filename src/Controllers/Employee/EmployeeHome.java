@@ -1,6 +1,8 @@
 package Controllers.Employee;
 
-import Controllers.BranchManager.AddNewEmplyeePane;
+import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
+import Controllers.Employee.CurrentAccount.CurrentAccountClose;
+import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
 import Controllers.Employee.Loans.RequestLoan;
@@ -23,10 +25,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import java.io.FileInputStream;
 import Models.EmployeeModel;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 
 public class EmployeeHome extends Application {
@@ -81,18 +80,18 @@ public class EmployeeHome extends Application {
         Label homeLabel = new Label("Bank Of Sri Lanka");
         homeLabel.setFont(Font.font("Cambria", FontWeight.BOLD, 35));
 
-        FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
-        Image image = new Image(input);
-        ImageView imageView = new ImageView(image);
-        imageView.setFitHeight(25.0);
-        imageView.setFitWidth(25.0);
+        //FileInputStream input = new FileInputStream("E:\\Bank Management Application\\src\\Views\\profile.jpg");
+        //Image image = new Image(input);
+        //ImageView imageView = new ImageView(image);
+        //imageView.setFitHeight(25.0);
+        //imageView.setFitWidth(25.0);
 
         //Set Settings Menu Item
         MenuItem editProfile = new MenuItem("Settings");
         MenuItem logout = new MenuItem("Logout");
 
-        //User Menu
-        MenuButton userMenu = new MenuButton(userName, imageView, editProfile, logout);
+//        User Menu
+        MenuButton userMenu = new MenuButton(userName, null, editProfile, logout);
         userMenu.setFont(Font.font("System",15));
         userMenu.setPrefSize(170,30);
 
@@ -216,11 +215,35 @@ public class EmployeeHome extends Application {
             }
         });
 
-        transactionSA.setOnAction(new EventHandler<ActionEvent>() {
+        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 disablePane();
                 savingsTransactionPane(pane);
+            }
+        });
+
+        openCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                openCurrentPane(pane);
+            }
+        });
+
+        closeCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                closeCurrentPane(pane);
+            }
+        });
+
+        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                chequeDepositPane(pane);
             }
         });
 
@@ -280,6 +303,21 @@ public class EmployeeHome extends Application {
     private void savingsTransactionPane(BorderPane pane){
         SavingsTransactionPane ta = new SavingsTransactionPane(this);
         ta.savingsTransactionPane(pane);
+    }
+
+    private void openCurrentPane(BorderPane pane){
+        CurrentAccountOpen p = new CurrentAccountOpen(this);
+        p.openCurrentPane(pane);
+    }
+
+    private void closeCurrentPane(BorderPane pane){
+        CurrentAccountClose p = new CurrentAccountClose(this);
+        p.closeCurrentPane(pane);
+    }
+
+    private void chequeDepositPane(BorderPane pane){
+        CurrentTransactionPane ta = new CurrentTransactionPane(this);
+        ta.DepositChequePane(pane);
     }
 
     private void organizationCustomerCreatePane(BorderPane pane){
