@@ -9,6 +9,7 @@ import Controllers.Employee.SavingsAccount.SavingsAccountOpen;
 import Controllers.Employee.SavingsAccount.SavingsTransactionPane;
 import Controllers.LoginForm;
 import Helpers.Helpers;
+import Objects.OnlineCustomerAccount.OnlineCustomer;
 import Validator.FormValidator;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ import java.io.FileInputStream;
 import Models.EmployeeModel;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+import Controllers.Employee.OnlineCustomer.onlineCustomerRegistrationForm;
 
 public class EmployeeHome extends Application {
 
@@ -180,8 +181,9 @@ public class EmployeeHome extends Application {
         MenuItem addOrganizationCustomer = new MenuItem("Create Organization");
         MenuItem SearchOrganizationCustomer = new MenuItem("Search Organization");
         MenuItem SearchIndividualCustomer = new MenuItem("Search Individual");
+        MenuItem addOnlineCustomer = new MenuItem("Add online customer");
 
-        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer,SearchOrganizationCustomer,SearchIndividualCustomer);
+        MenuButton customerManagement = new MenuButton("Customer Management", null, addIndividualCustomer, addOrganizationCustomer,SearchOrganizationCustomer,SearchIndividualCustomer,addOnlineCustomer);
         customerManagement.setFont(Font.font("System",15));
         customerManagement.setPrefSize(170,42);
         customerManagement.setPopupSide(Side.RIGHT);
@@ -216,6 +218,14 @@ public class EmployeeHome extends Application {
             public void handle(ActionEvent event) {
                 disablePane();
                 SearchIndividualCustomerPane(pane);
+            }
+        });
+
+        addOnlineCustomer.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                AddOnlineCustomerPane(pane);
             }
         });
 
@@ -314,6 +324,11 @@ public class EmployeeHome extends Application {
     private void SearchIndividualCustomerPane(BorderPane pane){
         IndividualCustomerSearch c = new IndividualCustomerSearch(this);
         c.IndividualCustomerSearchUI(pane);
+    }
+
+    private void AddOnlineCustomerPane(BorderPane pane){
+        onlineCustomerRegistrationForm c = new onlineCustomerRegistrationForm(this);
+        c.onlineCustomerRegistrationFormUI(pane);
     }
 
     private void changeAccountSettings(Pane pane, Stage primaryStage){

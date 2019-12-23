@@ -421,5 +421,50 @@ END$$
 DELIMITER ;
 
 
+/*Customer Online Account*/
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addOnlineCustomer`(IN `nid` VARCHAR(50))
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE nicExistArg INT(2);
+DECLARE nicExistInOnlineAccount INT(2);
+DECLARE getCustomerID VARCHAR(40);
+DECLARE returnArg VARCHAR(100);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong Adding the Online Customer!";
+
+    /* check the customerID is valid */
+    SELECT COUNT(*) INTO nicExistArg FROM `individual` WHERE `Nic`= nid;
+
+    IF nicExistArg <> 0 THEN
+
+        /*check customer has online account*/
+        SELECT COUNT(*) INTO nicExistInOnlineAccount FROM `customer_login` WHERE `Username`= nid;
 
 
+        IF nicExistInOnlineAccount = 0 THEN
+
+            /*get customer id from the customer table*/
+            SELECT DISTINCT `CustomerId` INTO getCustomerID FROM `individual` WHERE `Nic`= nid;
+
+			INSERT INTO `customer_login`(`CustomerId`, `Username`, `Password`, `Status`) VALUES (getCustomerID,nid,random_string(8,'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'),"1");
+            COMMIT;
+             SET returnArg = "success";
+
+        ELSE
+            SET returnArg = "Account already exists";
+        END  IF;
+
+    ELSE
+    	SET returnArg = "NIC is not registrerd!";
+    END IF;
+
+    SELECT returnArg;
+END$$
+DELIMITER ;
