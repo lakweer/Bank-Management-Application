@@ -2,6 +2,11 @@ package Controllers.Employee.Loans;
 
 
 import Controllers.Employee.EmployeeHome;
+import Helpers.Helpers;
+import Models.LoanModel;
+import Objects.Employee;
+import Objects.loan.IndividualLoanRequest;
+import Validator.FormValidator;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -29,6 +34,7 @@ public class RequestLoan {
     private String loanType = "";
     private String employmentSector = "";
     private String employmentType = "";
+    private LoanModel lmodel= new LoanModel();
 
     public RequestLoan(EmployeeHome parent){
         this.parent = parent;
@@ -72,7 +78,7 @@ public class RequestLoan {
         MenuItem vehicleType = new MenuItem("Vehicle");
 
         MenuButton loanTypeMenu = new MenuButton("LOAN TYPE", null, educationalType, housingType, personalType, vehicleType);
-        pane1.add(loanTypeMenu, 1, 3,2,1);
+        pane1.add(loanTypeMenu, 3, 3,2,1);
 
         //customer id label
         Label customerIDLabel = new Label("NIC : ");
@@ -102,7 +108,7 @@ public class RequestLoan {
         requestAmountText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
+                if (!newValue.matches("\\d{0,8}([\\.]\\d{0,2})?")) {
                     requestAmountText.setText(oldValue);
                 }
             }
@@ -266,8 +272,53 @@ public class RequestLoan {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            }
+                if (!customerNICNumberText.getText().isEmpty()) {
+                    if (!FormValidator.nicNumberValidate(customerNICNumberText.getText())) {
+                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Correct NIC Number");
+                        return;
+                    }
+                } else {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the NIC Number");
+                    return;
+                }
 
+                if (professionText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Profession");
+                    return;
+                }
+
+                if (requestAmountText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Request Amount");
+                    return;
+                }
+
+                if (grossSalaryText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Gross salary");
+                    return;
+                }
+
+                if (netSalaryText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Net salary");
+                    return;
+                }
+
+
+                IndividualLoanRequest newLoan = new IndividualLoanRequest(customerNICNumberText.getText(),parent.getBranchID(), Double.valueOf(requestAmountText.getText()), parent.getEmployeeID(),
+                        Double.valueOf(grossSalaryText.getText()), Double.valueOf(netSalaryText.getText()),employmentSector,employmentType, professionText.getText(),loanType, LocalDate.now());
+
+                String result = "";
+                result = lmodel.createIndividualLoanRequest(newLoan);
+
+                if (result.equals("Success")) {
+                    pane.getChildren().remove(pane1);
+                    parent.enablePane();
+                    Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success", "Successfully Requested");
+                } else {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
+                }
+
+
+            }
 
         });
 

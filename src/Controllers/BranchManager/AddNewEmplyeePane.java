@@ -177,7 +177,7 @@ public class AddNewEmplyeePane {
                     pane.getChildren().remove(pane1);
                     parent.enablePane();
                 }else{
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Error When Creating the Form");
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
                 }
 
             }   });

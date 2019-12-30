@@ -421,5 +421,105 @@ END$$
 DELIMITER ;
 
 
+/* create Individual Loan request Procedure */
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest`(
+     IN `NICArg` CHAR(10),
+    IN `branchIdArg` VARCHAR(40),
+	IN `AmountArg` DECIMAL(8,2),
+    IN `EmployeeIdArg` VARCHAR(40),
+	IN `GrossSalaryArg` DECIMAL(10,2),
+    IN `NetSalaryArg` DECIMAL(10,2),
+	IN `EmploymentSectorArg` ENUM("PRIVATE", "GOV", "SELF"),
+	IN `EmploymentTypeArg` ENUM("PER", "TEMP"),
+	IN `ProfessionArg` VARCHAR(40),
+	IN `loanTypeArg` VARCHAR(40),
+    IN `requestDateArg` DATE)
 
 
+
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE CustomerIdArg VARCHAR(40);
+DECLARE LoanTypeIdArg VARCHAR(10);
+DECLARE returnArg VARCHAR(100);
+
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong while Creating a Loan Request!";
+
+/* check the customer is already registred */
+SELECT `CustomerId` INTO CustomerIdArg FROM `individual` WHERE `Nic`= NICArg;
+
+/* check for the existance of the customer */
+IF LENGTH(CustomerIdArg) > 0 THEN
+
+	/* get the loan type id from loan_type table */
+	SELECT `LoanTypeId` INTO LoanTypeIdArg FROM `loan_type` WHERE `LoanTypeName`= loanTypeArg;
+
+    /* Add the data of loan request to the loan_request Table */
+    INSERT INTO `loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`, `requestDate`)
+    VALUES (CustomerIdArg, branchIdArg, AmountArg, EmployeeIdArg, GrossSalaryArg, NetSalaryArg, EmploymentSectorArg, EmploymentTypeArg, ProfessionArg, LoanTypeIdArg, requestDateArg );
+
+    SET returnArg = "Success";
+    COMMIT;
+
+ELSE
+    SET returnArg = "NIC is not registered!";
+END IF;
+
+SELECT returnArg;
+
+END$$
+DELIMITER ;
+
+
+
+/* create Organization Loan request Procedure */
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest`(
+    IN `RegisterIdArg` VARCHAR(40),
+	IN `BranchIdArg` VARCHAR(40),
+	IN `AmountArg` DECIMAL(8,2),
+    IN `EmployeeIdArg` VARCHAR(40),
+	IN `ProjectGrossValueArg` DECIMAL(10,2),
+	IN `LoanReasonArg` ENUM("Construction", "Asset_Purchase","Refinancing","Other_Reason"),
+	IN `OrganizationTypeArg` ENUM("Individual", "Joint", "Pvt_Ltd_Co", "Limited_Co", "Trust", "Other"),
+	IN `requestDateArg` DATE)
+
+
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE CustomerIdArg VARCHAR(40);
+DECLARE returnArg VARCHAR(100);
+
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong while Creating a Loan Request!";
+
+/* check the customer is already registred */
+SELECT `CustomerId` INTO CustomerIdArg FROM `organization` WHERE `RegisterNumber`= RegisterIdArg;
+
+/* check for the existance of the customer */
+IF LENGTH(CustomerIdArg) > 0 THEN
+
+    /* Add the data of loan request to the org_loan_request Table */
+
+    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`, `requestDate`)
+    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg, requestDateArg );
+
+    SET returnArg = "Success";
+    COMMIT;
+
+ELSE
+    SET returnArg = "Registration number does not exists!";
+END IF;
+
+SELECT returnArg;
+
+END$$
+DELIMITER ;
