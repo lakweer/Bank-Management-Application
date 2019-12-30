@@ -523,3 +523,163 @@ SELECT returnArg;
 
 END$$
 DELIMITER ;
+
+/*current account open procedure */
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountOpen`(IN `currentAccountNumberArg` VARCHAR(40), IN `customerTempIdArg` VARCHAR(40), IN `CurrentAccountOpenDateArg` DATE, IN `CustomerTypeArg` VARCHAR(40), IN `OpenEmployeeIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40))
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE customerIdArg VARCHAR(40);
+DECLARE returnArg VARCHAR(255);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During Current Account Open!";
+
+/* select the customerId from the respective table based on customer type */
+IF CustomerTypeArg = "Individual" THEN
+ 	SELECT CustomerId INTO customerIdArg FROM individual WHERE Nic = customerTempIdArg;
+ELSE
+    SELECT CustomerId INTO customerIdArg FROM organization WHERE RegisterNumber = customerTempIdArg;
+END IF;
+
+/* check the existance of the customer */
+IF LENGTH(customerIdArg) > 1 THEN
+
+	/* insert the values into current account table */
+	INSERT INTO current_account (AccountNumber, BranchId, CustomerId, Balance, Status) VALUES
+        (currentAccountNumberArg, BranchIdArg, customerIdArg, 0, "1");
+
+    /* insert the values into current account open table */
+    INSERT INTO current_account_open (AccountNumber, OpenEmployeeId, OpenDate) VALUES
+    	(currentAccountNumberArg, OpenEmployeeIdArg, CurrentAccountOpenDateArg);
+
+     SET returnArg = "Success";
+     COMMIT;
+ELSE
+     SET returnArg = "Customer doesn't exist";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;
+
+/*current account close procedure */
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountClose`(IN `currentAccountNumberArg` VARCHAR(40), IN `CurrentAccountCloseDateArg` DATE, IN `CloseEmployeeIdArg` VARCHAR(40))
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE accountNumberArg VARCHAR(40);
+DECLARE statusArg VARCHAR(40);
+DECLARE balanceArg DECIMAL(12,2);
+DECLARE returnArg VARCHAR(255);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During Current Account Close!";
+
+/* select the accountNumber, status, and balance from current_account table */
+SELECT AccountNumber INTO accountNumberArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Status INTO statusArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Balance INTO balanceArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+
+/* check the existence of the account */
+IF LENGTH(accountNumberArg) > 1 THEN
+
+	/*check whether the account is active */
+	IF statusArg = 1 THEN
+
+		/*check whether payment is due */
+		IF balanceArg < 0 THEN
+        	SET returnArg = "Can't close. amount due";
+
+        ELSE
+
+        	/* insert the data into transaction table */
+            INSERT INTO `current_transaction`(`EmployeeId`, `AccountNumber`, `TransactionDate`, `Amount`,`TransactionType`)
+            VALUES (CloseEmployeeIdArg, currentAccountNumberArg, CurrentAccountCloseDateArg, balanceArg, "Withdrawal");
+
+        	/*set status and balance to 0*/
+        	Update current_account SET `Status` = "0", `Balance` = 0.00 WHERE  AccountNumber = currentAccountNumberArg;
+
+    		/* insert the values into current account open table */
+    		INSERT INTO current_account_close (AccountNumber, CloseEmployeeId, CloseDate) VALUES (currentAccountNumberArg, CloseEmployeeIdArg, CurrentAccountCloseDateArg);
+
+     		SET returnArg = "Account successfully closed. Balance withdrawed.";
+     		COMMIT;
+        END IF;
+
+     ELSE
+     	SET returnArg = "Account already closed";
+     END IF;
+ELSE
+     SET returnArg = "Account doesn't exist";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;
+
+/*current account transaction procedure */
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"))
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE accountNumberArg VARCHAR(40);
+DECLARE balanceArg DECIMAL(12,2);
+DECLARE statusArg ENUM('0','1');
+DECLARE returnArg VARCHAR(255);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During transaction!";
+
+/* select the account number */
+SELECT AccountNumber INTO accountNumberArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Balance INTO balanceArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Status INTO statusArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+
+/*check the existence of the account*/
+IF LENGTH(accountNumberArg) > 1 THEN
+
+	/*check whether account is activated*/
+    IF statusArg = '1' THEN
+
+		/* insert the values into current transaction table */
+		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, ChequeNumber, TransactionType) VALUES
+    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, chequeNumberArg, TransactionType);
+
+    	/*to check whether the transaction is a withdrawal*/
+    	IF TransactionType = "Withdrawal" THEN
+    		/*substract the withdrawed amount from the balance*/
+    		Update current_account SET `Balance` = balanceArg - AmountArg WHERE  AccountNumber = currentAccountNumberArg;
+        	SET returnArg = "Success";
+    		COMMIT;
+
+    	ELSE
+    		/*add the deposited amount to the balance*/
+    		Update current_account SET `Balance` = balanceArg + AmountArg WHERE  AccountNumber = currentAccountNumberArg;
+        	SET returnArg = "Success";
+    		COMMIT;
+    	END IF;
+
+    ELSE
+    	SET returnArg = "Account closed";
+    END IF;
+
+ELSE
+    SET returnArg = "Customer does not exist";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;

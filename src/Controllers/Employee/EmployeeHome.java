@@ -294,6 +294,13 @@ public class EmployeeHome extends Application {
             }
         });
 
+        transactionCA.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                transactionCurrentPane(pane);
+            }
+        });
 
     }
 
@@ -305,6 +312,11 @@ public class EmployeeHome extends Application {
     private void closeCurrentPane(BorderPane pane){
         CurrentAccountClose ca = new CurrentAccountClose(this);
         ca.closeCurrentPane(pane);
+    }
+
+    private void transactionCurrentPane(BorderPane pane){
+        CurrentTransactionPane ca = new CurrentTransactionPane(this);
+        ca.TransactionCurrentPane(pane);
     }
 
 
