@@ -5,6 +5,7 @@ import Objects.loan.IndividualLoanRequest;
 import Objects.loan.OrgLoanRequest;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -170,6 +171,27 @@ public class LoanModel {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, loanType);
             stmt.setString(2, requestId.toString());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+
+    public String updateSettlements(String loanTID, LocalDate date , Double settleAmount) {
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        try {
+            String sql = "CALL `updateSettlements`(?, ?,?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, loanTID);
+            stmt.setString(2, date.toString());
+            stmt.setString(2, settleAmount.toString());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result = rs.getString(1);

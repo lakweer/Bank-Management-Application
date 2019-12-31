@@ -61,13 +61,13 @@ public class InstallmentSettlement {
         pane1.add(loanTypeMenu, 3, 4,3,1);
 
 
-        //request id label
-        Label requestIdLabel = new Label("Request ID : ");
-        pane1.add(requestIdLabel, 1, 5, 2, 1);
+        //loan id label
+        Label loanIdLabel = new Label("Request ID : ");
+        pane1.add(loanIdLabel, 1, 5, 2, 1);
 
-        TextField requestIDText = new TextField();
-        pane1.add(requestIDText, 3, 5, 2, 1);
-        pane1.setHalignment(requestIDText, HPos.LEFT);
+        TextField loanIDText = new TextField();
+        pane1.add(loanIDText, 3, 5, 2, 1);
+        pane1.setHalignment(loanIDText, HPos.LEFT);
 
         //settle amount label
         Label settleAmountLabel = new Label("Settling Amount (Rs) : ");
@@ -128,8 +128,8 @@ public class InstallmentSettlement {
             @Override
             public void handle(ActionEvent event) {
 
-                if (requestIDText.getText().isEmpty()) {
-                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Request ID");
+                if (loanIDText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Loan ID");
                     return;
                 }
 
@@ -137,28 +137,17 @@ public class InstallmentSettlement {
                     Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Settlement Amount");
                     return;
                 }
-//
-//                String result = "";
-//                result = lmodel.checkLoanStatus(customerLoanType,Integer.valueOf(requestIDText.getText()));
-//
-//                if (result.equals("APPROVED")) {
-//                    pane.getChildren().remove(pane1);
-//                    parent.enablePane();
-//                    Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Loan Status", "Your loan request has been APPROVED");
-//                }
-//                else if(result.equals("PENDING")) {
-//                    pane.getChildren().remove(pane1);
-//                    parent.enablePane();
-//                    Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Loan Status", "Your loan request is still PENDING");
-//                }
-//                else if(result.equals("REJECTED")) {
-//                    pane.getChildren().remove(pane1);
-//                    parent.enablePane();
-//                    Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Loan Status", "Your loan request hes been REJECTED");
-//                }
-//                else {
-//                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
-//                }
+
+                String result = "";
+                result = lmodel.updateSettlements(loanIDText.getText(),LocalDate.now(), Double.valueOf(settleAmountText.getText()));
+
+                if (result.equals("Success")) {
+                    pane.getChildren().remove(pane1);
+                    parent.enablePane();
+                    Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success", "Successfully Settled");
+                } else {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
+                }
 
 
             }
