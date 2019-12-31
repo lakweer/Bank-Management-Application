@@ -850,6 +850,67 @@ END$$
 DELIMITER ;
 
 
+/*check status of loan request*/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `checkLoanStatus`(
+    IN `LoanTypeArg` ENUM("Individual", "Organizational"),
+	IN `Request_Id` INT(40))
+
+
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE returnArg VARCHAR(100);
+DECLARE loanArg INT(40);
+
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong while Creating a Loan Request!";
+
+/* Check loan type */
+IF LoanTypeArg = "Individual" THEN
+
+	/* check the loan request is already requested */
+	SELECT `RequestId` INTO loanArg FROM `loan_request` WHERE `RequestId`= Request_Id;
+
+	/* check for the existence of the loan request */
+	IF LENGTH(loanArg) > 0 THEN
+
+		/* get the status of the request from loan_request table */
+		SELECT `ApprovedStatus` INTO returnArg FROM `loan_request` WHERE `RequestId`= Request_Id;
+
+		COMMIT;
+
+	ELSE
+		SET returnArg = "Request Id does not exist! Plz check and try again";
+    END IF;
+
+ELSE
+	/* check the loan request is already requested */
+	SELECT `RequestId` INTO loanArg FROM `org_loan_request` WHERE `RequestId`= Request_Id;
+
+	/* check for the existence of the loan request */
+	IF LENGTH(loanArg) > 0 THEN
+
+		/* get the status of the request from org_loan_request table */
+		SELECT `ApprovedStatus` INTO returnArg FROM `org_loan_request` WHERE `RequestId`= Request_Id;
+
+		COMMIT;
+
+	ELSE
+		SET returnArg = "Request Id does not exist! Plz check and try again";
+	END IF;
+
+END IF;
+
+SELECT returnArg;
+
+END$$
+DELIMITER ;
+
+
 
 
 

@@ -74,4 +74,23 @@ public class LoanModel {
 
         return result;
     }
+
+    public String checkLoanStatus(String loanType, Integer requestId) {
+        connection1 = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        try {
+            String sql = "CALL `checkLoanStatus`(?, ?)";
+            PreparedStatement stmt = connection1.prepareStatement(sql);
+            stmt.setString(1, loanType);
+            stmt.setString(2, requestId.toString());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }

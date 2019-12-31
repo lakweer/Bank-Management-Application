@@ -61,13 +61,6 @@ public class RequestLoan {
         pane1.setHalignment(dateLabel, HPos.RIGHT);
         pane1.add(dateLabel, 4, 2);
 
-//        //menu for customer type
-//        MenuItem individualType = new MenuItem("Individual");
-//        MenuItem organaizationType = new MenuItem("Organization");
-//
-//        MenuButton customerTypeMenu = new MenuButton("CUSTOMER TYPE", null, individualType, organaizationType);
-//        pane1.add(customerTypeMenu, 1, 3,2,1);
-
         //menu for loan type
         Label loanTypeLabel = new Label("Loan type : ");
         pane1.add(loanTypeLabel, 1, 3, 2, 1);

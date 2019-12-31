@@ -82,8 +82,8 @@ public class RequestOrgLoan {
 
 
         //request amount label
-        Label requestAmountLabel = new Label("Request Amount (Rs) : ");
-        pane1.add(requestAmountLabel, 1, 4, 2, 1);
+        Label requestIdLabel = new Label("Request Amount (Rs) : ");
+        pane1.add(requestIdLabel, 1, 4, 2, 1);
 
         TextField requestAmountText = new TextField();
         pane1.add(requestAmountText, 3, 4, 2, 1);

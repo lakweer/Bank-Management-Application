@@ -6,6 +6,7 @@ import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
 import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
+import Controllers.Employee.Loans.CheckStatus;
 import Controllers.Employee.Loans.RequestLoan;
 import Controllers.Employee.Loans.RequestOrgLoan;
 import Controllers.Employee.SavingsAccount.SavingsAccountClose;
@@ -271,6 +272,15 @@ public class EmployeeHome extends Application {
                 requestOrgLoanPane(pane);
             }
         });
+
+        checkStatus.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                checkStatusPane(pane);
+            }
+        });
+
         issueDC.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -338,6 +348,12 @@ public class EmployeeHome extends Application {
         RequestOrgLoan orgLoan = new RequestOrgLoan(this);
         orgLoan.requestOrgLoanPane(pane);
     }
+
+    private  void checkStatusPane(BorderPane pane){
+        CheckStatus orgLoan = new CheckStatus(this);
+        orgLoan.checkStatusPane(pane);
+    }
+
     private void individualCustomerCreatePane(BorderPane pane){
         IndividualCustomerRegister c =new  IndividualCustomerRegister(this);
         c.IndividualCustomerRegisterUI(pane);
