@@ -162,7 +162,21 @@ public class BranchMangerHome {
             }
         });
 
+        checkStatus.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                ViewIndidualLoansPane(pane);
+            }
+        });
 
+
+
+    }
+
+    private void ViewIndidualLoansPane(BorderPane pane){
+        ViewIndidualLoansPane p =new ViewIndidualLoansPane(this);
+        p.viewIndividualLoans(pane);
     }
 
     private void viewCurrentEmployeesPane(BorderPane pane){

@@ -4,18 +4,106 @@ package Models;
 import Objects.loan.IndividualLoanRequest;
 import Objects.loan.OrgLoanRequest;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LoanModel {
     private Connection connection;
     private Connection connection1;
 
-//    public String getBranchMangerId() {
-//        return "ID";
-//    }
+    public ArrayList<HashMap<String, String>> viewIndividulaLoanRequests(String branchId){
+        ArrayList<HashMap<String, String>> ar = new ArrayList<HashMap<String, String>>();
+        connection = DB.Database.getConnection();
+        String sql =
+        "SELECT `RequestId`, `CustomerId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, " +
+                "`EmploymentType`, `ApprovedStatus`, `Profession`, `requestDate`, `FirstName`, `LastName`, `Nic`, `LoanTypeName`, `LoanTypeId` FROM `loan_request` " +
+                "INNER JOIN `individual` USING(`CustomerId`) INNER JOIN `loan_type` USING(`LoanTypeId`) " +
+                "WHERE `ApprovedStatus` = 'PENDING' AND `BranchId` =?";
+        try{
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1,branchId);
+            ResultSet rs = stmt.executeQuery();
+
+            ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
+            int counter = md.getColumnCount();
+
+            while (rs.next()){
+                HashMap<String, String> map = new HashMap<String, String>();
+                for (int loop = 1; loop <= counter; loop++) {
+                    map.put(md.getColumnLabel(loop), rs.getString(loop));
+                }
+                ar.add(map);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ar;
+    }
+
+    public ArrayList<HashMap<String, String>> viewOrganizationLoanRequests(String branchId){
+        ArrayList<HashMap<String, String>> ar = new ArrayList<HashMap<String, String>>();
+        connection = DB.Database.getConnection();
+        String sql = "SELECT `RequestId`, `CustomerId`, `BranchId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `ProjectGrossValue`, " +
+                " `LoanReason`, `OrganizationType`, `RequestDate` FROM `org_loan_request`"
+                + "WHERE `ApprovedStatus` = 'PENDING' AND `BranchId` =?";
+        try{
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1,branchId);
+            ResultSet rs = stmt.executeQuery();
+
+            ResultSetMetaData md = (ResultSetMetaData) rs.getMetaData();
+            int counter = md.getColumnCount();
+
+            while (rs.next()){
+                HashMap<String, String> map = new HashMap<String, String>();
+                for (int loop = 1; loop <= counter; loop++) {
+                    map.put(md.getColumnLabel(loop), rs.getString(loop));
+                }
+                ar.add(map);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return ar;
+    }
+
+    public boolean rejectIndividualLoanRequest(String reqId){
+        connection = DB.Database.getConnection();
+        String sql = "UPDATE `loan_request` SET `ApprovedStatus`= 'REJECTED' WHERE `RequestId` = ? ";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, reqId);
+            int i = stmt.executeUpdate();
+            if(i > 0){
+                return true;
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String approveLoanRequest(String reqId, String amount,String loanType, String period, String numOfSettlements){
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        String sql =" CALL `approveLoanRequest`(?, ?, ?, ?, ?)";
+       try {
+           PreparedStatement stmt =  connection.prepareStatement(sql);
+           stmt.setString(1,reqId);
+           stmt.setString(2,amount);
+           stmt.setString(3,loanType);
+           stmt.setString(4,period);
+           stmt.setString(5,numOfSettlements);
+           ResultSet rs = stmt.executeQuery();
+           while (rs.next()) {
+               result = rs.getString(1);
+           }
+       } catch (SQLException e) {
+           e.printStackTrace();
+       }
+        return result;
+    }
 
     /*
    Calls the createIndividualLoanRequest Stored Procedure
