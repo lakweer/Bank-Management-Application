@@ -179,6 +179,13 @@ public class CurrentTransactionPane {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                String chequeNumber;
+                if(transactionMode == "Cheque") {
+                    chequeNumber = chequeNumberText.getText();
+                }
+                else {
+                    chequeNumber = null;
+                }
                 System.out.println("submit");
                 /*to check whether all the required fields are filled*/
                 if(!accountNumberText.getText().isEmpty() && !transactionType.isEmpty() && !transactionMode.isEmpty()
@@ -193,7 +200,7 @@ public class CurrentTransactionPane {
                     else {
                         System.out.println("inside");
                         String result = currentAccountModel.currentAccountTransaction(accountNumberText.getText(), LocalDate.now().toString(), parent,
-                                amountText.getText(), chequeNumberText.getText(), transactionType);
+                                amountText.getText(), chequeNumber, transactionType);
                         if (result.equals("Success")) {
                             Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", result);
                             parent.enablePane();
