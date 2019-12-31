@@ -98,10 +98,43 @@ public class RequestOrgLoan {
             }
         });
 
+        //settlement period label
+        Label settlementPeriodLabel = new Label("Settlement Period : ");
+        pane1.add(settlementPeriodLabel, 1, 5, 2, 1);
+
+        TextField settlementPeriodText = new TextField();
+        pane1.add(settlementPeriodText, 3, 5, 2, 1);
+        pane1.setHalignment(settlementPeriodText, HPos.LEFT);
+
+        settlementPeriodText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,0})?")) {
+                    settlementPeriodText.setText(oldValue);
+                }
+            }
+        });
+
+        //No of installments label
+        Label noOfSettlementsLabel = new Label("No Of Settlements : ");
+        pane1.add(noOfSettlementsLabel, 1, 6, 2, 1);
+
+        TextField noOfSettlementsText = new TextField();
+        pane1.add(noOfSettlementsText, 3, 6, 2, 1);
+        pane1.setHalignment(noOfSettlementsText, HPos.LEFT);
+
+        noOfSettlementsText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,0})?")) {
+                    noOfSettlementsText.setText(oldValue);
+                }
+            }
+        });
 
         //Organization type label
         Label organizationTypeLabel = new Label("Organization Type : ");
-        pane1.add(organizationTypeLabel, 1, 5, 2, 1);
+        pane1.add(organizationTypeLabel, 1, 7, 2, 1);
 
         MenuItem individualType = new MenuItem("Individual");
         MenuItem jointType = new MenuItem("Joint");
@@ -111,21 +144,21 @@ public class RequestOrgLoan {
         MenuItem otherType = new MenuItem("Other");
 
         MenuButton organizationTypeTypeMenu = new MenuButton("Organization Type", null, individualType, jointType,pvtType,limitedCoType,trustType,otherType);
-        pane1.add(organizationTypeTypeMenu, 3, 5,2,1);
+        pane1.add(organizationTypeTypeMenu, 3, 7,2,1);
 
 
         //Project Gross Value  label
         Label projectGrossValueLabel = new Label("Project Gross Value (Rs) : ");
-        pane1.add(projectGrossValueLabel, 1, 6, 2, 1);
+        pane1.add(projectGrossValueLabel, 1, 8, 2, 1);
 
         TextField projectGrossValuText = new TextField();
-        pane1.add(projectGrossValuText, 3, 6, 2, 1);
+        pane1.add(projectGrossValuText, 3, 8, 2, 1);
         pane1.setHalignment(projectGrossValuText, HPos.LEFT);
 
         projectGrossValuText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
+                if (!newValue.matches("\\d{0,12}([\\.]\\d{0,2})?")) {
                     projectGrossValuText.setText(oldValue);
                 }
             }
@@ -133,7 +166,7 @@ public class RequestOrgLoan {
 
         //loan reasonlabel
         Label loanReasonLabel = new Label("Loan Reason : ");
-        pane1.add(loanReasonLabel, 1, 7, 2, 1);
+        pane1.add(loanReasonLabel, 1, 9, 2, 1);
 
         MenuItem constructionType = new MenuItem("Construction");
         MenuItem assetPurchaseType = new MenuItem("Asset Purchase");
@@ -141,7 +174,7 @@ public class RequestOrgLoan {
         MenuItem otherReasonType = new MenuItem("Other Reason");
 
         MenuButton loanReasonTypeMenu = new MenuButton("Loan Reason", null, constructionType, assetPurchaseType,refinancingType,otherReasonType);
-        pane1.add(loanReasonTypeMenu, 3, 7,2,1);
+        pane1.add(loanReasonTypeMenu, 3, 9,2,1);
 
 
         constructionType.setOnAction(new EventHandler<ActionEvent>() {
@@ -228,7 +261,7 @@ public class RequestOrgLoan {
         Button cancelButton = new Button("Back");
         cancelButton.setDefaultButton(true);
         cancelButton.setPrefSize(73, 35);
-        pane1.add(cancelButton, 1, 12);
+        pane1.add(cancelButton, 1, 11);
         pane1.setHalignment(cancelButton, HPos.CENTER);
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -241,7 +274,7 @@ public class RequestOrgLoan {
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
         submitButton.setPrefSize(73, 35);
-        pane1.add(submitButton, 3, 12);
+        pane1.add(submitButton, 3, 11);
         pane1.setHalignment(submitButton, HPos.CENTER);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -262,9 +295,20 @@ public class RequestOrgLoan {
                     return;
                 }
 
+                if (settlementPeriodText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Settlement Period");
+                    return;
+                }
+
+                if (noOfSettlementsText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the No Of Settlements");
+                    return;
+                }
+
+
 
                 OrgLoanRequest newOrgLoan = new OrgLoanRequest(registerIdText.getText(),parent.getBranchID(), Double.valueOf(requestAmountText.getText()), parent.getEmployeeID(),
-                        Double.valueOf(projectGrossValuText.getText()), loanReason, organizationType, LocalDate.now());
+                        Double.valueOf(projectGrossValuText.getText()), loanReason, organizationType, Integer.valueOf(settlementPeriodText.getText()),Integer.valueOf(noOfSettlementsText.getText()),LocalDate.now());
 
                 String result = "";
                 result = omodel.createOrgLoanRequest(newOrgLoan);

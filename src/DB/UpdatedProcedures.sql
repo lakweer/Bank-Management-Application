@@ -148,7 +148,7 @@ DELIMITER ;
 
 /*create individual loan request*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest` (IN `NICArg` CHAR(10), IN `branchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `GrossSalaryArg` DECIMAL(10,2), IN `NetSalaryArg` DECIMAL(10,2), IN `EmploymentSectorArg` ENUM("PRIVATE","GOV","SELF"), IN `EmploymentTypeArg` ENUM("PER","TEMP"), IN `ProfessionArg` VARCHAR(40), IN `loanTypeArg` VARCHAR(40), IN `requestDateArg` DATE)  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest` (IN `NICArg` CHAR(10), IN `branchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `GrossSalaryArg` DECIMAL(10,2), IN `NetSalaryArg` DECIMAL(10,2), IN `EmploymentSectorArg` ENUM("PRIVATE","GOV","SELF"), IN `EmploymentTypeArg` ENUM("PER","TEMP"), IN `ProfessionArg` VARCHAR(40), IN `loanTypeArg` VARCHAR(40),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -170,8 +170,8 @@ IF LENGTH(CustomerIdArg) > 0 THEN
 	SELECT `LoanTypeId` INTO LoanTypeIdArg FROM `loan_type` WHERE `LoanTypeName`= loanTypeArg;
 
     /* Add the data of loan request to the loan_request Table */
-    INSERT INTO `loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`, `requestDate`)
-    VALUES (CustomerIdArg, branchIdArg, AmountArg, EmployeeIdArg, GrossSalaryArg, NetSalaryArg, EmploymentSectorArg, EmploymentTypeArg, ProfessionArg, LoanTypeIdArg, requestDateArg );
+    INSERT INTO `loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
+    VALUES (CustomerIdArg, branchIdArg, AmountArg, EmployeeIdArg, GrossSalaryArg, NetSalaryArg, EmploymentSectorArg, EmploymentTypeArg, ProfessionArg, LoanTypeIdArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
 
     SET returnArg = "Success";
     COMMIT;
@@ -192,7 +192,7 @@ DELIMITER ;
 
 /*create organization loan request*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(10,2), IN `LoanReasonArg` ENUM("Construction","Asset_Purchase","Refinancing","Other_Reason"), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"), IN `requestDateArg` DATE)  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(12,2), IN `LoanReasonArg` ENUM("Construction","Asset_Purchase","Refinancing","Other_Reason"), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -211,8 +211,8 @@ IF LENGTH(CustomerIdArg) > 0 THEN
 
     /* Add the data of loan request to the org_loan_request Table */
 
-    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`, `requestDate`)
-    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg, requestDateArg );
+    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
+    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
 
     SET returnArg = "Success";
     COMMIT;

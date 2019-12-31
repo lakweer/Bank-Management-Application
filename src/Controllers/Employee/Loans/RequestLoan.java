@@ -107,41 +107,75 @@ public class RequestLoan {
             }
         });
 
+        //settlement period label
+        Label settlementPeriodLabel = new Label("Settlement Period : ");
+        pane1.add(settlementPeriodLabel, 1, 6, 2, 1);
+
+        TextField settlementPeriodText = new TextField();
+        pane1.add(settlementPeriodText, 3, 6, 2, 1);
+        pane1.setHalignment(settlementPeriodText, HPos.LEFT);
+
+        settlementPeriodText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,0})?")) {
+                    settlementPeriodText.setText(oldValue);
+                }
+            }
+        });
+
+        //No of installments label
+        Label noOfSettlementsLabel = new Label("No Of Settlements : ");
+        pane1.add(noOfSettlementsLabel, 1, 7, 2, 1);
+
+        TextField noOfSettlementsText = new TextField();
+        pane1.add(noOfSettlementsText, 3, 7, 2, 1);
+        pane1.setHalignment(noOfSettlementsText, HPos.LEFT);
+
+        noOfSettlementsText.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (!newValue.matches("\\d{0,3}([\\.]\\d{0,0})?")) {
+                    noOfSettlementsText.setText(oldValue);
+                }
+            }
+        });
+
         //employment sector label
         Label employmentSectorLabel = new Label("Employment Sector : ");
-        pane1.add(employmentSectorLabel, 1, 6, 2, 1);
+        pane1.add(employmentSectorLabel, 1, 8, 2, 1);
 
         MenuItem publicType = new MenuItem("Public");
         MenuItem privateType = new MenuItem("Private");
         MenuItem selfType = new MenuItem("Self");
 
         MenuButton employmentSectorTypeMenu = new MenuButton("Employment Sector", null, publicType, privateType, selfType);
-        pane1.add(employmentSectorTypeMenu, 3, 6,2,1);
+        pane1.add(employmentSectorTypeMenu, 3, 8,2,1);
 
         //employment type label
         Label employmentTypeLabel = new Label("Employment Type : ");
-        pane1.add(employmentTypeLabel, 1, 7, 2, 1);
+        pane1.add(employmentTypeLabel, 1, 9, 2, 1);
 
         MenuItem permanentType = new MenuItem("Permanent");
         MenuItem temporaryType = new MenuItem("Temporary");
 
         MenuButton employmentTypeTypeMenu = new MenuButton("Employment Type", null, permanentType, temporaryType);
-        pane1.add(employmentTypeTypeMenu, 3, 7,2,1);
+        pane1.add(employmentTypeTypeMenu, 3, 9,2,1);
 
         //profession label
         Label professionLabel = new Label("Profession : ");
-        pane1.add(professionLabel, 1, 8, 2, 1);
+        pane1.add(professionLabel, 1, 10, 2, 1);
 
         TextField professionText = new TextField();
-        pane1.add(professionText, 3, 8, 2, 1);
+        pane1.add(professionText, 3, 10, 2, 1);
         pane1.setHalignment(professionText, HPos.LEFT);
 
         //Gross Salary label
         Label grossSalaryLabel = new Label("Gross Salary (Rs) : ");
-        pane1.add(grossSalaryLabel, 1, 9, 2, 1);
+        pane1.add(grossSalaryLabel, 1, 11, 2, 1);
 
         TextField grossSalaryText = new TextField();
-        pane1.add(grossSalaryText, 3, 9, 2, 1);
+        pane1.add(grossSalaryText, 3, 11, 2, 1);
         pane1.setHalignment(grossSalaryText, HPos.LEFT);
 
         grossSalaryText.textProperty().addListener(new ChangeListener<String>() {
@@ -155,10 +189,10 @@ public class RequestLoan {
 
         //Net Salary label
         Label netSalaryLabel = new Label("Net Salary (Rs) : ");
-        pane1.add(netSalaryLabel, 1, 10, 2, 1);
+        pane1.add(netSalaryLabel, 1, 12, 2, 1);
 
         TextField netSalaryText = new TextField();
-        pane1.add(netSalaryText, 3, 10, 2, 1);
+        pane1.add(netSalaryText, 3, 12, 2, 1);
         pane1.setHalignment(netSalaryText, HPos.LEFT);
 
         netSalaryText.textProperty().addListener(new ChangeListener<String>() {
@@ -246,7 +280,7 @@ public class RequestLoan {
         Button cancelButton = new Button("Back");
         cancelButton.setDefaultButton(true);
         cancelButton.setPrefSize(73, 35);
-        pane1.add(cancelButton, 1, 12);
+        pane1.add(cancelButton, 1, 14);
         pane1.setHalignment(cancelButton, HPos.CENTER);
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -259,7 +293,7 @@ public class RequestLoan {
         Button submitButton = new Button("Submit");
         submitButton.setDefaultButton(true);
         submitButton.setPrefSize(73, 35);
-        pane1.add(submitButton, 3, 12);
+        pane1.add(submitButton, 3, 14);
         pane1.setHalignment(submitButton, HPos.CENTER);
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -295,9 +329,19 @@ public class RequestLoan {
                     return;
                 }
 
+                if (settlementPeriodText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the Settlement Period");
+                    return;
+                }
+
+                if (noOfSettlementsText.getText().isEmpty()) {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Please enter the No Of Settlements");
+                    return;
+                }
+
 
                 IndividualLoanRequest newLoan = new IndividualLoanRequest(customerNICNumberText.getText(),parent.getBranchID(), Double.valueOf(requestAmountText.getText()), parent.getEmployeeID(),
-                        Double.valueOf(grossSalaryText.getText()), Double.valueOf(netSalaryText.getText()),employmentSector,employmentType, professionText.getText(),loanType, LocalDate.now());
+                        Double.valueOf(grossSalaryText.getText()), Double.valueOf(netSalaryText.getText()),employmentSector,employmentType, professionText.getText(),loanType,Integer.valueOf(settlementPeriodText.getText()),Integer.valueOf(noOfSettlementsText.getText()), LocalDate.now());
 
                 String result = "";
                 result = lmodel.createIndividualLoanRequest(newLoan);
