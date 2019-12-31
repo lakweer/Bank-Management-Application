@@ -4,7 +4,6 @@ import Controllers.Employee.EmployeeHome;
 import Helpers.Helpers;
 import Models.LoanModel;
 import Objects.loan.OrgLoanRequest;
-import Validator.FormValidator;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;

@@ -4,7 +4,7 @@ package Controllers.Employee.Loans;
 import Controllers.Employee.EmployeeHome;
 import Helpers.Helpers;
 import Models.LoanModel;
-import Objects.Employee;
+
 import Objects.loan.IndividualLoanRequest;
 import Validator.FormValidator;
 import javafx.beans.value.ChangeListener;
@@ -12,7 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
+
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
