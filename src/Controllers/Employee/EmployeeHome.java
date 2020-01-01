@@ -6,6 +6,8 @@ import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
 import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
+import Controllers.Employee.Loans.CheckStatus;
+import Controllers.Employee.Loans.InstallmentSettlement;
 import Controllers.Employee.Loans.RequestLoan;
 import Controllers.Employee.Loans.RequestOrgLoan;
 import Controllers.Employee.SavingsAccount.SavingsAccountClose;
@@ -162,8 +164,9 @@ public class EmployeeHome extends Application {
         MenuItem requestIndividualBL = new MenuItem("Request Individual Bank Loan");
         MenuItem requestOrgBL = new MenuItem("Request Organization Bank Loan");
         MenuItem checkStatus = new MenuItem("Check Status");
+        MenuItem installmentSettlement = new MenuItem("Installment Settlement");
 
-        MenuButton blMenu = new MenuButton("Bank Loans", null, requestIndividualBL, requestOrgBL, checkStatus);
+        MenuButton blMenu = new MenuButton("Bank Loans", null, requestIndividualBL, requestOrgBL, checkStatus,installmentSettlement);
         blMenu.setFont(Font.font("System", 15));
         blMenu.setPrefSize(170, 42);
         blMenu.setPopupSide(Side.RIGHT);
@@ -263,14 +266,6 @@ public class EmployeeHome extends Application {
                 requestLoanPane(pane);
             }
         });
-
-        requestOrgBL.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                disablePane();
-                requestOrgLoanPane(pane);
-            }
-        });
         issueDC.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -294,6 +289,30 @@ public class EmployeeHome extends Application {
             }
         });
 
+        requestOrgBL.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                requestOrgLoanPane(pane);
+            }
+        });
+
+        checkStatus.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                checkStatusPane(pane);
+            }
+        });
+
+        installmentSettlement.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                installmentSettlementPane(pane);
+            }
+        });
+
         transactionCA.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -302,7 +321,29 @@ public class EmployeeHome extends Application {
             }
         });
 
+
     }
+
+    private void transactionCurrentPane(BorderPane pane){
+        CurrentTransactionPane ca = new CurrentTransactionPane(this);
+        ca.TransactionCurrentPane(pane);
+    }
+
+    private  void requestOrgLoanPane(BorderPane pane){
+        RequestOrgLoan orgLoan = new RequestOrgLoan(this);
+        orgLoan.requestOrgLoanPane(pane);
+    }
+
+    private  void checkStatusPane(BorderPane pane){
+        CheckStatus check = new CheckStatus(this);
+        check.checkStatusPane(pane);
+    }
+
+    private  void installmentSettlementPane(BorderPane pane){
+        InstallmentSettlement check = new InstallmentSettlement(this);
+        check.installmentSettlementPane(pane);
+    }
+
 
     private void openCurrentPane(BorderPane pane){
         CurrentAccountOpen ca = new CurrentAccountOpen(this);
@@ -312,11 +353,6 @@ public class EmployeeHome extends Application {
     private void closeCurrentPane(BorderPane pane){
         CurrentAccountClose ca = new CurrentAccountClose(this);
         ca.closeCurrentPane(pane);
-    }
-
-    private void transactionCurrentPane(BorderPane pane){
-        CurrentTransactionPane ca = new CurrentTransactionPane(this);
-        ca.TransactionCurrentPane(pane);
     }
 
 
@@ -333,10 +369,6 @@ public class EmployeeHome extends Application {
     private  void requestLoanPane(BorderPane pane){
         RequestLoan loan = new RequestLoan(this);
         loan.requestLoanPane(pane);
-    }
-    private  void requestOrgLoanPane(BorderPane pane){
-        RequestOrgLoan orgLoan = new RequestOrgLoan(this);
-        orgLoan.requestOrgLoanPane(pane);
     }
     private void individualCustomerCreatePane(BorderPane pane){
         IndividualCustomerRegister c =new  IndividualCustomerRegister(this);

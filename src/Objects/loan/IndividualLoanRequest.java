@@ -17,6 +17,8 @@ public class IndividualLoanRequest {
     private String Profession;
     private String LoanTypeId;
     private LocalDate RequestDate;
+    private Integer SettlementPeriod;
+    private Integer NoOfSettlements;
 
 //    public IndividualLoanRequest(String requestId, String customerId, String branchId, Double amount, String approvedStatus, String employeeId, Double grossSalary, Double netSalary, String loanId, String employmentSector, String employmentType, String profession,String loanTypeId,LocalDate requestDate) {
 //        RequestId = requestId;
@@ -35,7 +37,7 @@ public class IndividualLoanRequest {
 //        RequestDate = requestDate;
 //    }
 
-    public IndividualLoanRequest(String customerId, String branchId, Double amount, String employeeId, Double grossSalary, Double netSalary, String employmentSector, String employmentType, String profession,String loanTypeId,LocalDate requestDate) {
+    public IndividualLoanRequest(String customerId, String branchId, Double amount, String employeeId, Double grossSalary, Double netSalary, String employmentSector, String employmentType, String profession,String loanTypeId,Integer settlementPeriod, Integer noOfSettlements, LocalDate requestDate) {
 
         CustomerId = customerId;
         BranchId = branchId;
@@ -49,6 +51,8 @@ public class IndividualLoanRequest {
         EmploymentType = employmentType;
         Profession = profession;
         LoanTypeId = loanTypeId;
+        SettlementPeriod = settlementPeriod;
+        NoOfSettlements = noOfSettlements;
         RequestDate = requestDate;
     }
 
@@ -150,6 +154,22 @@ public class IndividualLoanRequest {
 
     public String getLoanTypeId() {
         return LoanTypeId;
+    }
+
+    public Integer getSettlementPeriod() {
+        return SettlementPeriod;
+    }
+
+    public Integer getNoOfSettlements() {
+        return NoOfSettlements;
+    }
+
+    public void setNoOfSettlements(Integer noOfSettlements) {
+        NoOfSettlements = noOfSettlements;
+    }
+
+    public void setSettlementPeriod(Integer settlementPeriod) {
+        SettlementPeriod = settlementPeriod;
     }
 
     public void setLoanTypeId(String loanTypeId) {

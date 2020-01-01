@@ -1,5 +1,6 @@
 package Models;
 
+import Hashing.GFG;
 import Objects.Employee;
 
 import java.sql.Connection;
@@ -33,7 +34,7 @@ public class BranchManagerModel extends  EmployeeModel{
             stmt.setString(6, employee.getDateOfBirth().toString());
             stmt.setString(7, empType);
             stmt.setString(8, employee.getUserName());
-            stmt.setString(9,employee.getPassword());
+            stmt.setString(9, GFG.encryptThisString(employee.getPassword()));
             ResultSet rs = stmt.executeQuery();
             while (rs.next()){
                 result = rs.getString(1);

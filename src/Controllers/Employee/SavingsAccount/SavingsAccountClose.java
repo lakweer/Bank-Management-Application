@@ -58,6 +58,7 @@ public class SavingsAccountClose {
         cancelButton.setPrefSize(73,35);
         pane1.add(cancelButton,1,19);
         pane1.setHalignment(cancelButton, HPos.CENTER);
+
         cancelButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

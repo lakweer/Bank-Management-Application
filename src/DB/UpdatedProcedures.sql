@@ -148,7 +148,7 @@ DELIMITER ;
 
 /*create individual loan request*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest` (IN `NICArg` CHAR(10), IN `branchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `GrossSalaryArg` DECIMAL(10,2), IN `NetSalaryArg` DECIMAL(10,2), IN `EmploymentSectorArg` ENUM("PRIVATE","GOV","SELF"), IN `EmploymentTypeArg` ENUM("PER","TEMP"), IN `ProfessionArg` VARCHAR(40), IN `loanTypeArg` VARCHAR(40), IN `requestDateArg` DATE)  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest` (IN `NICArg` CHAR(10), IN `branchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `GrossSalaryArg` DECIMAL(10,2), IN `NetSalaryArg` DECIMAL(10,2), IN `EmploymentSectorArg` ENUM("PRIVATE","GOV","SELF"), IN `EmploymentTypeArg` ENUM("PER","TEMP"), IN `ProfessionArg` VARCHAR(40), IN `loanTypeArg` VARCHAR(40),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -170,8 +170,8 @@ IF LENGTH(CustomerIdArg) > 0 THEN
 	SELECT `LoanTypeId` INTO LoanTypeIdArg FROM `loan_type` WHERE `LoanTypeName`= loanTypeArg;
 
     /* Add the data of loan request to the loan_request Table */
-    INSERT INTO `loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`, `requestDate`)
-    VALUES (CustomerIdArg, branchIdArg, AmountArg, EmployeeIdArg, GrossSalaryArg, NetSalaryArg, EmploymentSectorArg, EmploymentTypeArg, ProfessionArg, LoanTypeIdArg, requestDateArg );
+    INSERT INTO `loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
+    VALUES (CustomerIdArg, branchIdArg, AmountArg, EmployeeIdArg, GrossSalaryArg, NetSalaryArg, EmploymentSectorArg, EmploymentTypeArg, ProfessionArg, LoanTypeIdArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
 
     SET returnArg = "Success";
     COMMIT;
@@ -192,7 +192,7 @@ DELIMITER ;
 
 /*create organization loan request*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(10,2), IN `LoanReasonArg` ENUM("Construction","Asset_Purchase","Refinancing","Other_Reason"), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"), IN `requestDateArg` DATE)  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(12,2), IN `LoanReasonArg` ENUM("Construction","Asset_Purchase","Refinancing","Other_Reason"), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -211,8 +211,8 @@ IF LENGTH(CustomerIdArg) > 0 THEN
 
     /* Add the data of loan request to the org_loan_request Table */
 
-    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`, `requestDate`)
-    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg, requestDateArg );
+    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
+    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
 
     SET returnArg = "Success";
     COMMIT;
@@ -848,6 +848,158 @@ BEGIN
 
 END$$
 DELIMITER ;
+
+
+/*check status of loan request*/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `checkLoanStatus`(
+    IN `LoanTypeArg` ENUM("Individual", "Organizational"),
+	IN `Request_Id` INT(40))
+
+
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE returnArg VARCHAR(100);
+DECLARE loanArg INT(40);
+
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong while Creating a Loan Request!";
+
+/* Check loan type */
+IF LoanTypeArg = "Individual" THEN
+
+	/* check the loan request is already requested */
+	SELECT `RequestId` INTO loanArg FROM `loan_request` WHERE `RequestId`= Request_Id;
+
+	/* check for the existence of the loan request */
+	IF LENGTH(loanArg) > 0 THEN
+
+		/* get the status of the request from loan_request table */
+		SELECT `ApprovedStatus` INTO returnArg FROM `loan_request` WHERE `RequestId`= Request_Id;
+
+		COMMIT;
+
+	ELSE
+		SET returnArg = "Request Id does not exist! Plz check and try again";
+    END IF;
+
+ELSE
+	/* check the loan request is already requested */
+	SELECT `RequestId` INTO loanArg FROM `org_loan_request` WHERE `RequestId`= Request_Id;
+
+	/* check for the existence of the loan request */
+	IF LENGTH(loanArg) > 0 THEN
+
+		/* get the status of the request from org_loan_request table */
+		SELECT `ApprovedStatus` INTO returnArg FROM `org_loan_request` WHERE `RequestId`= Request_Id;
+
+		COMMIT;
+
+	ELSE
+		SET returnArg = "Request Id does not exist! Plz check and try again";
+	END IF;
+
+END IF;
+
+SELECT returnArg;
+
+END$$
+DELIMITER ;
+
+
+
+/*update Loan Settlements*/
+
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updateSettlements`(
+
+	IN `Loan_Id` VARCHAR(40),
+	IN `DateArg` DATE,
+	IN `SettleAmountArg` DECIMAL(8,2))
+
+
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE returnArg VARCHAR(100);
+DECLARE loanArg VARCHAR(40);
+DECLARE InstallmentIdArg INT(5);
+DECLARE DueDateArg DATE;
+DECLARE LoanAmountArg DECIMAL(8,2);
+DECLARE NoOfSettlementsArg INT(3);
+DECLARE InstallmentArg DECIMAL(8,2);
+DECLARE LateAmountArg DECIMAL(8,2);
+DECLARE LateInstallmentArg DECIMAL(8,2);
+
+
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong while Settling loan!";
+
+
+
+/* check the loan is already approved */
+SELECT `LoanId` INTO loanArg FROM `loan` WHERE `LoanId`= Loan_Id;
+SELECT `Amount` INTO LoanAmountArg FROM `loan` WHERE `LoanId`= Loan_Id;
+SELECT `NoOfSettlements` INTO NoOfSettlementsArg FROM `loan` WHERE `LoanId`= Loan_Id;
+SET InstallmentArg = LoanAmountArg/NoOfSettlementsArg;
+
+		/* check for the existence of the loan */
+		IF LENGTH(loanArg) > 0 THEN
+
+			/**/
+			SELECT `InstallmentId` INTO InstallmentIdArg FROM loan_installment_history WHERE `LoanId`= Loan_Id AND InstallmentDate IS NULL ORDER BY DueDate ASC LIMIT 1;
+			SELECT `DueDate` INTO DueDateArg FROM loan_installment_history WHERE `LoanId`= Loan_Id AND InstallmentDate IS NULL ORDER BY DueDate ASC LIMIT 1;
+			SELECT `LateCharges` INTO LateAmountArg FROM loan_installment_history WHERE `LoanId`= Loan_Id AND InstallmentDate IS NULL ORDER BY DueDate ASC LIMIT 1;
+
+			IF LENGTH(InstallmentIdArg) > 0 THEN
+				/*CHECK FOR LATE CHARGES*/
+				IF DueDateArg>DateArg THEN
+
+					IF InstallmentArg=SettleAmountArg THEN
+
+						/* Add the data of loan request to the loan_request Table */
+						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
+
+						SET returnArg = "Success";
+						COMMIT;
+					ELSE
+						SET returnArg = CONCAT("Check installment ammount. Your payment should be   ",InstallmentArg, ". There are no late charges.") ;
+					END IF;
+				ELSE
+					SET LateInstallmentArg= InstallmentArg + LateAmountArg ;
+					IF LateInstallmentArg=SettleAmountArg THEN
+
+						/* Add the data of loan request to the loan_request Table */
+						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
+
+						SET returnArg = "Success";
+						COMMIT;
+					ELSE
+						SET returnArg = CONCAT("Due date has expierd. You have late charge of ",LateAmountArg, ". Your payment should be  ", LateInstallmentArg, ", with late charges") ;
+					END IF;
+
+				END IF;
+			ELSE
+				SET returnArg = "Your Installments are settled up to date";
+			END IF;
+
+
+		ELSE
+			SET returnArg = "Loan ID does not exist! Plz check and try again";
+		END IF;
+
+
+SELECT returnArg;
+
+END$$
+DELIMITER ;
+
 
 
 

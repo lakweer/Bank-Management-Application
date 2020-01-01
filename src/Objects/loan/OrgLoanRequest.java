@@ -15,6 +15,8 @@ public class OrgLoanRequest {
         private String LoanReason;
         private String OrganizationType;
         private LocalDate RequestDate;
+        private Integer SettlementPeriod;
+        private Integer NoOfSettlements;
 
 //    public OrgLoanRequest(String requestId, String registerId, String branchId, Double amount, String approvedStatus, String employeeId, Double projectGrossValue, String loanId, String loanReason, String organizationType,LocalDate requestDate) {
 //
@@ -32,7 +34,8 @@ public class OrgLoanRequest {
 //
 //    }
 
-    public OrgLoanRequest( String registerId, String branchId, Double amount,  String employeeId, Double projectGrossValue, String loanReason, String organizationType,LocalDate requestDate) {
+
+    public OrgLoanRequest(String registerId, String branchId, Double amount, String employeeId, Double projectGrossValue, String loanReason, String organizationType, Integer settlementPeriod, Integer noOfSettlements, LocalDate requestDate) {
 
         RegisterId = registerId;
         BranchId = branchId;
@@ -43,6 +46,8 @@ public class OrgLoanRequest {
 
         LoanReason = loanReason;
         OrganizationType = organizationType;
+        SettlementPeriod = settlementPeriod;
+        NoOfSettlements = noOfSettlements;
         RequestDate = requestDate;
 
     }
@@ -129,5 +134,25 @@ public class OrgLoanRequest {
 
     public void setRequestDate(LocalDate requestDate) {
         RequestDate = requestDate;
+    }
+
+    public void setRequestId(String requestId) {
+        RequestId = requestId;
+    }
+
+    public Integer getSettlementPeriod() {
+        return SettlementPeriod;
+    }
+
+    public void setSettlementPeriod(Integer settlementPeriod) {
+        SettlementPeriod = settlementPeriod;
+    }
+
+    public Integer getNoOfSettlements() {
+        return NoOfSettlements;
+    }
+
+    public void setNoOfSettlements(Integer noOfSettlements) {
+        NoOfSettlements = noOfSettlements;
     }
 }
