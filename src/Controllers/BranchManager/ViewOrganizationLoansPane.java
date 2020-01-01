@@ -24,7 +24,7 @@ public class ViewOrganizationLoansPane {
     public   ViewOrganizationLoansPane(BranchMangerHome parent){
         this.parent =parent;
         this.loanModel = new LoanModel();
-        this.loans = loanModel.viewIndividulaLoanRequests(parent.getBranchID());
+        this.loans = loanModel.viewOrganizationLoanRequests(parent.getBranchID());
         this.ar_size=loans.size();
     }
 
@@ -78,7 +78,7 @@ public class ViewOrganizationLoansPane {
 
 
                 element.getChildren().addAll(loanDetails, link, Amount, requestedDate, loanReason, requestedBy, settlementPeriod, numOfSettlements,
-                        customerDetails);
+                        customerDetails, organizationType);
                 box.getChildren().add(element);
 
                 if(loans.get(pageIndex).get("ApprovedStatus").equals("PENDING")){

@@ -1,6 +1,5 @@
 package Controllers.Employee;
 
-import Controllers.BranchManager.AddNewEmplyeePane;
 import Controllers.Employee.CurrentAccount.CurrentAccountClose;
 import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
 import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
