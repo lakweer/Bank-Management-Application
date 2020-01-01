@@ -191,7 +191,7 @@ public class LoanModel {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, loanTID);
             stmt.setString(2, date.toString());
-            stmt.setString(2, settleAmount.toString());
+            stmt.setString(3, settleAmount.toString());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result = rs.getString(1);

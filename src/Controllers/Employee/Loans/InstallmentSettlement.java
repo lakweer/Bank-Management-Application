@@ -62,7 +62,7 @@ public class InstallmentSettlement {
 
 
         //loan id label
-        Label loanIdLabel = new Label("Request ID : ");
+        Label loanIdLabel = new Label("Loan ID : ");
         pane1.add(loanIdLabel, 1, 5, 2, 1);
 
         TextField loanIDText = new TextField();
