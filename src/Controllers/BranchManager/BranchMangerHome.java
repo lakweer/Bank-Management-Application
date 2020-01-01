@@ -109,10 +109,10 @@ public class BranchMangerHome {
         panes[1] = sideAnchorPane;
 
         //Bank Loans
-        MenuItem requestBL = new MenuItem("Request Bank Loan");
-        MenuItem checkStatus = new MenuItem("Check Status");
+        MenuItem viewIndividualLoans = new MenuItem("Ind Loan Req");
+        MenuItem viewOrganizationlLoans = new MenuItem("Org Loan Req");
 
-        MenuButton blMenu = new MenuButton("Bank Loans", null, requestBL, checkStatus);
+        MenuButton blMenu = new MenuButton("Bank Loans", null, viewOrganizationlLoans, viewIndividualLoans);
         blMenu.setFont(Font.font("System",15));
         blMenu.setPrefSize(170,42);
         blMenu.setPopupSide(Side.RIGHT);
@@ -162,7 +162,7 @@ public class BranchMangerHome {
             }
         });
 
-        checkStatus.setOnAction(new EventHandler<ActionEvent>() {
+        viewIndividualLoans.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 disablePane();
@@ -170,8 +170,20 @@ public class BranchMangerHome {
             }
         });
 
+        viewOrganizationlLoans.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                viewOrganizationLoans(pane);
+            }
+        });
 
 
+    }
+
+    private void viewOrganizationLoans(BorderPane pane){
+        ViewOrganizationLoansPane p = new ViewOrganizationLoansPane(this);
+        p.viewOrganizationLoans(pane);
     }
 
     private void ViewIndidualLoansPane(BorderPane pane){

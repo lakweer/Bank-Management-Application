@@ -24,7 +24,7 @@ public class ViewOrganizationLoansPane {
     public   ViewOrganizationLoansPane(BranchMangerHome parent){
         this.parent =parent;
         this.loanModel = new LoanModel();
-        this.loans = loanModel.viewIndividulaLoanRequests(parent.getBranchID());
+        this.loans = loanModel.viewOrganizationLoanRequests(parent.getBranchID());
         this.ar_size=loans.size();
     }
 
@@ -51,10 +51,10 @@ public class ViewOrganizationLoansPane {
                 Label link = new Label("RequestId : " + (loans.get(pageIndex).get("RequestId")));
                 Label Amount = new Label("Amount : " + loans.get(pageIndex).get("Amount"));
                 Label requestedDate = new Label("Project Gross Value : " + loans.get(pageIndex).get("ProjectGrossValue"));
-                Label loanReason = new Label("Reason For Loan : " + loans.get(pageIndex).get("LoanReason"));
+                Label loanReason = new Label("Loan Type: " + loans.get(pageIndex).get("LoanTypeName"));
                 Label requestedBy = new Label("Requested Employee : " + loans.get(pageIndex).get("EmployeeId"));
-                Label settlementPeriod = new Label("Settlement Period : " + 5);
-                Label numOfSettlements = new Label("Number of Settlements : " + 5);
+                Label settlementPeriod = new Label("Settlement Period : " + loans.get(pageIndex).get("SettlementPeriod"));
+                Label numOfSettlements = new Label("Number of Settlements : " + loans.get(pageIndex).get("NoOfSettlements"));
 
                 Label customerDetails = new Label("Organization Details");
                 customerDetails.setUnderline(true);
@@ -78,7 +78,7 @@ public class ViewOrganizationLoansPane {
 
 
                 element.getChildren().addAll(loanDetails, link, Amount, requestedDate, loanReason, requestedBy, settlementPeriod, numOfSettlements,
-                        customerDetails);
+                        customerDetails, organizationType);
                 box.getChildren().add(element);
 
                 if(loans.get(pageIndex).get("ApprovedStatus").equals("PENDING")){
@@ -88,8 +88,8 @@ public class ViewOrganizationLoansPane {
                 approveButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        String r = loanModel.approveLoanRequest(loans.get(pageIndex).get("RequestId"), loans.get(pageIndex).get("Amount"),
-                                loans.get(pageIndex).get("LoanTypeId"), "5","5");
+                        String r = loanModel.approveOrgLoanRequest(loans.get(pageIndex).get("RequestId"), loans.get(pageIndex).get("Amount"),
+                                loans.get(pageIndex).get("LoanTypeId"), loans.get(pageIndex).get("SettlementPeriod"),loans.get(pageIndex).get("NoOfSettlements"));
                         if(r.equals("Success")){
                             loans.get(pageIndex).replace("ApprovedStatus","REJECTED");
                             element.getChildren().removeAll(gp);

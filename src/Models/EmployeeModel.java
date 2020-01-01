@@ -1,6 +1,8 @@
 package Models;
 
 import DB.Database;
+import Hashing.GFG;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -129,7 +131,7 @@ public class EmployeeModel {
             try{
                 String sql = "UPDATE employee_login  SET Password = ? WHERE EmployeeId =? ";
                 PreparedStatement stmt = connection.prepareStatement(sql);
-                stmt.setString(1, password);
+                stmt.setString(1, GFG.encryptThisString(password));
                 stmt.setString(2,employeeId);
                 int result = stmt.executeUpdate();
                 if(result>0){

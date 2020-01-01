@@ -1,6 +1,7 @@
 package Controllers;
 
 import Controllers.BranchManager.BranchMangerHome;
+import Hashing.GFG;
 import Models.EmployeeModel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -77,9 +78,11 @@ public class LoginForm extends Application {
                     return;
                 }
 
+
+
                 //Login Action
                 EmployeeModel model =new EmployeeModel();
-                String[] params = {username.getText(),password.getText()};
+                String[] params = {username.getText(),GFG.encryptThisString(password.getText())};
                 boolean result = false;
                 try {
                    result= model.login(params);
