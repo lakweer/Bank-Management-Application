@@ -80,7 +80,7 @@ public class InstallmentSettlement {
         settleAmountText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,8}([\\.]\\d{0,2})?")) {
+                if (!newValue.matches("\\d{0,6}([\\.]\\d{0,2})?")) {
                     settleAmountText.setText(oldValue);
                 }
             }

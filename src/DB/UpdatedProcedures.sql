@@ -957,33 +957,38 @@ SET InstallmentArg = LoanAmountArg/NoOfSettlementsArg;
 			SELECT `DueDate` INTO DueDateArg FROM loan_installment_history WHERE `LoanId`= Loan_Id AND InstallmentDate IS NULL ORDER BY DueDate ASC LIMIT 1;
 			SELECT `LateCharges` INTO LateAmountArg FROM loan_installment_history WHERE `LoanId`= Loan_Id AND InstallmentDate IS NULL ORDER BY DueDate ASC LIMIT 1;
 
-			/*CHECK FOR LATE CHARGES*/
-			IF DueDateArg>DateArg THEN
+			IF LENGTH(InstallmentIdArg) > 0 THEN
+				/*CHECK FOR LATE CHARGES*/
+				IF DueDateArg>DateArg THEN
 
-				IF InstallmentArg=SettleAmountArg THEN
+					IF InstallmentArg=SettleAmountArg THEN
 
-					/* Add the data of loan request to the loan_request Table */
-					UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
+						/* Add the data of loan request to the loan_request Table */
+						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
 
-					SET returnArg = "Success";
-					COMMIT;
+						SET returnArg = "Success";
+						COMMIT;
+					ELSE
+						SET returnArg = CONCAT("Check installment ammount. Your payment should be   ",InstallmentArg, ". There are no late charges.") ;
+					END IF;
 				ELSE
-					SET returnArg = CONCAT("Check installment ammount. Your payment should be   ",InstallmentArg, ". There are no late charges.") ;
+					SET LateInstallmentArg= InstallmentArg + LateAmountArg ;
+					IF LateInstallmentArg=SettleAmountArg THEN
+
+						/* Add the data of loan request to the loan_request Table */
+						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
+
+						SET returnArg = "Success";
+						COMMIT;
+					ELSE
+						SET returnArg = CONCAT("Due date has expierd. You have late charge of ",LateAmountArg, ". Your payment should be  ", LateInstallmentArg, ", with late charges") ;
+					END IF;
+
 				END IF;
 			ELSE
-				SET LateInstallmentArg= InstallmentArg + LateAmountArg ;
-				IF LateInstallmentArg=SettleAmountArg THEN
-
-					/* Add the data of loan request to the loan_request Table */
-					UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
-
-					SET returnArg = "Success";
-					COMMIT;
-				ELSE
-					SET returnArg = CONCAT("Due date has expierd. You have late charge of ",LateAmountArg, ". Your payment should be  ", LateInstallmentArg, ", with late charges") ;
-				END IF;
-
+				SET returnArg = "Your Installments are settled up to date";
 			END IF;
+
 
 		ELSE
 			SET returnArg = "Loan ID does not exist! Plz check and try again";

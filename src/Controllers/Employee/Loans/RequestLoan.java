@@ -101,7 +101,7 @@ public class RequestLoan {
         requestAmountText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,8}([\\.]\\d{0,2})?")) {
+                if (!newValue.matches("\\d{0,6}([\\.]\\d{0,2})?")) {
                     requestAmountText.setText(oldValue);
                 }
             }
@@ -198,7 +198,7 @@ public class RequestLoan {
         netSalaryText.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (!newValue.matches("\\d{0,10}([\\.]\\d{0,2})?")) {
+                if (!newValue.matches("\\d{0,8}([\\.]\\d{0,2})?")) {
                     netSalaryText.setText(oldValue);
                 }
             }
