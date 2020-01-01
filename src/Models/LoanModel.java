@@ -114,7 +114,7 @@ public class LoanModel {
         connection = DB.Database.getConnection();
         String result = "Error! Try again.";
         try {
-            String sql = "CALL `createIndividualLoanRequest`(?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+            String sql = "CALL `createIndividualLoanRequest`(?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, inLoanRequest.getCustomerId());
             stmt.setString(2, inLoanRequest.getBranchId());
@@ -126,7 +126,9 @@ public class LoanModel {
             stmt.setString(8, inLoanRequest.getEmploymentType());
             stmt.setString(9, inLoanRequest.getProfession());
             stmt.setString(10, inLoanRequest.getLoanTypeId());
-            stmt.setString(11, inLoanRequest.getRequestDate().toString());
+            stmt.setString(11, inLoanRequest.getSettlementPeriod().toString());
+            stmt.setString(12, inLoanRequest.getNoOfSettlements().toString());
+            stmt.setString(13, inLoanRequest.getRequestDate().toString());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result = rs.getString(1);
@@ -142,7 +144,7 @@ public class LoanModel {
         connection = DB.Database.getConnection();
         String result = "Error! Try again.";
         try {
-            String sql = "CALL `createOrgLoanRequest`(?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "CALL `createOrgLoanRequest`(?, ?, ?, ?, ?, ?, ?, ?,?,?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, orgLoanRequest.getRegisterId());
             stmt.setString(2, orgLoanRequest.getBranchId());
@@ -151,7 +153,9 @@ public class LoanModel {
             stmt.setString(5, orgLoanRequest.getProjectGrossValue().toString());
             stmt.setString(6, orgLoanRequest.getLoanReason());
             stmt.setString(7, orgLoanRequest.getOrganizationType());
-            stmt.setString(8, orgLoanRequest.getRequestDate().toString());
+            stmt.setString(8, orgLoanRequest.getSettlementPeriod().toString());
+            stmt.setString(9, orgLoanRequest.getNoOfSettlements().toString());
+            stmt.setString(10, orgLoanRequest.getRequestDate().toString());
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result = rs.getString(1);
@@ -162,6 +166,7 @@ public class LoanModel {
 
         return result;
     }
+
 
     public String checkLoanStatus(String loanType, Integer requestId) {
         connection = DB.Database.getConnection();
