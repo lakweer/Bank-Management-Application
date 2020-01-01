@@ -192,12 +192,13 @@ DELIMITER ;
 
 /*create organization loan request*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(12,2), IN `LoanReasonArg` ENUM("Construction","Asset_Purchase","Refinancing","Other_Reason"), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `createOrgLoanRequest` (IN `RegisterIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `ProjectGrossValueArg` DECIMAL(12,2), IN `LoanReasonArg` VARCHAR(40), IN `OrganizationTypeArg` ENUM("Individual","Joint","Pvt_Ltd_Co","Limited_Co","Trust","Other"),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
 DECLARE CustomerIdArg VARCHAR(40);
 DECLARE returnArg VARCHAR(100);
+DECLARE LoanTypeIdArg VARCHAR(10);
 
 
 /* Set Default Statement */
@@ -209,10 +210,13 @@ SELECT `CustomerId` INTO CustomerIdArg FROM `organization` WHERE `RegisterNumber
 /* check for the existance of the customer */
 IF LENGTH(CustomerIdArg) > 0 THEN
 
+    /* get the loan type id from loan_type table */
+    	SELECT `LoanTypeId` INTO LoanTypeIdArg FROM `loan_type` WHERE `LoanTypeName`= LoanReasonArg;
+
     /* Add the data of loan request to the org_loan_request Table */
 
-    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanReason`, `OrganizationType`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
-    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanReasonArg, OrganizationTypeArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
+    INSERT INTO `org_loan_request`(`CustomerId`, `BranchId`, `Amount`, `EmployeeId`, `ProjectGrossValue`, `LoanTypeId`, `OrganizationType`,`SettlementPeriod`, `NoOfSettlements`, `requestDate`)
+    VALUES (CustomerIdArg, BranchIdArg, AmountArg, EmployeeIdArg, ProjectGrossValueArg, LoanTypeIdArg, OrganizationTypeArg,settlementPeriodArg, noOfSettlementsArg , requestDateArg );
 
     SET returnArg = "Success";
     COMMIT;

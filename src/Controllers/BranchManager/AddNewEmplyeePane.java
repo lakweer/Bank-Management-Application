@@ -1,6 +1,7 @@
 package Controllers.BranchManager;
 
 
+import Hashing.GFG;
 import Helpers.Helpers;
 import Objects.Employee;
 import Validator.FormValidator;
@@ -169,7 +170,7 @@ public class AddNewEmplyeePane {
                 }
 
                 Employee newEmployee = new Employee(firstNameText.getText(), lastNameText.getText(), nicText.getText(),
-                        nicText.getText(), "BOSL", emailText.getText(), parent.getBranchID(), dob.getValue());
+                        nicText.getText(), GFG.encryptThisString("BOSL"), emailText.getText(), parent.getBranchID(), dob.getValue());
                 String result = "";
                     result = parent.getModel().addNewEmployee(newEmployee, "Normal");
 

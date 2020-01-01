@@ -16,7 +16,7 @@ public class LoanModel {
         ArrayList<HashMap<String, String>> ar = new ArrayList<HashMap<String, String>>();
         connection = DB.Database.getConnection();
         String sql =
-        "SELECT `RequestId`, `CustomerId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, " +
+        "SELECT `RequestId`, `CustomerId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `GrossSalary`, `NetSalary`, `EmploymentSector`, `SettlementPeriod`, `NoOfSettlements`," +
                 "`EmploymentType`, `ApprovedStatus`, `Profession`, `requestDate`, `FirstName`, `LastName`, `Nic`, `LoanTypeName`, `LoanTypeId` FROM `loan_request` " +
                 "INNER JOIN `individual` USING(`CustomerId`) INNER JOIN `loan_type` USING(`LoanTypeId`) " +
                 "WHERE `ApprovedStatus` = 'PENDING' AND `BranchId` =?";
@@ -44,9 +44,11 @@ public class LoanModel {
     public ArrayList<HashMap<String, String>> viewOrganizationLoanRequests(String branchId){
         ArrayList<HashMap<String, String>> ar = new ArrayList<HashMap<String, String>>();
         connection = DB.Database.getConnection();
-        String sql = "SELECT `RequestId`, `CustomerId`, `BranchId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `ProjectGrossValue`, " +
-                " `LoanReason`, `OrganizationType`, `RequestDate` FROM `org_loan_request`"
-                + "WHERE `ApprovedStatus` = 'PENDING' AND `BranchId` =?";
+        String sql = "SELECT `RequestId`, `CustomerId`, `BranchId`, `Amount`, `ApprovedStatus`, `EmployeeId`, " +
+                "`ProjectGrossValue`, `SettlementPeriod`, `NoOfSettlements`,`LoanTypeId`,`OrganizationType`, " +
+                "`RequestDate`, `LoanTypeName` FROM `org_loan_request` INNER JOIN `loan_type` USING(`LoanTypeId`)" +
+                "INNER JOIN `organization` USING(CustomerId) WHERE `ApprovedStatus` = 'PENDING' AND " +
+                "`BranchId` = ? ";
         try{
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1,branchId);
@@ -82,6 +84,28 @@ public class LoanModel {
             e.printStackTrace();
         }
         return false;
+    }
+
+
+    public String approveOrgLoanRequest(String reqId, String amount,String loanType, String period, String numOfSettlements){
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        String sql =" CALL `approveOrgLoanRequest`(?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement stmt =  connection.prepareStatement(sql);
+            stmt.setString(1,reqId);
+            stmt.setString(2,amount);
+            stmt.setString(3,loanType);
+            stmt.setString(4,period);
+            stmt.setString(5,numOfSettlements);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                result = rs.getString(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public String approveLoanRequest(String reqId, String amount,String loanType, String period, String numOfSettlements){

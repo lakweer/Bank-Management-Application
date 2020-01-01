@@ -59,8 +59,8 @@ public class ViewIndidualLoansPane {
                 Label Amount = new Label("Amount : " + loans.get(pageIndex).get("Amount"));
                 Label requestedDate = new Label("Date Requested : " + loans.get(pageIndex).get("requestDate"));
                 Label requestedBy = new Label("Requested Employee : " + loans.get(pageIndex).get("EmployeeId"));
-                Label settlementPeriod = new Label("Settlement Period : " + 5);
-                Label numOfSettlements = new Label("Number of Settlements : " + 5);
+                Label settlementPeriod = new Label("Settlement Period : " + loans.get(pageIndex).get("SettlementPeriod"));
+                Label numOfSettlements = new Label("Number of Settlements : " + loans.get(pageIndex).get("NoOfSettlements"));
 
                 Label customerDetails = new Label("Customer Details");
                 customerDetails.setUnderline(true);
@@ -101,7 +101,7 @@ public class ViewIndidualLoansPane {
                     @Override
                     public void handle(ActionEvent event) {
                         String r = loanModel.approveLoanRequest(loans.get(pageIndex).get("RequestId"), loans.get(pageIndex).get("Amount"),
-                                loans.get(pageIndex).get("LoanTypeId"), "5","5");
+                                loans.get(pageIndex).get("LoanTypeId"), loans.get(pageIndex).get("SettlementPeriod"),loans.get(pageIndex).get("NoOfSettlements"));
                         if(r.equals("Success")){
                             loans.get(pageIndex).replace("ApprovedStatus","REJECTED");
                             element.getChildren().removeAll(gp);
