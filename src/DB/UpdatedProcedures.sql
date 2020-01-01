@@ -1003,7 +1003,70 @@ SELECT returnArg;
 END$$
 DELIMITER ;
 
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"), IN `transactionMode` ENUM("Cash","Cheque"))
+    MODIFIES SQL DATA
+BEGIN
 
+/* DECLARE VARIABLES */
+DECLARE accountNumberArg VARCHAR(40);
+DECLARE balanceArg DECIMAL(12,2);
+DECLARE statusArg ENUM('0','1');
+DECLARE returnArg VARCHAR(255);
+DECLARE transactionIdArg int(40);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During transaction!";
+
+/* select the account number */
+SELECT AccountNumber INTO accountNumberArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Balance INTO balanceArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+SELECT Status INTO statusArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
+
+/*check the existence of the account*/
+IF LENGTH(accountNumberArg) > 1 THEN
+
+	/*check whether account is activated*/
+    IF statusArg = '1' THEN
+
+		/* insert the values into current transaction table */
+		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, TransactionMode, TransactionType) VALUES
+    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, transactionMode, TransactionType);
+        SELECT TransactionId INTO transactionIdArg FROM current_transaction WHERE TransactionId = LAST_INSERT_ID();
+
+        IF transactionMode = "cheque" THEN
+        	INSERT INTO current_cheque (TransactionId, chequeNumber) VALUES (transactionIdArg, chequeNumberArg);
+
+        END IF;
+
+        /*to check whether the transaction is a withdrawal*/
+    	IF TransactionType = "Withdrawal" THEN
+
+    		/*substract the withdrawed amount from the balance*/
+    		Update current_account SET `Balance` = balanceArg - AmountArg WHERE  AccountNumber = currentAccountNumberArg;
+        	SET returnArg = "Success";
+    		COMMIT;
+
+    	ELSE
+    		/*add the deposited amount to the balance*/
+    		Update current_account SET `Balance` = balanceArg + AmountArg WHERE  AccountNumber = currentAccountNumberArg;
+        	SET returnArg = "Success";
+    		COMMIT;
+    	END IF;
+
+    ELSE
+    	SET returnArg = "Account closed";
+    END IF;
+
+ELSE
+    SET returnArg = "Customer does not exist";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;
 
 
 
