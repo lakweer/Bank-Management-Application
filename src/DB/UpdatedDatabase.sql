@@ -335,6 +335,11 @@ CREATE TABLE org_loan_request (
    RequestDate date NOT NULL
    );
 
+CREATE TABLE current_cheque (
+    TransactionId int(40) primary KEY,
+    chequeNumber varchar(40) not null,
+    foreign key (TransactionId) REFERENCES current_transaction(TransactionId)
+    );
 
 
 

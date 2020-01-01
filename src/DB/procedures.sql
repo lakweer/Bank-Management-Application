@@ -626,9 +626,15 @@ SELECT returnArg;
 END$$
 DELIMITER ;
 
-/*current account transaction procedure */
+
+
+
+
+
+
+/*current account transaction*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"), IN `transactionMode` ENUM("Cash","Cheque"))
     MODIFIES SQL DATA
 BEGIN
 
@@ -637,6 +643,7 @@ DECLARE accountNumberArg VARCHAR(40);
 DECLARE balanceArg DECIMAL(12,2);
 DECLARE statusArg ENUM('0','1');
 DECLARE returnArg VARCHAR(255);
+DECLARE transactionIdArg int(40);
 
 /* BEGIN TRANSACTION */
 START TRANSACTION;
@@ -656,11 +663,18 @@ IF LENGTH(accountNumberArg) > 1 THEN
     IF statusArg = '1' THEN
 
 		/* insert the values into current transaction table */
-		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, ChequeNumber, TransactionType) VALUES
-    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, chequeNumberArg, TransactionType);
+		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, TransactionMode, TransactionType) VALUES
+    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, transactionMode, TransactionType);
+        SELECT TransactionId INTO transactionIdArg FROM current_transaction WHERE TransactionId = LAST_INSERT_ID();
 
-    	/*to check whether the transaction is a withdrawal*/
+        IF transactionMode = "cheque" THEN
+        	INSERT INTO current_cheque (TransactionId, chequeNumber) VALUES (transactionIdArg, chequeNumberArg);
+
+        END IF;
+
+        /*to check whether the transaction is a withdrawal*/
     	IF TransactionType = "Withdrawal" THEN
+
     		/*substract the withdrawed amount from the balance*/
     		Update current_account SET `Balance` = balanceArg - AmountArg WHERE  AccountNumber = currentAccountNumberArg;
         	SET returnArg = "Success";

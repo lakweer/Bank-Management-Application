@@ -200,7 +200,7 @@ public class CurrentTransactionPane {
                     else {
                         System.out.println("inside");
                         String result = currentAccountModel.currentAccountTransaction(accountNumberText.getText(), LocalDate.now().toString(), parent,
-                                amountText.getText(), chequeNumber, transactionType);
+                                amountText.getText(), chequeNumber, transactionType, transactionMode);
                         if (result.equals("Success")) {
                             Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", result);
                             parent.enablePane();

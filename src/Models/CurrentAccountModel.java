@@ -60,11 +60,11 @@ public class CurrentAccountModel {
     }
 
     public String currentAccountTransaction(String account_number, String transaction_date, EmployeeHome parent, String amount,
-                                            String cheque_number, String transaction_type){
+                                            String cheque_number, String transaction_type, String transaction_mode){
         connection = DB.Database.getConnection();
         String result = "Error! Try again.";
         try {
-            String sql = "CALL `currentAccountTransaction`(?, ?, ?, ?, ?, ?)";
+            String sql = "CALL `currentAccountTransaction`(?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, parent.getEmployeeID());
             stmt.setString(2, account_number);
@@ -72,6 +72,7 @@ public class CurrentAccountModel {
             stmt.setString(4, amount);
             stmt.setString(5, cheque_number);
             stmt.setString(6, transaction_type);
+            stmt.setString(7, transaction_mode);
 
 
             ResultSet rs = stmt.executeQuery();
