@@ -31,4 +31,22 @@ public class DebitCardModel {
         }
         return result;
     }
+
+    public String cancelDebitCard(String AccountNumber){
+        connection = DB.Database.getConnection();
+        String result = "Error! Try again.";
+        try {
+            String sql = "CALL `cancelDebitCard`(?)";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, AccountNumber);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                result = rs.getString(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

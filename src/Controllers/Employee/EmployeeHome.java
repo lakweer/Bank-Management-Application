@@ -4,6 +4,7 @@ import Controllers.BranchManager.AddNewEmplyeePane;
 import Controllers.Employee.CurrentAccount.CurrentAccountClose;
 import Controllers.Employee.CurrentAccount.CurrentAccountOpen;
 import Controllers.Employee.CurrentAccount.CurrentTransactionPane;
+import Controllers.Employee.DebitCard.CancelDebitCard;
 import Controllers.Employee.DebitCard.OpenDebitCard;
 import Controllers.Employee.FixedDeposit.FixedDepositOpen;
 import Controllers.Employee.Loans.CheckStatus;
@@ -273,6 +274,14 @@ public class EmployeeHome extends Application {
                 openDebitCardPane(pane);
             }
         });
+
+        cancelDC.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                cancelDebitCardPane(pane);
+            }
+        });
         openCA.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -359,6 +368,12 @@ public class EmployeeHome extends Application {
     private void openDebitCardPane(BorderPane pane){
         OpenDebitCard card = new OpenDebitCard(this);
         card.openDebitCardPane(pane);
+    }
+
+
+    private void cancelDebitCardPane(BorderPane pane){
+        CancelDebitCard card = new CancelDebitCard(this);
+        card.cancelDebitCardPane(pane);
     }
 
     private void fdOpenPane(BorderPane pane){

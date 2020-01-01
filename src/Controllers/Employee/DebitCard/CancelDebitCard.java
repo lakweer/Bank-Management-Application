@@ -1,9 +1,12 @@
 package Controllers.Employee.DebitCard;
 
 import Controllers.Employee.EmployeeHome;
+import Helpers.Helpers;
+import Models.DebitCardModel;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,10 +17,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 import java.time.LocalDate;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class CancelDebitCard {
 
     private EmployeeHome parent;
+    private DebitCardModel debitModel;
 
     /*
     Card Number, Pin Number, Account Number, Issued Date Expiry Date
@@ -25,9 +31,10 @@ public class CancelDebitCard {
 
     public CancelDebitCard(EmployeeHome parent){
         this.parent = parent;
+        this.debitModel = new DebitCardModel();
     }
 
-    public GridPane openDebitCardPane(BorderPane pane) {
+    public GridPane cancelDebitCardPane(BorderPane pane) {
         GridPane pane1 = new GridPane();
         pane.setCenter(pane1);
         pane1.setHgap(10);
@@ -80,6 +87,25 @@ public class CancelDebitCard {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                if(!savingsAccNumberText.getText().isEmpty()){
+
+                    String result = debitModel.cancelDebitCard(savingsAccNumberText.getText());
+
+                    if(result.equals("Success")){
+                        Helpers.showAlert(Alert.AlertType.CONFIRMATION, pane.getScene().getWindow(), "Success!", "Cancelled debit card");
+                        parent.enablePane();
+                        pane.getChildren().remove(pane1);
+                    }
+                    else{
+                        Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", result);
+                        return;
+                    }
+
+                }
+                else {
+                    Helpers.showAlert(Alert.AlertType.ERROR, pane.getScene().getWindow(), "Form Error!", "Fill All the Fields");
+                    return;
+                }
             }
 
 
