@@ -1,5 +1,7 @@
 package Controllers.BranchManager;
 
+import Controllers.BranchManager.Reports.LateLoanInstallmentReport;
+import Controllers.BranchManager.Reports.SavingsTransactionReport;
 import Controllers.LoginForm;
 import Models.BranchManagerModel;
 import javafx.event.ActionEvent;
@@ -130,6 +132,23 @@ public class BranchMangerHome {
         employeeSettingsMenu.setPopupSide(Side.RIGHT);
         sideAnchorPane.getChildren().add(employeeSettingsMenu);
 
+        MenuItem savingsTransactionReport = new MenuItem("Transaction Report");
+        MenuItem lateLoanReport = new MenuItem("Late Loan Report");
+
+        MenuButton reportsMenu = new MenuButton("Reports", null, savingsTransactionReport, lateLoanReport);
+        reportsMenu.setFont(Font.font("System",15));
+        reportsMenu.setPrefSize(170,42);
+        reportsMenu.setPopupSide(Side.RIGHT);
+        sideAnchorPane.getChildren().add(reportsMenu);
+
+        savingsTransactionReport.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                getSavingsTransactionReport(pane);
+            }
+        });
+
         addNewEmployee.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -178,9 +197,26 @@ public class BranchMangerHome {
             }
         });
 
+        lateLoanReport.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                disablePane();
+                getLateLoanReport(pane);
+            }
+        });
+
 
     }
 
+    private void getLateLoanReport(BorderPane pane){
+        LateLoanInstallmentReport rp = new LateLoanInstallmentReport(this);
+        rp.getLateLoanReport(pane);
+    }
+
+    private  void getSavingsTransactionReport(BorderPane pane){
+        SavingsTransactionReport r = new SavingsTransactionReport(this);
+        r.getReport(pane);
+    }
     private void viewOrganizationLoans(BorderPane pane){
         ViewOrganizationLoansPane p = new ViewOrganizationLoansPane(this);
         p.viewOrganizationLoans(pane);

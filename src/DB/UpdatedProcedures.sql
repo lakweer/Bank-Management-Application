@@ -1091,8 +1091,6 @@ DECLARE LateInstallmentArg DECIMAL(8,2);
 /* Set Default Statement */
 SET returnArg = "Something Went Wrong while Settling loan!";
 
-
-
 /* check the loan is already approved */
 SELECT `LoanId` INTO loanArg FROM `loan` WHERE `LoanId`= Loan_Id;
 SELECT `Amount` INTO LoanAmountArg FROM `loan` WHERE `LoanId`= Loan_Id;
@@ -1115,6 +1113,7 @@ SET InstallmentArg = LoanAmountArg/NoOfSettlementsArg;
 
 						/* Add the data of loan request to the loan_request Table */
 						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
+						UPDATE `loan` SET `PaidSettlements`= PaidSettlements + 1 WHERE `LoanId`= Loan_Id;
 
 						SET returnArg = "Success";
 						COMMIT;
@@ -1127,7 +1126,7 @@ SET InstallmentArg = LoanAmountArg/NoOfSettlementsArg;
 
 						/* Add the data of loan request to the loan_request Table */
 						UPDATE `loan_installment_history` SET `InstallmentDate`=DateArg, `Amount`=SettleAmountArg WHERE InstallmentId=InstallmentIdArg;
-
+                        UPDATE `loan` SET `PaidSettlements`= PaidSettlements + 1 WHERE `LoanId`= Loan_Id;
 						SET returnArg = "Success";
 						COMMIT;
 					ELSE
