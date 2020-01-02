@@ -226,11 +226,20 @@ CREATE TABLE current_transaction(
     AccountNumber VARCHAR(40) NOT NULL,
     TransactionDate DATE NOT NULL,
     Amount DECIMAL(10,2) NOT NULL,
-    ChequeNumber VARCHAR(40) DEFAULT NULL,
+    TransactionMode  ENUM('cash','cheque') NOT NULL DEFAULT 'cash',
     TransactionType ENUM('Withdrawal','Deposit') NOT NULL,
     FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
     FOREIGN KEY(AccountNumber) REFERENCES current_account(AccountNumber)
     );
+
+
+CREATE TABLE current_cheque (
+    TransactionId int(40) primary KEY,
+    chequeNumber varchar(40) not null,
+    foreign key (TransactionId) REFERENCES current_transaction(TransactionId)
+    );
+
+
 
 CREATE TABLE transfer (
     TransferId VARCHAR(40) PRIMARY KEY,
@@ -246,14 +255,17 @@ CREATE TABLE transfer (
     FOREIGN KEY(TransferredToAccountNumber) REFERENCES savings_account(AccountNumber)
     );
 
+
 CREATE TABLE debit_card (
     CardNumber CHAR(16) PRIMARY KEY,
     PinNumber CHAR(4) NOT NULL,
     AccountNumber VARCHAR(40) NOT NULL,
     IssuedDate DATE NOT NULL,
     ExpiryDate DATE NOT NULL,
+    Status ENUM('0','1') NOT NULL,
     FOREIGN KEY (AccountNumber) REFERENCES savings_account(AccountNumber)
     );
+
 
 CREATE TABLE atm_withdraw (
     WithdrawId VARCHAR(40) PRIMARY KEY,
@@ -335,11 +347,7 @@ CREATE TABLE org_loan_request (
    RequestDate date NOT NULL
    );
 
-CREATE TABLE current_cheque (
-    TransactionId int(40) primary KEY,
-    chequeNumber varchar(40) not null,
-    foreign key (TransactionId) REFERENCES current_transaction(TransactionId)
-    );
+
 
 
 

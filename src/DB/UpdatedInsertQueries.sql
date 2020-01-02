@@ -38,8 +38,8 @@ INSERT INTO `employee` (`EmployeeId`, `FirstName`, `LastName`, `BranchId`, `Nic`
 
 /*employee login*/
 INSERT INTO `employee_login` (`EmployeeId`, `UserName`, `Password`, `Status`, `Type`) VALUES
-('23adad46-1bb9-11ea-a1fc-d8c4971f41ea', 'admin', 'admin', '1', 'Normal'),
-('c44cb195-1e1f-11ea-b1ca-d8c4971f41ea', 'manager', 'manager', '1', 'BranchManager');
+('23adad46-1bb9-11ea-a1fc-d8c4971f41ea', 'admin', '9ca694a90285c034432c9550421b7b9dbd5c0f4b6673f05f6dbce58052ba20e4248041956ee8c9a2ec9f10290cdc0782', '1', 'Normal'),
+('c44cb195-1e1f-11ea-b1ca-d8c4971f41ea', 'manager', '300f04de8446334e084d7cd0a728c1bd46f218eae5aca0989a3b31835e4cf39a7596a0f751fcfea11bfd3109a3ead62', '1', 'BranchManager');
 
 
 /*branch manager*/
@@ -66,10 +66,13 @@ INSERT INTO `normal_employees_history` (`EmployeeId`, `BranchId`, `JoinedDate`, 
 INSERT INTO `customer` (`CustomerId`, `CustomerType`, `Email`) VALUES
 ('42c07756-20a3-11ea-b1ca-d8c4971f41ea', 'Child', NULL),
 ('ae29d825-1bb9-11ea-a1fc-d8c4971f41ea', 'Individual', 'lak@gmail.com'),
-('b72a8c6f-2553-11ea-8d42-c8d3ff1d6347', 'Organization', 'hash@gmail.com');
+('b72a8c6f-2553-11ea-8d42-c8d3ff1d6347', 'Organization', 'hash@gmail.com'),
+('1efeb027-2b3a-11ea-8d4e-30e37ab25bb4', 'Individual', 'nilmanikulaweera@gmail.com');
 
 
 /*individual*/
+INSERT INTO `individual` (`CustomerId`, `Nic`, `FirstName`, `LastName`, `HouseNumber`, `StreetOne`, `StreetTwo`, `Town`, `District`, `PostalCode`, `Gender`, `Birthday`) VALUES
+('1efeb027-2b3a-11ea-8d4e-30e37ab25bb4', '985030774V', 'Nilmani ', 'Kulaweera', '16A', 'Dharmarathna Avenue', 'Rawathawatte', 'Moratuwa', 'Colombo', '11111', 'Female', '1998-01-03');
 INSERT INTO `individual` (`CustomerId`, `Nic`, `FirstName`, `LastName`, `HouseNumber`, `StreetOne`, `StreetTwo`, `Town`, `District`, `PostalCode`, `Gender`, `Birthday`) VALUES
 ('ae29d825-1bb9-11ea-a1fc-d8c4971f41ea', '980083837V', 'Laskshan ', 'Weerasinghe', '12', 'st', 'sas', 'sadd', 'xsccac', '11111', 'Male', '1999-01-08');
 
@@ -96,6 +99,5 @@ INSERT INTO `fixed_deposit_account` (`FDAccountNumber`, `SavingsAccountNumber`, 
 /*loan request*/
 INSERT INTO `loan_request` (`RequestId`, `CustomerId`, `BranchId`, `Amount`, `ApprovedStatus`, `EmployeeId`, `GrossSalary`, `NetSalary`, `LoanId`, `EmploymentSector`, `EmploymentType`, `Profession`, `LoanTypeId`, `requestDate`) VALUES
 (1, 'ae29d825-1bb9-11ea-a1fc-d8c4971f41ea', 'BOSL_001_COL_NUG', '1555.00', 'PENDING', '23adad46-1bb9-11ea-a1fc-d8c4971f41ea', '122.00', '158.00', NULL, 'GOV', 'PER', 'Bajnji', '1', '2019-12-22');
-
 
 

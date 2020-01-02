@@ -1,3 +1,31 @@
+/*add fixed deposit interest*/
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `addFixedDepositInterest`()
+    MODIFIES SQL DATA
+BEGIN
+	UPDATE fixed_deposit_account INNER JOIN fixed_deposit_type USING (FDType) INNER JOIN savings_account
+	ON savings_account.AccountNumber = fixed_deposit_account.SavingsAccountNumber
+	SET savings_account.Balance = savings_account.Balance + fixed_deposit_account.DepositAmount*fixed_deposit_type.InterestRate*30/365
+	WHERE fixed_deposit_account.MaturityDate > CURDATE() AND MOD( DATEDIFF(CURDATE(), fixed_deposit_account.DepositDate) , 30 )=0;
+
+    INSERT INTO savings_transaction(TransactionId, AccountNumber,TransactionDate,Amount,Teller,TransactionType)
+    SELECT UUID(), savings_account.AccountNumber, CURDATE(), fixed_deposit_account.DepositAmount*fixed_deposit_type.InterestRate*30/365, "SYSTEM", "Deposit"
+    FROM fixed_deposit_account INNER JOIN fixed_deposit_type USING (FDType) INNER JOIN savings_account
+    ON savings_account.AccountNumber = fixed_deposit_account.SavingsAccountNumber
+    WHERE fixed_deposit_account.MaturityDate > CURDATE() AND MOD( DATEDIFF(CURDATE(), fixed_deposit_account.DepositDate) , 30 )= 0;
+
+
+END$$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
 /* add new Employee Procedure */
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addNewEmployee`(
@@ -146,6 +174,54 @@ DELIMITER ;
 
 
 
+/*cancel debit card*/
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `cancelDebitCard`(IN `SavingsAccountNumberArg` VARCHAR(40))
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE StatusArg enum('0', '1');
+DECLARE ActiveDebit enum('0', '1');
+DECLARE returnArg VARCHAR(255);
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During cancelling debit card!";
+
+/*select the status of the savings account*/
+SELECT Status INTO StatusArg FROM savings_account WHERE AccountNumber = SavingsAccountNumberArg;
+
+/*check whether a valid card is there to cancel*/
+SELECT COUNT(STATUS) INTO ActiveDebit FROM debit_card WHERE AccountNumber = SavingsAccountNumberArg AND STATUS = "1";
+
+/* check whether the savings account is active */
+IF StatusArg = "1" THEN
+
+	/*check whether an active debit card is there to cancel*/
+    	IF ActiveDebit = 1 THEN
+
+			UPDATE debit_card SET Status = "0" WHERE AccountNumber = SavingsAccountNumberArg;
+    		SET returnArg = "Success";
+
+        ELSE
+        	SET returnArg = "no active debit card to cancel";
+        END IF;
+
+ELSE
+     SET returnArg = "not an active savings account";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;
+
+
+
+
+
+
+
+
+
 /*create individual loan request*/
 DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `createIndividualLoanRequest` (IN `NICArg` CHAR(10), IN `branchIdArg` VARCHAR(40), IN `AmountArg` DECIMAL(8,2), IN `EmployeeIdArg` VARCHAR(40), IN `GrossSalaryArg` DECIMAL(10,2), IN `NetSalaryArg` DECIMAL(10,2), IN `EmploymentSectorArg` ENUM("PRIVATE","GOV","SELF"), IN `EmploymentTypeArg` ENUM("PER","TEMP"), IN `ProfessionArg` VARCHAR(40), IN `loanTypeArg` VARCHAR(40),IN `settlementPeriodArg` INT(3),IN `noOfSettlementsArg` INT(3), IN `requestDateArg` DATE)  MODIFIES SQL DATA
@@ -236,7 +312,8 @@ DELIMITER ;
 
 /*current account close*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountClose` (IN `currentAccountNumberArg` VARCHAR(40), IN `CurrentAccountCloseDateArg` DATE, IN `CloseEmployeeIdArg` VARCHAR(40))  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountClose`(IN `currentAccountNumberArg` VARCHAR(40), IN `CurrentAccountCloseDateArg` DATE, IN `CloseEmployeeIdArg` VARCHAR(40))
+    MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -296,9 +373,12 @@ DELIMITER ;
 
 
 
+
+
 /*current account open*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountOpen` (IN `currentAccountNumberArg` VARCHAR(40), IN `customerTempIdArg` VARCHAR(40), IN `CurrentAccountOpenDateArg` DATE, IN `CustomerTypeArg` VARCHAR(40), IN `OpenEmployeeIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40))  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountOpen`(IN `currentAccountNumberArg` VARCHAR(40), IN `customerTempIdArg` VARCHAR(40), IN `CurrentAccountOpenDateArg` DATE, IN `CustomerTypeArg` VARCHAR(40), IN `OpenEmployeeIdArg` VARCHAR(40), IN `BranchIdArg` VARCHAR(40))
+    MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -341,9 +421,12 @@ DELIMITER ;
 
 
 
+
+
 /*current account transaction*/
 DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction` (IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"))  MODIFIES SQL DATA
+CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"), IN `transactionMode` ENUM("Cash","Cheque"))
+    MODIFIES SQL DATA
 BEGIN
 
 /* DECLARE VARIABLES */
@@ -351,6 +434,7 @@ DECLARE accountNumberArg VARCHAR(40);
 DECLARE balanceArg DECIMAL(12,2);
 DECLARE statusArg ENUM('0','1');
 DECLARE returnArg VARCHAR(255);
+DECLARE transactionIdArg int(40);
 
 /* BEGIN TRANSACTION */
 START TRANSACTION;
@@ -370,11 +454,18 @@ IF LENGTH(accountNumberArg) > 1 THEN
     IF statusArg = '1' THEN
 
 		/* insert the values into current transaction table */
-		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, ChequeNumber, TransactionType) VALUES
-    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, chequeNumberArg, TransactionType);
+		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, TransactionMode, TransactionType) VALUES
+    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, transactionMode, TransactionType);
+        SELECT TransactionId INTO transactionIdArg FROM current_transaction WHERE TransactionId = LAST_INSERT_ID();
 
-    	/*to check whether the transaction is a withdrawal*/
+        IF transactionMode = "cheque" THEN
+        	INSERT INTO current_cheque (TransactionId, chequeNumber) VALUES (transactionIdArg, chequeNumberArg);
+
+        END IF;
+
+        /*to check whether the transaction is a withdrawal*/
     	IF TransactionType = "Withdrawal" THEN
+
     		/*substract the withdrawed amount from the balance*/
     		Update current_account SET `Balance` = balanceArg - AmountArg WHERE  AccountNumber = currentAccountNumberArg;
         	SET returnArg = "Success";
@@ -397,6 +488,8 @@ END IF;
 SELECT returnArg;
 END$$
 DELIMITER ;
+
+
 
 
 
@@ -460,6 +553,59 @@ END IF;
 	SELECT returnArg;
 END$$
 DELIMITER ;
+
+
+
+
+
+
+
+/*issue new debit card*/
+DELIMITER $$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `issueNewDebitCard`(IN `CardNumberArg` CHAR(16), IN `PinNumberArg` CHAR(4), IN `SavingsAccountNumberArg` VARCHAR(40), IN `IssuedDateArg` DATE, IN `ExpiryDate` DATE)
+    MODIFIES SQL DATA
+BEGIN
+
+/* DECLARE VARIABLES */
+DECLARE StatusArg enum('0', '1');
+DECLARE ActiveDebit enum('0', '1');
+DECLARE returnArg VARCHAR(255);
+
+/* BEGIN TRANSACTION */
+START TRANSACTION;
+
+/* Set Default Statement */
+SET returnArg = "Something Went Wrong During issuing debit card!";
+
+/*select the status of the savings account*/
+SELECT Status INTO StatusArg FROM savings_account WHERE AccountNumber = SavingsAccountNumberArg;
+
+/* check whether the savings account is active */
+IF StatusArg = "1" THEN
+
+	/*check whether a card is already issued for the savings account*/
+    SELECT COUNT(STATUS) INTO ActiveDebit FROM debit_card WHERE AccountNumber = SavingsAccountNumberArg AND STATUS = "1";
+    IF ActiveDebit = 1 THEN
+
+    	SET returnArg = "Debit card already exists for the savings account";
+
+	ELSE
+		/* insert the values into debit card table */
+		INSERT INTO debit_card (CardNumber, PinNumber, AccountNumber, IssuedDate, ExpiryDate, Status) VALUES
+        	(CardNumberArg, PinNumberArg, SavingsAccountNumberArg, IssuedDateArg, ExpiryDate, "1");
+
+     	SET returnArg = "Success";
+     	COMMIT;
+
+   	END IF;
+ELSE
+     SET returnArg = "Not a valid savings account";
+END IF;
+SELECT returnArg;
+END$$
+DELIMITER ;
+
+
 
 
 
@@ -1001,73 +1147,17 @@ SET InstallmentArg = LoanAmountArg/NoOfSettlementsArg;
 
 SELECT returnArg;
 
+
 END$$
 DELIMITER ;
 
-DELIMITER $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `currentAccountTransaction`(IN `TransactionEmployeeIdArg` VARCHAR(40), IN `currentAccountNumberArg` VARCHAR(40), IN `TransactionDateArg` DATE, IN `AmountArg` DECIMAL(10,2), IN `chequeNumberArg` VARCHAR(40), IN `TransactionType` ENUM("Withdrawal","Deposit"), IN `transactionMode` ENUM("Cash","Cheque"))
-    MODIFIES SQL DATA
-BEGIN
 
-/* DECLARE VARIABLES */
-DECLARE accountNumberArg VARCHAR(40);
-DECLARE balanceArg DECIMAL(12,2);
-DECLARE statusArg ENUM('0','1');
-DECLARE returnArg VARCHAR(255);
-DECLARE transactionIdArg int(40);
 
-/* BEGIN TRANSACTION */
-START TRANSACTION;
 
-/* Set Default Statement */
-SET returnArg = "Something Went Wrong During transaction!";
 
-/* select the account number */
-SELECT AccountNumber INTO accountNumberArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
-SELECT Balance INTO balanceArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
-SELECT Status INTO statusArg FROM current_account WHERE AccountNumber = currentAccountNumberArg;
 
-/*check the existence of the account*/
-IF LENGTH(accountNumberArg) > 1 THEN
 
-	/*check whether account is activated*/
-    IF statusArg = '1' THEN
 
-		/* insert the values into current transaction table */
-		INSERT INTO current_transaction (EmployeeId, AccountNumber, TransactionDate, Amount, TransactionMode, TransactionType) VALUES
-    	(TransactionEmployeeIdArg, currentAccountNumberArg, TransactionDateArg, AmountArg, transactionMode, TransactionType);
-        SELECT TransactionId INTO transactionIdArg FROM current_transaction WHERE TransactionId = LAST_INSERT_ID();
-
-        IF transactionMode = "cheque" THEN
-        	INSERT INTO current_cheque (TransactionId, chequeNumber) VALUES (transactionIdArg, chequeNumberArg);
-
-        END IF;
-
-        /*to check whether the transaction is a withdrawal*/
-    	IF TransactionType = "Withdrawal" THEN
-
-    		/*substract the withdrawed amount from the balance*/
-    		Update current_account SET `Balance` = balanceArg - AmountArg WHERE  AccountNumber = currentAccountNumberArg;
-        	SET returnArg = "Success";
-    		COMMIT;
-
-    	ELSE
-    		/*add the deposited amount to the balance*/
-    		Update current_account SET `Balance` = balanceArg + AmountArg WHERE  AccountNumber = currentAccountNumberArg;
-        	SET returnArg = "Success";
-    		COMMIT;
-    	END IF;
-
-    ELSE
-    	SET returnArg = "Account closed";
-    END IF;
-
-ELSE
-    SET returnArg = "Customer does not exist";
-END IF;
-SELECT returnArg;
-END$$
-DELIMITER ;
 
 
 
